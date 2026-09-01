@@ -32,6 +32,8 @@ public class CorsProperties {
     Set<String> patterns = new LinkedHashSet<>();
     patterns.add("http://localhost:4200");
     patterns.add("http://127.0.0.1:4200");
+    patterns.add("http://localhost:4300");
+    patterns.add("http://127.0.0.1:4300");
     patterns.add("http://localhost:8081");
     patterns.add("http://127.0.0.1:8081");
     patterns.add("http://localhost:8082");

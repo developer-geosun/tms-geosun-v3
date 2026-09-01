@@ -198,6 +198,20 @@ npm start
 
 Frontend: `http://localhost:4200`.
 
+### 2b) Flutter Web (experimental client)
+
+Параллельный клиент для Web → Android/iOS. Пока только auth (`/login`, `/home`).
+
+Требуется Flutter stable. Backend должен быть доступен на `:8080`.
+
+```bash
+cd frontend-flutter
+flutter pub get
+flutter run -d chrome --web-port=4300 --dart-define=API_URL=http://localhost:8080
+```
+
+Flutter Web: `http://localhost:4300`. Подробнее: [`frontend-flutter/README.md`](frontend-flutter/README.md).
+
 ## Вариант 2: запуск всего стека через Docker Compose
 
 1. Создайте `.env` на основе шаблона `.env.example`.

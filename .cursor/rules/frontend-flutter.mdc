@@ -1,0 +1,47 @@
+---
+description: Flutter frontend conventions for TMS GeoSun
+globs: frontend-flutter/**
+alwaysApply: false
+---
+
+# Flutter frontend (TMS GeoSun)
+
+## Stack
+
+- Flutter stable, **Material 3** (not custom widgets when Material fits).
+- State: **Riverpod** (`NotifierProvider` for session/feature state).
+- Routing: **go_router** with auth redirect (`/login`, `/home`).
+- HTTP: **Dio** + auth interceptor (Bearer, single in-flight refresh on 401).
+- i18n: ARB under `lib/core/l10n/` (`uk` default, `en`, `ru`).
+- Font: bundled **Inter** only — no Google Fonts CDN, no Roboto as primary UI font.
+
+## Backend integration
+
+- API base: `--dart-define=API_URL=...` → `AppConfig.apiUrl`.
+- Auth prefix: `/api/v1/auth/*` — JWT in JSON body, **not** cookies.
+- Do **not** duplicate server business rules (freight formulas, HERE/geojson breakdown) on the client.
+- OpenAPI at `/v3/api-docs` — prefer codegen for new modules; auth v1 is hand-written to match Angular.
+
+## Auth rules (must match Angular)
+
+- Storage key: `tms_geosun_auth` (SharedPreferences / web localStorage).
+- Clear session only on server **401/403**, not on timeout/offline during bootstrap.
+- One in-flight refresh; retry original request after success.
+- Skip refresh for `/auth/login|refresh|logout|me|...` paths.
+- Header `ngrok-skip-browser-warning: true` on Dio (see Angular `ngrok-headers.ts`).
+
+## Code style
+
+- Comments in code: **Ukrainian**.
+- Keep features under `lib/<feature>/` (`data`, `domain`, `state`, `ui`).
+- Run before commit: `dart format lib test`, `flutter test`, `dart analyze lib`.
+
+## UI
+
+- Primary actions: `FilledButton`; secondary/cancel: `OutlinedButton`.
+- Login card pattern for auth screens; admin-style dense tables are out of scope until admin migration.
+
+## Dev
+
+- Local web port: **4300** (`flutter run -d chrome --web-port=4300`).
+- CORS: `localhost:4300` in `CorsProperties.java`.

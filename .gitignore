@@ -6,6 +6,11 @@ dist/
 backend-java/.env
 frontend-angular/.env
 frontend-angular/src/assets/app-config.local.js
+frontend-flutter/.dart_tool/
+frontend-flutter/build/
+frontend-flutter/.flutter-plugins
+frontend-flutter/.flutter-plugins-dependencies
+frontend-flutter/.env
 
 # Локальні завантаження файлів (app.storage.type=local)
 data/uploads/

@@ -8,6 +8,7 @@
 ## Что уже умеет система
 
 - Frontend на Angular 21 с маршрутизацией, i18n и auth-слоем (`AuthService`, `AuthGuard`, `AuthInterceptor`, login-page).
+- **Flutter Web client** (`frontend-flutter/`): каркас + auth (login/refresh/logout/me), i18n uk/en/ru, порт dev `:4300`. Бизнес-экраны и mobile — следующие фазы; Angular остаётся основным UI для admin и route-builder.
 - Экраны `/route-builder` (построение и сохранение маршрута), `/routes` (список и открытие сохранённых маршрутов), `/my-freight-requests` (заявки пользователя) и диалог заявки на фрахт работают через backend API.
 - Есть admin-страницы `/admin/route-requests` (очередь, ИИ-расчёт, quote), `/admin/freight-calculation-scenarios` (сценарии), `/admin/users` (управление пользователями и ролями, только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, а также `/my-trips` для водителя.
 - Backend на Java 21 + Spring Boot 3 с JWT auth, refresh token rotation и RBAC.
@@ -18,7 +19,7 @@
 
 ## Как работает (высокоуровнево)
 
-Пользователь -> Angular frontend -> Backend API (Spring Boot, `/api/v1`) -> MySQL -> Ответ пользователю.
+Пользователь -> Angular или Flutter frontend -> Backend API (Spring Boot, `/api/v1`) -> MySQL -> Ответ пользователю.
 
 ## Основные сущности
 
@@ -80,6 +81,7 @@
 ## Структура проекта
 
 - `frontend-angular/` — Angular приложение.
+- `frontend-flutter/` — Flutter Web client (auth v1; mobile позже).
 - `backend-java/` — Spring Boot backend (Maven, `src/main/java`, `src/main/resources`).
 - `docs/specs/` — ТЗ по фичам.
 - `docs/templates/` — шаблоны ТЗ и промптов для LLM.
@@ -88,6 +90,7 @@
 
 - Backend integration tests (MockMvc): CRUD маршрутов, ownership, RBAC для admin endpoints, quote idempotency.
 - Frontend unit tests: auth/guards/interceptors + API services для `routes` и `route-requests`.
+- Flutter unit/widget tests: auth session, refresh single-flight, login validation (`frontend-flutter/test/`).
 - Миграции только incremental Flyway (`V3`, `V4`, `V5`) без правок предыдущих версий.
 
 ## Совместимость rollout
@@ -98,11 +101,16 @@
 
 ## Как запустить
 
-- Frontend:
+- Frontend (Angular):
   - `cd frontend-angular`
   - `npm install`
   - `npm start`
   - app URL: `http://localhost:4200/`
+- Frontend (Flutter Web):
+  - `cd frontend-flutter`
+  - `flutter pub get`
+  - `flutter run -d chrome --web-port=4300 --dart-define=API_URL=http://localhost:8080`
+  - app URL: `http://localhost:4300/`
 - Backend (Spring Boot):
   - `cd backend-java`
   - `mvn spring-boot:run`
