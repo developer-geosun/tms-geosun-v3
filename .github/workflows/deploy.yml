@@ -1,5 +1,6 @@
 # Деплой Angular з frontend/ на гілку gh-pages (GitHub Pages: Settings → Pages → branch gh-pages / root)
 # Frontend на GitHub Pages; API — окремо (ngrok або статична IP, див. PUBLIC_ACCESS_MODE).
+# Реєстрація workflow в Actions після увімкнення permissions у новому репозиторії.
 name: Deploy to GitHub Pages
 
 on:
