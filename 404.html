@@ -3,12 +3,20 @@
 <head>
   <meta charset="utf-8">
   <title>TMS GeoSun</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/svg+xml" href="assets/GeoSun_logo_svg.svg">
   <script>
-    // Базовий шлях деплою: /tms-geosun-v2/ на GitHub Pages або / локально
+    // SPA fallback для GitHub Pages: Angular (корінь) і Flutter (/flutter/).
     (function () {
+      var path = location.pathname;
+      var parts = path.split('/').filter(Boolean);
+
+      var flutterIndex = parts.indexOf('flutter');
+      if (flutterIndex !== -1) {
+        var flutterBase = '/' + parts.slice(0, flutterIndex + 1).join('/') + '/';
+        sessionStorage.setItem('flutter_redirect', location.href);
+        location.replace(flutterBase + 'index.html');
+        return;
+      }
+
       var topLevelRoutes = {
         login: 1,
         register: 1,
@@ -21,21 +29,17 @@
         routes: 1,
         'my-freight-requests': 1,
         admin: 1,
-        '404': 1
+        '404': 1,
+        flutter: 1
       };
-      var parts = location.pathname.split('/').filter(Boolean);
       var baseHref = '/';
       if (parts.length > 0 && !topLevelRoutes[parts[0]]) {
         baseHref = '/' + parts[0] + '/';
       }
-      document.querySelector('base').setAttribute('href', baseHref);
       sessionStorage.redirect = location.href;
       location.replace(baseHref + 'index.html');
     })();
   </script>
 </head>
-<body>
-  <app-root></app-root>
-</body>
+<body></body>
 </html>
-
