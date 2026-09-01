@@ -24,7 +24,8 @@ String? sanitizeReturnUrl(String? raw) {
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
-    initialLocation: '/login',
+    // На web береться path з адресного рядка (листи /reset-password?token=).
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/login',
@@ -95,6 +96,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       }
 
       if (isAuthenticated && isGuestRoute) {
+        // Посилання з листа мають відкритися навіть за наявності сесії.
+        if (location == '/verify-email' || location == '/reset-password') {
+          return null;
+        }
         final returnUrl = sanitizeReturnUrl(
           state.uri.queryParameters['returnUrl'],
         );

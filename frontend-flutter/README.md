@@ -60,7 +60,7 @@ Output: `build/web/`
 - Angular → `https://developer-geosun.github.io/<repo-name>/`
 - Flutter → `https://developer-geosun.github.io/<repo-name>/flutter/`
 
-`API_URL` для Flutter берётся из GitHub Secret `API_URL` (тот же, что для Angular). Deep links на Pages обрабатываются через общий `404.html` в корне `gh-pages`. Ссылки из писем ведут на клиент, который отправил запрос (`X-App-Client`).
+`API_URL` для Flutter берётся из GitHub Secret `API_URL` (тот же, что для Angular). Deep links на Pages обрабатываются через общий `404.html` в корне `gh-pages`. Маршруты — path URL (`/flutter/reset-password?token=`), не hash (`#/login`). Ссылки из писем ведут на клиент, который отправил запрос (`X-App-Client`).
 
 ## Tests
 
