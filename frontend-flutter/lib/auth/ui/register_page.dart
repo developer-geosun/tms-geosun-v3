@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,33 +7,48 @@ import '../../core/http/health_service.dart';
 import '../../core/l10n/app_localizations.dart';
 import '../../core/widgets/app_settings_button.dart';
 import '../domain/auth_models.dart';
+import '../domain/password_rules.dart';
 import '../state/auth_controller.dart';
 import 'auth_status_banner.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key, this.returnUrl});
-
-  final String? returnUrl;
+class RegisterPage extends ConsumerStatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   bool _isLoading = false;
   bool _showSuccess = false;
   bool _passwordVisible = false;
-  LoginErrorCode? _errorCode;
+  RegisterErrorCode? _errorCode;
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordController.addListener(_revalidateConfirmPassword);
+  }
 
   @override
   void dispose() {
+    _passwordController.removeListener(_revalidateConfirmPassword);
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void _revalidateConfirmPassword() {
+    if (_confirmPasswordController.text.isEmpty) {
+      return;
+    }
+    _formKey.currentState?.validate();
   }
 
   @override
@@ -65,19 +79,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Icon(
-                        Icons.lock_outline,
+                        Icons.person_add_outlined,
                         size: 40,
                         color: theme.colorScheme.primary,
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        l10n.loginTitle,
+                        l10n.registerTitle,
                         style: theme.textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        l10n.loginSubtitle,
+                        l10n.registerSubtitle,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
@@ -122,21 +136,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             TextFormField(
                               controller: _passwordController,
                               obscureText: !_passwordVisible,
-                              textInputAction: TextInputAction.done,
-                              autofillHints: const [AutofillHints.password],
-                              onFieldSubmitted: (_) {
-                                if (!serviceUnavailable && !_isLoading) {
-                                  _submit();
-                                }
-                              },
+                              textInputAction: TextInputAction.next,
+                              autofillHints: const [AutofillHints.newPassword],
                               decoration: InputDecoration(
                                 labelText: l10n.loginPassword,
                                 suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _passwordVisible = !_passwordVisible;
-                                    });
-                                  },
+                                  onPressed: _togglePasswordVisible,
                                   icon: Icon(
                                     _passwordVisible
                                         ? Icons.visibility_off_outlined
@@ -146,30 +151,57 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ),
                               enabled: !serviceUnavailable && !_isLoading,
                               validator: (value) {
-                                final trimmed = value ?? '';
-                                if (trimmed.isEmpty) {
+                                final password = value ?? '';
+                                if (password.isEmpty) {
                                   return l10n.loginPasswordRequired;
                                 }
-                                if (trimmed.length < 8) {
+                                if (password.length < 8) {
                                   return l10n.loginPasswordMinLength;
+                                }
+                                if (!meetsPasswordPolicy(password)) {
+                                  return l10n.registerPasswordRule;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _confirmPasswordController,
+                              obscureText: !_passwordVisible,
+                              textInputAction: TextInputAction.done,
+                              autofillHints: const [AutofillHints.newPassword],
+                              onFieldSubmitted: (_) {
+                                if (!serviceUnavailable && !_isLoading) {
+                                  _submit();
+                                }
+                              },
+                              decoration: InputDecoration(
+                                labelText: l10n.registerConfirmPassword,
+                                suffixIcon: IconButton(
+                                  onPressed: _togglePasswordVisible,
+                                  icon: Icon(
+                                    _passwordVisible
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                  ),
+                                ),
+                              ),
+                              enabled: !serviceUnavailable && !_isLoading,
+                              validator: (value) {
+                                final confirm = value ?? '';
+                                if (confirm.isEmpty) {
+                                  return l10n.loginPasswordRequired;
+                                }
+                                if (confirm.length < 8) {
+                                  return l10n.loginPasswordMinLength;
+                                }
+                                if (confirm != _passwordController.text) {
+                                  return l10n.registerPasswordMismatch;
                                 }
                                 return null;
                               },
                             ),
                           ],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextButton(
-                          onPressed: () => context.go('/forgot-password'),
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: Text(l10n.loginForgotPassword),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -182,7 +214,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ],
                       if (_showSuccess) ...[
                         AuthStatusBanner.success(
-                          message: l10n.loginSuccess,
+                          message: l10n.registerSuccess,
                           icon: Icons.check_circle_outline,
                         ),
                         const SizedBox(height: 16),
@@ -204,20 +236,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     ),
                                   ),
                                   const SizedBox(width: 12),
-                                  Text(l10n.loginLoading),
+                                  Text(l10n.registerLoading),
                                 ],
                               )
-                            : Text(l10n.loginSubmit),
+                            : Text(l10n.registerSubmit),
                       ),
                       const SizedBox(height: 8),
                       Wrap(
                         alignment: WrapAlignment.center,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          Text(l10n.loginNoAccount),
+                          Text(l10n.registerHaveAccount),
                           TextButton(
-                            onPressed: () => context.go('/register'),
-                            child: Text(l10n.authRegister),
+                            onPressed: _isLoading
+                                ? null
+                                : () => context.go('/login'),
+                            child: Text(l10n.authLogin),
                           ),
                         ],
                       ),
@@ -232,8 +266,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
+  void _togglePasswordVisible() {
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final password = _passwordController.text;
+    if (password != _confirmPasswordController.text) {
       return;
     }
 
@@ -246,10 +291,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     try {
       await ref
           .read(authControllerProvider.notifier)
-          .login(
-            email: _emailController.text,
-            password: _passwordController.text,
-          );
+          .register(email: _emailController.text, password: password);
 
       if (!mounted) {
         return;
@@ -260,17 +302,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         _showSuccess = true;
       });
 
-      TextInput.finishAutofillContext(shouldSave: true);
-
-      final target = widget.returnUrl ?? '/home';
-      context.go(target);
+      context.go('/login');
     } on ApiException catch (error) {
       if (!mounted) {
         return;
       }
       setState(() {
         _isLoading = false;
-        _errorCode = mapLoginErrorCode(error);
+        _errorCode = mapRegisterErrorCode(error);
       });
     } on Object {
       if (!mounted) {
@@ -278,19 +317,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
       setState(() {
         _isLoading = false;
-        _errorCode = LoginErrorCode.generic;
+        _errorCode = RegisterErrorCode.generic;
       });
     }
   }
 
-  String _errorMessage(AppLocalizations l10n, LoginErrorCode code) {
+  String _errorMessage(AppLocalizations l10n, RegisterErrorCode code) {
     return switch (code) {
-      LoginErrorCode.error401 => l10n.loginError401,
-      LoginErrorCode.error403 => l10n.loginError403,
-      LoginErrorCode.accountDisabled => l10n.loginErrorAccountDisabled,
-      LoginErrorCode.userDeleted => l10n.loginErrorUserDeleted,
-      LoginErrorCode.emailNotVerified => l10n.loginErrorEmailNotVerified,
-      LoginErrorCode.generic => l10n.loginErrorGeneric,
+      RegisterErrorCode.conflict => l10n.registerError409,
+      RegisterErrorCode.rateLimited => l10n.registerError429,
+      RegisterErrorCode.generic => l10n.registerErrorGeneric,
     };
   }
 }

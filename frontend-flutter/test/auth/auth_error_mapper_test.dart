@@ -44,4 +44,30 @@ void main() {
       LoginErrorCode.generic,
     );
   });
+
+  test('mapRegisterErrorCode відповідає кодам backend', () {
+    expect(
+      mapRegisterErrorCode(const ApiException(statusCode: 409, message: '')),
+      RegisterErrorCode.conflict,
+    );
+    expect(
+      mapRegisterErrorCode(const ApiException(statusCode: 429, message: '')),
+      RegisterErrorCode.rateLimited,
+    );
+    expect(
+      mapRegisterErrorCode(const ApiException(statusCode: 400, message: '')),
+      RegisterErrorCode.generic,
+    );
+  });
+
+  test('mapVerifyEmailErrorCode відповідає кодам backend', () {
+    expect(
+      mapVerifyEmailErrorCode(const ApiException(statusCode: 400, message: '')),
+      VerifyEmailErrorCode.invalid,
+    );
+    expect(
+      mapVerifyEmailErrorCode(const ApiException(statusCode: 500, message: '')),
+      VerifyEmailErrorCode.generic,
+    );
+  });
 }

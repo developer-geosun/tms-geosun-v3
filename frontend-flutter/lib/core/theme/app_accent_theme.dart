@@ -1,42 +1,36 @@
 import 'package:flutter/material.dart';
 
-/// Акцентні теми (1:1 з Angular ThemeService).
+/// Акцентні кольори (як у flutter-test Design Playground).
 enum AppAccentTheme {
-  azureBlue('azure-blue'),
-  roseRed('rose-red'),
-  magentaViolet('magenta-violet'),
-  cyanOrange('cyan-orange');
+  indigo('indigo'),
+  emerald('emerald'),
+  amber('amber'),
+  raspberry('raspberry');
 
   const AppAccentTheme(this.storageKey);
 
   final String storageKey;
 
-  Brightness get brightness => switch (this) {
-    AppAccentTheme.azureBlue || AppAccentTheme.roseRed => Brightness.light,
-    AppAccentTheme.magentaViolet ||
-    AppAccentTheme.cyanOrange => Brightness.dark,
-  };
-
-  /// Seed-колір для ColorScheme.fromSeed (наближено до Angular M3 palettes).
+  /// Seed-колір для ColorScheme.fromSeed (Material 3).
   Color get seedColor => switch (this) {
-    AppAccentTheme.azureBlue => const Color(0xFF005FB8),
-    AppAccentTheme.roseRed => const Color(0xFF984061),
-    AppAccentTheme.magentaViolet => const Color(0xFF9700AA),
-    AppAccentTheme.cyanOrange => const Color(0xFF0A6A6C),
-  };
-
-  /// Другий акцент для превʼю (tertiary у Angular).
-  Color get previewAccentColor => switch (this) {
-    AppAccentTheme.azureBlue => const Color(0xFF4A7FD7),
-    AppAccentTheme.roseRed => const Color(0xFFE46962),
-    AppAccentTheme.magentaViolet => const Color(0xFF7F39FB),
-    AppAccentTheme.cyanOrange => const Color(0xFFFF8C42),
+    AppAccentTheme.indigo => const Color(0xFF4F46E5),
+    AppAccentTheme.emerald => const Color(0xFF10B981),
+    AppAccentTheme.amber => const Color(0xFFF59E0B),
+    AppAccentTheme.raspberry => const Color(0xFFE11D48),
   };
 
   static AppAccentTheme fromStorageKey(String? key) {
-    return AppAccentTheme.values.firstWhere(
-      (theme) => theme.storageKey == key,
-      orElse: () => AppAccentTheme.azureBlue,
-    );
+    return switch (key) {
+      'indigo' => AppAccentTheme.indigo,
+      'emerald' => AppAccentTheme.emerald,
+      'amber' => AppAccentTheme.amber,
+      'raspberry' => AppAccentTheme.raspberry,
+      // Міграція зі старих ключів Angular / попередньої версії Flutter.
+      'azure-blue' => AppAccentTheme.indigo,
+      'rose-red' => AppAccentTheme.raspberry,
+      'magenta-violet' => AppAccentTheme.indigo,
+      'cyan-orange' => AppAccentTheme.amber,
+      _ => AppAccentTheme.indigo,
+    };
   }
 }

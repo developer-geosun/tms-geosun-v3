@@ -8,7 +8,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { firstValueFrom } from 'rxjs';
 import { routes } from './app.routes';
-import { authInterceptor, ngrokSkipInterceptor } from './core/interceptors';
+import { authInterceptor, appClientInterceptor, ngrokSkipInterceptor } from './core/interceptors';
 import { AuthService, TranslatedMatPaginatorIntl } from './core/services';
 
 // Фабрика для завантаження перекладів з assets
@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'uk' },
     { provide: MatPaginatorIntl, useClass: TranslatedMatPaginatorIntl },
     provideRouter(routes),
-    provideHttpClient(withInterceptors([ngrokSkipInterceptor, authInterceptor])),
+    provideHttpClient(withInterceptors([ngrokSkipInterceptor, appClientInterceptor, authInterceptor])),
     provideAnimations(),
     provideAppInitializer(configureMaterialSymbols),
     provideAppInitializer(() => {

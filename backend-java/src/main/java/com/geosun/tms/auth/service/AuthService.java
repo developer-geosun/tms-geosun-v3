@@ -1,5 +1,6 @@
 package com.geosun.tms.auth.service;
 
+import com.geosun.tms.auth.config.AppClient;
 import com.geosun.tms.auth.config.AppEmailProperties;
 import com.geosun.tms.auth.domain.EmailNormalizer;
 import com.geosun.tms.auth.domain.token.EmailVerificationToken;
@@ -39,6 +40,7 @@ import java.time.Instant;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.NonNull;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,7 +92,8 @@ public class AuthService {
   }
 
   @Transactional
-  public RegisterResponse register(RegisterRequest request, String clientIp) {
+  public RegisterResponse register(
+      RegisterRequest request, String clientIp, @NonNull AppClient appClient) {
     rateLimitService.checkRegister(clientIp);
     String email = EmailNormalizer.normalize(request.email());
     if (userRepository.existsByEmailAndDeletedFalse(email)) {
@@ -113,7 +116,8 @@ public class AuthService {
     emailVerificationTokenRepository.save(token);
 
     try {
-      verificationMailSender.sendVerificationEmail(email, rawVerification);
+      verificationMailSender.sendVerificationEmail(
+          email, rawVerification, Objects.requireNonNull(appClient));
     } catch (MailException ex) {
       log.error("Failed to send verification email after registration");
     }
@@ -181,7 +185,8 @@ public class AuthService {
   }
 
   @Transactional
-  public OperationSuccessResponse resendVerification(ResendVerificationRequest request) {
+  public OperationSuccessResponse resendVerification(
+      ResendVerificationRequest request, @NonNull AppClient appClient) {
     String email = EmailNormalizer.normalize(request.email());
     rateLimitService.checkResend(email);
 
@@ -202,7 +207,7 @@ public class AuthService {
     emailVerificationTokenRepository.save(token);
 
     try {
-      verificationMailSender.sendVerificationEmail(email, raw);
+      verificationMailSender.sendVerificationEmail(email, raw, Objects.requireNonNull(appClient));
     } catch (MailException ex) {
       log.error("Failed to resend verification email");
       throw ApiException.serviceUnavailable("EMAIL_DELIVERY_FAILED", "Email delivery failed");
@@ -212,7 +217,8 @@ public class AuthService {
   }
 
   @Transactional
-  public OperationSuccessResponse forgotPassword(ForgotPasswordRequest request) {
+  public OperationSuccessResponse forgotPassword(
+      ForgotPasswordRequest request, @NonNull AppClient appClient) {
     String email = EmailNormalizer.normalize(request.email());
     rateLimitService.checkForgotPassword(email);
 
@@ -244,7 +250,7 @@ public class AuthService {
     passwordResetTokenRepository.save(token);
 
     try {
-      passwordResetMailSender.sendPasswordResetEmail(email, raw);
+      passwordResetMailSender.sendPasswordResetEmail(email, raw, Objects.requireNonNull(appClient));
     } catch (MailException ex) {
       log.error("Failed to send password reset email");
     }

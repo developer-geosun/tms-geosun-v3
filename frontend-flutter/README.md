@@ -60,7 +60,7 @@ Output: `build/web/`
 - Angular → `https://developer-geosun.github.io/<repo-name>/`
 - Flutter → `https://developer-geosun.github.io/<repo-name>/flutter/`
 
-`API_URL` для Flutter берётся из GitHub Secret `API_URL` (тот же, что для Angular). Deep links на Pages обрабатываются через общий `404.html` в корне `gh-pages`.
+`API_URL` для Flutter берётся из GitHub Secret `API_URL` (тот же, что для Angular). Deep links на Pages обрабатываются через общий `404.html` в корне `gh-pages`. Ссылки из писем ведут на клиент, который отправил запрос (`X-App-Client`).
 
 ## Tests
 
@@ -73,7 +73,7 @@ dart format lib test
 
 - Material 3 UI, Inter font (bundled), i18n `uk` / `en` / `ru`
 - Auth: login, refresh, logout, `/auth/me`, session restore from `localStorage`
-- Routes: `/login`, `/home` (stub after sign-in)
+- Routes: `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password`, `/home`
 
 Business screens (trips, routes, admin) and mobile targets are planned for later phases.
 

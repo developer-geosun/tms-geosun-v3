@@ -121,8 +121,8 @@ PUBLIC_ACCESS_MODE=static-ip
 PUBLIC_API_URL=http://178.136.237.7:8080
 # COMPOSE_PROFILES не задавать (или оставить пустым) — сервис ngrok не стартует
 CORS_ALLOWED_ORIGIN_PATTERNS=https://developer-geosun.github.io
-EMAIL_VERIFICATION_LINK_BASE=https://developer-geosun.github.io/tms-geosun-v2/verify-email
-PASSWORD_RESET_LINK_BASE=https://developer-geosun.github.io/tms-geosun-v2/reset-password
+ANGULAR_APP_BASE_URL=https://developer-geosun.github.io/tms-geosun-v3
+FLUTTER_APP_BASE_URL=https://developer-geosun.github.io/tms-geosun-v3/flutter
 APP_STORAGE_TYPE=local
 ```
 
@@ -149,8 +149,8 @@ NGROK_AUTHTOKEN=<ваш_ngrok_authtoken>
 NGROK_DOMAIN=<ваш_домен_из_ngrok>
 PUBLIC_API_URL=https://<NGROK_DOMAIN>
 CORS_ALLOWED_ORIGIN_PATTERNS=https://developer-geosun.github.io
-EMAIL_VERIFICATION_LINK_BASE=https://developer-geosun.github.io/tms-geosun-v2/verify-email
-PASSWORD_RESET_LINK_BASE=https://developer-geosun.github.io/tms-geosun-v2/reset-password
+ANGULAR_APP_BASE_URL=https://developer-geosun.github.io/tms-geosun-v3
+FLUTTER_APP_BASE_URL=https://developer-geosun.github.io/tms-geosun-v3/flutter
 APP_STORAGE_TYPE=local
 ```
 
@@ -301,7 +301,7 @@ docker compose --profile dev down --remove-orphans
 - `frontend-dev` — это режим разработки (ng serve), подходит для быстрых правок и тестирования.
 - В Docker dev-режиме API проксируется через `frontend-angular/proxy.docker.conf.json` на `http://backend:8080`.
 - Для публичного API: режим `static-ip` (порт на хосте) или профили Compose `ngrok` / `ngrok-dev`.
-- Для ссылок из писем укажите `EMAIL_VERIFICATION_LINK_BASE` на URL frontend (локальный или GitHub Pages).
+- Для ссылок из писем укажите `ANGULAR_APP_BASE_URL` и `FLUTTER_APP_BASE_URL` (локально или GitHub Pages). Backend сам добавит `/verify-email` или `/reset-password` по заголовку `X-App-Client`.
 - На первом запуске `frontend-dev` установит зависимости (`npm ci`), далее старт обычно заметно быстрее.
 - Если выполнить обычный `docker compose down` без `--profile dev`, может появиться `Network ... Resource is still in use`, потому что dev-контейнеры останутся запущенными.
 

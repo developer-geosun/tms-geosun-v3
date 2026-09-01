@@ -23,10 +23,10 @@ class ThemeNotifier extends Notifier<AppAccentTheme> {
     final saved = prefs.getString(themeStorageKey);
 
     if (saved == 'light') {
-      return AppAccentTheme.azureBlue;
+      return AppAccentTheme.indigo;
     }
     if (saved == 'dark') {
-      return AppAccentTheme.magentaViolet;
+      return AppAccentTheme.indigo;
     }
 
     return AppAccentTheme.fromStorageKey(saved);

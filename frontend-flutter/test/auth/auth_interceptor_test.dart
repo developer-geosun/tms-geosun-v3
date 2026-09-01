@@ -57,6 +57,10 @@ void main() {
       isTrue,
     );
     expect(
+      isAuthEndpointPath('http://localhost:8080/api/v1/auth/register'),
+      isTrue,
+    );
+    expect(
       isAuthEndpointPath('http://localhost:8080/api/v1/auth/refresh'),
       isTrue,
     );
@@ -64,6 +68,12 @@ void main() {
       isAuthEndpointPath('http://localhost:8080/api/v1/routes/my'),
       isFalse,
     );
+  });
+
+  test('ApiClient додає X-App-Client flutter', () {
+    const config = AppConfig(apiUrl: 'http://localhost:8080');
+    final client = ApiClient(config);
+    expect(client.dio.options.headers['X-App-Client'], 'flutter');
   });
 }
 

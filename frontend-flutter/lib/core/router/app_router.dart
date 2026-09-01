@@ -2,8 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../auth/state/auth_controller.dart';
+import '../../auth/ui/forgot_password_page.dart';
 import '../../auth/ui/home_page.dart';
 import '../../auth/ui/login_page.dart';
+import '../../auth/ui/register_page.dart';
+import '../../auth/ui/reset_password_page.dart';
+import '../../auth/ui/verify_email_page.dart';
+import '../../core/shell/app_shell.dart';
+import '../../features/directories/ui/directories_page.dart';
 
 /// Безпечний returnUrl: лише відносний шлях без protocol-relative URL.
 String? sanitizeReturnUrl(String? raw) {
@@ -29,7 +35,43 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           return LoginPage(returnUrl: returnUrl);
         },
       ),
-      GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterPage(),
+      ),
+      GoRoute(
+        path: '/verify-email',
+        builder: (context, state) {
+          final token = state.uri.queryParameters['token']?.trim();
+          return VerifyEmailPage(token: token);
+        },
+      ),
+      GoRoute(
+        path: '/forgot-password',
+        builder: (context, state) => const ForgotPasswordPage(),
+      ),
+      GoRoute(
+        path: '/reset-password',
+        builder: (context, state) {
+          final token = state.uri.queryParameters['token']?.trim();
+          return ResetPasswordPage(token: token);
+        },
+      ),
+      ShellRoute(
+        builder: (context, state, child) => AppShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/home',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: HomePage()),
+          ),
+          GoRoute(
+            path: '/directories',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: DirectoriesPage()),
+          ),
+        ],
+      ),
       GoRoute(path: '/', redirect: (context, state) => '/login'),
     ],
     redirect: (context, state) {
@@ -39,15 +81,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       }
 
       final location = state.matchedLocation;
-      final isLogin = location == '/login';
+      final isGuestRoute =
+          location == '/login' ||
+          location == '/register' ||
+          location == '/verify-email' ||
+          location == '/forgot-password' ||
+          location == '/reset-password';
       final isAuthenticated = auth.isAuthenticated;
 
-      if (!isAuthenticated && !isLogin) {
+      if (!isAuthenticated && !isGuestRoute) {
         final returnUrl = Uri.encodeComponent(state.uri.toString());
         return '/login?returnUrl=$returnUrl';
       }
 
-      if (isAuthenticated && isLogin) {
+      if (isAuthenticated && isGuestRoute) {
         final returnUrl = sanitizeReturnUrl(
           state.uri.queryParameters['returnUrl'],
         );
@@ -58,7 +105,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     },
   );
 
-  ref.listen(authControllerProvider, (_, __) {
+  ref.listen(authControllerProvider, (_, _) {
     router.refresh();
   });
 

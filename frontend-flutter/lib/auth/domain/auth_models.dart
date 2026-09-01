@@ -101,6 +101,60 @@ enum LoginErrorCode {
   generic,
 }
 
+enum RegisterErrorCode { conflict, rateLimited, generic }
+
+enum ForgotPasswordErrorCode {
+  rateLimited,
+  accountDisabled,
+  userDeleted,
+  generic,
+}
+
+enum ResetPasswordErrorCode { invalid, rateLimited, generic }
+
+enum VerifyEmailErrorCode { invalid, generic }
+
+RegisterErrorCode mapRegisterErrorCode(ApiException error) {
+  if (error.statusCode == 409) {
+    return RegisterErrorCode.conflict;
+  }
+  if (error.statusCode == 429) {
+    return RegisterErrorCode.rateLimited;
+  }
+  return RegisterErrorCode.generic;
+}
+
+ForgotPasswordErrorCode mapForgotPasswordErrorCode(ApiException error) {
+  final code = error.code;
+  if (error.statusCode == 403 && code == 'ACCOUNT_DISABLED') {
+    return ForgotPasswordErrorCode.accountDisabled;
+  }
+  if (error.statusCode == 403 && code == 'USER_DELETED') {
+    return ForgotPasswordErrorCode.userDeleted;
+  }
+  if (error.statusCode == 429) {
+    return ForgotPasswordErrorCode.rateLimited;
+  }
+  return ForgotPasswordErrorCode.generic;
+}
+
+ResetPasswordErrorCode mapResetPasswordErrorCode(ApiException error) {
+  if (error.statusCode == 400) {
+    return ResetPasswordErrorCode.invalid;
+  }
+  if (error.statusCode == 429) {
+    return ResetPasswordErrorCode.rateLimited;
+  }
+  return ResetPasswordErrorCode.generic;
+}
+
+VerifyEmailErrorCode mapVerifyEmailErrorCode(ApiException error) {
+  if (error.statusCode == 400) {
+    return VerifyEmailErrorCode.invalid;
+  }
+  return VerifyEmailErrorCode.generic;
+}
+
 LoginErrorCode mapLoginErrorCode(ApiException error) {
   final code = error.code;
   if (error.statusCode == 403 && code == 'EMAIL_NOT_VERIFIED') {

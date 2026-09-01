@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.geosun.tms.auth.config.AppClient;
 import com.geosun.tms.auth.domain.user.Role;
 import com.geosun.tms.auth.domain.user.User;
 import com.geosun.tms.auth.dto.request.ForgotPasswordRequest;
@@ -199,6 +200,58 @@ class ApiIntegrationTest {
                 .contentType(jsonContentType())
                 .content(toJson(new RefreshRequest(refresh))))
         .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  void register_withoutClientHeader_sendsAngularLinkAndClientUrl() throws Exception {
+    mockMvc.perform(
+        post("/api/v1/auth/register")
+            .contentType(jsonContentType())
+            .content(toJson(new RegisterRequest("angular-mail@example.com", "Secret123"))));
+
+    ArgumentCaptor<MimeMessage> mailCap = mimeMessageCaptor();
+    verifyMailSentAndCapture(javaMailSender, mailCap);
+    String text = requireMailText(capturedMail(mailCap));
+    assertThat(text).contains("http://localhost:4200/verify-email?token=");
+    assertThat(text).contains("Angular");
+    assertThat(text).contains("http://localhost:4200");
+    assertThat(text).doesNotContain("http://localhost:4300");
+  }
+
+  @Test
+  void register_withFlutterClient_sendsFlutterLinkAndClientUrl() throws Exception {
+    mockMvc.perform(
+        post("/api/v1/auth/register")
+            .header(AppClient.HEADER_NAME, "flutter")
+            .contentType(jsonContentType())
+            .content(toJson(new RegisterRequest("flutter-mail@example.com", "Secret123"))));
+
+    ArgumentCaptor<MimeMessage> mailCap = mimeMessageCaptor();
+    verifyMailSentAndCapture(javaMailSender, mailCap);
+    String text = requireMailText(capturedMail(mailCap));
+    assertThat(text).contains("http://localhost:4300/verify-email?token=");
+    assertThat(text).contains("Flutter");
+    assertThat(text).contains("http://localhost:4300");
+    assertThat(text).doesNotContain("http://localhost:4200");
+  }
+
+  @Test
+  void forgotPassword_withFlutterClient_sendsFlutterResetLink() throws Exception {
+    registerVerifyLogin("flutter-reset@example.com");
+
+    mockMvc
+        .perform(
+            post("/api/v1/auth/forgot-password")
+                .header(AppClient.HEADER_NAME, "FLUTTER")
+                .contentType(jsonContentType())
+                .content(toJson(new ForgotPasswordRequest("flutter-reset@example.com"))))
+        .andExpect(status().isOk());
+
+    ArgumentCaptor<MimeMessage> mailCap = mimeMessageCaptor();
+    verifyMailSentAndCapture(javaMailSender, mailCap);
+    String text = requireMailText(capturedMail(mailCap));
+    assertThat(text).contains("http://localhost:4300/reset-password?token=");
+    assertThat(text).contains("Flutter");
   }
 
   @Test

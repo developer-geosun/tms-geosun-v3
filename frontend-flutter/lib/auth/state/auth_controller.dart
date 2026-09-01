@@ -95,6 +95,34 @@ class AuthController extends Notifier<AuthState> {
     await _applyTokens(tokens);
   }
 
+  /// Реєстрація без сесії: токени з'являться лише після підтвердження email.
+  Future<AuthUser> register({required String email, required String password}) {
+    return _authApi.register(
+      RegisterRequest(email: email.trim(), password: password),
+    );
+  }
+
+  Future<void> verifyEmail({required String token}) {
+    return _authApi.verifyEmail(token: token.trim());
+  }
+
+  Future<void> forgotPassword({required String email}) {
+    return _authApi.forgotPassword(ForgotPasswordRequest(email: email.trim()));
+  }
+
+  Future<String> passwordResetInfo({required String token}) {
+    return _authApi.passwordResetInfo(token: token);
+  }
+
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) {
+    return _authApi.resetPassword(
+      ResetPasswordRequest(token: token, newPassword: newPassword),
+    );
+  }
+
   Future<void> logout() async {
     final accessToken = state.accessToken;
     if (accessToken != null) {

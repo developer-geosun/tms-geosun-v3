@@ -1,11 +1,11 @@
 import { spawnSync } from 'node:child_process';
-import { deriveBaseHrefFromLinkBase } from './derive-base-href.mjs';
+import { deriveBaseHrefFromAppBase } from './derive-base-href.mjs';
 import { readEnvVar } from './read-env.mjs';
 
-const verificationLinkBase = readEnvVar('EMAIL_VERIFICATION_LINK_BASE');
-const baseHref = deriveBaseHrefFromLinkBase(verificationLinkBase);
+const angularAppBase = readEnvVar('ANGULAR_APP_BASE_URL');
+const baseHref = deriveBaseHrefFromAppBase(angularAppBase);
 
-console.log(`[deploy] base-href=${baseHref} (from EMAIL_VERIFICATION_LINK_BASE)`);
+console.log(`[deploy] base-href=${baseHref} (from ANGULAR_APP_BASE_URL)`);
 
 function run(command, args) {
   const result = spawnSync(command, args, {

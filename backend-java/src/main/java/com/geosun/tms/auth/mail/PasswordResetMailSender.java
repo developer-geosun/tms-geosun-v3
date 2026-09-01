@@ -1,13 +1,15 @@
 package com.geosun.tms.auth.mail;
 
+import com.geosun.tms.auth.config.AppClient;
 import com.geosun.tms.auth.config.AppEmailProperties;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.lang.NonNull;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailPreparationException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,7 +22,9 @@ import org.springframework.util.StreamUtils;
  */
 @Component
 public class PasswordResetMailSender {
-  private static final String TEMPLATE_TOKEN = "{{RESET_LINK}}";
+  private static final String TEMPLATE_LINK = "{{RESET_LINK}}";
+  private static final String TEMPLATE_CLIENT_NAME = "{{CLIENT_NAME}}";
+  private static final String TEMPLATE_APP_URL = "{{APP_URL}}";
   private static final String MAIL_SUBJECT = "Password reset / Сброс пароля / Скидання пароля";
   private static final Resource PLAIN_TEMPLATE_RESOURCE =
       new ClassPathResource("mail/password-reset-email.txt");
@@ -35,18 +39,20 @@ public class PasswordResetMailSender {
     this.emailProperties = emailProperties;
   }
 
-  public void sendPasswordResetEmail(String toAddress, String rawToken) throws MailException {
+  public void sendPasswordResetEmail(
+      String toAddress, String rawToken, @NonNull AppClient appClient) throws MailException {
     if (toAddress == null) {
       throw new NullPointerException("toAddress must not be null");
     }
     if (rawToken == null) {
       throw new NullPointerException("rawToken must not be null");
     }
+    AppClient client = Objects.requireNonNull(appClient);
     String fromAddress = emailProperties.getFrom();
     if (fromAddress == null) {
       throw new NullPointerException("from address must not be null");
     }
-    String resetLink = buildResetLink(emailProperties.resolvePasswordResetLinkBase(), rawToken);
+    String resetLink = emailProperties.buildPasswordResetLink(client, rawToken);
     MimeMessage message = mailSender.createMimeMessage();
     try {
       MimeMessageHelper helper =
@@ -54,8 +60,12 @@ public class PasswordResetMailSender {
       helper.setFrom(fromAddress);
       helper.setTo(toAddress);
       helper.setSubject(MAIL_SUBJECT);
-      String plainBody = buildPlainTextBody(resetLink);
-      String htmlBody = buildHtmlBody(resetLink);
+      String plainBody =
+          fillTemplate(
+              Objects.requireNonNull(readTemplate(PLAIN_TEMPLATE_RESOURCE)), resetLink, client);
+      String htmlBody =
+          fillTemplate(
+              Objects.requireNonNull(readTemplate(HTML_TEMPLATE_RESOURCE)), resetLink, client);
       if (plainBody == null || htmlBody == null) {
         throw new MailPreparationException("Password reset email body must not be null");
       }
@@ -66,33 +76,24 @@ public class PasswordResetMailSender {
     mailSender.send(message);
   }
 
-  private static String buildPlainTextBody(String resetLink) throws IOException {
-    return readTemplate(PLAIN_TEMPLATE_RESOURCE).replace(TEMPLATE_TOKEN, resetLink);
+  @NonNull
+  private String fillTemplate(
+      @NonNull String template, @NonNull String resetLink, @NonNull AppClient client) {
+    return Objects.requireNonNull(
+        template
+            .replace(TEMPLATE_LINK, resetLink)
+            .replace(TEMPLATE_CLIENT_NAME, emailProperties.resolveClientDisplayName(client))
+            .replace(TEMPLATE_APP_URL, emailProperties.resolveAppBaseUrl(client)));
   }
 
-  private static String buildHtmlBody(String resetLink) throws IOException {
-    return readTemplate(HTML_TEMPLATE_RESOURCE).replace(TEMPLATE_TOKEN, resetLink);
-  }
-
+  @NonNull
   private static String readTemplate(Resource resource) throws IOException {
     try (var inputStream = resource.getInputStream()) {
       var utf8 = StandardCharsets.UTF_8;
       if (utf8 == null) {
         throw new IllegalStateException("UTF-8 charset must be available");
       }
-      return StreamUtils.copyToString(inputStream, utf8);
+      return Objects.requireNonNull(StreamUtils.copyToString(inputStream, utf8));
     }
-  }
-
-  private static String buildResetLink(String resetLinkBase, String rawToken) {
-    String sanitizedBase =
-        resetLinkBase == null || resetLinkBase.isBlank()
-            ? "http://localhost:4200/reset-password"
-            : resetLinkBase.trim();
-    String delimiter = sanitizedBase.contains("?") ? "&" : "?";
-    return sanitizedBase
-        + delimiter
-        + "token="
-        + URLEncoder.encode(rawToken, StandardCharsets.UTF_8);
   }
 }

@@ -13,12 +13,38 @@ class LoginRequest {
   Map<String, dynamic> toJson() => {'email': email, 'password': password};
 }
 
+class RegisterRequest {
+  const RegisterRequest({required this.email, required this.password});
+
+  final String email;
+  final String password;
+
+  Map<String, dynamic> toJson() => {'email': email, 'password': password};
+}
+
 class RefreshRequest {
   const RefreshRequest({required this.refreshToken});
 
   final String refreshToken;
 
   Map<String, dynamic> toJson() => {'refreshToken': refreshToken};
+}
+
+class ForgotPasswordRequest {
+  const ForgotPasswordRequest({required this.email});
+
+  final String email;
+
+  Map<String, dynamic> toJson() => {'email': email};
+}
+
+class ResetPasswordRequest {
+  const ResetPasswordRequest({required this.token, required this.newPassword});
+
+  final String token;
+  final String newPassword;
+
+  Map<String, dynamic> toJson() => {'token': token, 'newPassword': newPassword};
 }
 
 /// REST-клієнт auth endpoint-ів без codegen.
@@ -30,6 +56,38 @@ class AuthApi {
 
   Future<AuthTokens> login(LoginRequest request) async {
     return _postTokens(_config.authPath('/login'), data: request.toJson());
+  }
+
+  Future<AuthUser> register(RegisterRequest request) async {
+    final payload = await _postAuthJson('/register', data: request.toJson());
+    return AuthUser.fromJson(payload);
+  }
+
+  Future<void> verifyEmail({required String token}) async {
+    await _postAuthJson('/verify-email', data: {'token': token});
+  }
+
+  Future<void> forgotPassword(ForgotPasswordRequest request) async {
+    await _postAuthJson('/forgot-password', data: request.toJson());
+  }
+
+  Future<String> passwordResetInfo({required String token}) async {
+    final payload = await _postAuthJson(
+      '/reset-password-info',
+      data: {'token': token},
+    );
+    final email = payload['email']?.toString().trim() ?? '';
+    if (email.isEmpty) {
+      throw const ApiException(
+        statusCode: 400,
+        message: 'Reset info missing email',
+      );
+    }
+    return email;
+  }
+
+  Future<void> resetPassword(ResetPasswordRequest request) async {
+    await _postAuthJson('/reset-password', data: request.toJson());
   }
 
   Future<AuthTokens> refresh(RefreshRequest request) async {
@@ -69,6 +127,21 @@ class AuthApi {
     String url, {
     required Map<String, dynamic> data,
   }) async {
+    final payload = await _postAuthUrl(url, data: data);
+    return AuthTokens.fromJson(payload);
+  }
+
+  Future<Map<String, dynamic>> _postAuthJson(
+    String path, {
+    required Map<String, dynamic> data,
+  }) {
+    return _postAuthUrl(_config.authPath(path), data: data);
+  }
+
+  Future<Map<String, dynamic>> _postAuthUrl(
+    String url, {
+    required Map<String, dynamic> data,
+  }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         url,
@@ -86,7 +159,7 @@ class AuthApi {
           code: payload['code']?.toString(),
         );
       }
-      return AuthTokens.fromJson(payload);
+      return payload;
     } on DioException catch (error) {
       throw ApiException.fromDio(error);
     }

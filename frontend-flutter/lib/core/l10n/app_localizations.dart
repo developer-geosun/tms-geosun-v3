@@ -214,11 +214,275 @@ abstract class AppLocalizations {
   /// **'Пароль має містити щонайменше 8 символів'**
   String get loginPasswordMinLength;
 
+  /// No description provided for @loginNoAccount.
+  ///
+  /// In uk, this message translates to:
+  /// **'Ще не маєте акаунта?'**
+  String get loginNoAccount;
+
+  /// No description provided for @loginForgotPassword.
+  ///
+  /// In uk, this message translates to:
+  /// **'Забули пароль?'**
+  String get loginForgotPassword;
+
+  /// No description provided for @authRegister.
+  ///
+  /// In uk, this message translates to:
+  /// **'Реєстрація'**
+  String get authRegister;
+
+  /// No description provided for @authLogin.
+  ///
+  /// In uk, this message translates to:
+  /// **'Увійти'**
+  String get authLogin;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Створити акаунт'**
+  String get registerTitle;
+
+  /// No description provided for @registerSubtitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Зареєструйтеся за email та паролем'**
+  String get registerSubtitle;
+
+  /// No description provided for @registerConfirmPassword.
+  ///
+  /// In uk, this message translates to:
+  /// **'Підтвердіть пароль'**
+  String get registerConfirmPassword;
+
+  /// No description provided for @registerPasswordRule.
+  ///
+  /// In uk, this message translates to:
+  /// **'Пароль має містити щонайменше одну літеру та одну цифру'**
+  String get registerPasswordRule;
+
+  /// No description provided for @registerPasswordMismatch.
+  ///
+  /// In uk, this message translates to:
+  /// **'Паролі не збігаються'**
+  String get registerPasswordMismatch;
+
+  /// No description provided for @registerSubmit.
+  ///
+  /// In uk, this message translates to:
+  /// **'Зареєструватися'**
+  String get registerSubmit;
+
+  /// No description provided for @registerLoading.
+  ///
+  /// In uk, this message translates to:
+  /// **'Створення акаунта...'**
+  String get registerLoading;
+
+  /// No description provided for @registerSuccess.
+  ///
+  /// In uk, this message translates to:
+  /// **'Акаунт успішно створено. Перевірте пошту для підтвердження email'**
+  String get registerSuccess;
+
+  /// No description provided for @registerError409.
+  ///
+  /// In uk, this message translates to:
+  /// **'Користувач з таким email вже існує'**
+  String get registerError409;
+
+  /// No description provided for @registerError429.
+  ///
+  /// In uk, this message translates to:
+  /// **'Занадто багато спроб, спробуйте пізніше'**
+  String get registerError429;
+
+  /// No description provided for @registerErrorGeneric.
+  ///
+  /// In uk, this message translates to:
+  /// **'Помилка реєстрації, перевірте дані'**
+  String get registerErrorGeneric;
+
+  /// No description provided for @registerHaveAccount.
+  ///
+  /// In uk, this message translates to:
+  /// **'Вже маєте акаунт?'**
+  String get registerHaveAccount;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Відновлення пароля'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Вкажіть email — надішлемо посилання для скидання пароля'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @forgotPasswordSubmit.
+  ///
+  /// In uk, this message translates to:
+  /// **'Надіслати посилання'**
+  String get forgotPasswordSubmit;
+
+  /// No description provided for @forgotPasswordLoading.
+  ///
+  /// In uk, this message translates to:
+  /// **'Надсилаємо...'**
+  String get forgotPasswordLoading;
+
+  /// No description provided for @forgotPasswordSuccess.
+  ///
+  /// In uk, this message translates to:
+  /// **'Якщо акаунт існує, ми надіслали лист із посиланням для скидання пароля'**
+  String get forgotPasswordSuccess;
+
+  /// No description provided for @forgotPasswordErrorGeneric.
+  ///
+  /// In uk, this message translates to:
+  /// **'Не вдалося надіслати лист. Спробуйте пізніше'**
+  String get forgotPasswordErrorGeneric;
+
+  /// No description provided for @forgotPasswordBackToLogin.
+  ///
+  /// In uk, this message translates to:
+  /// **'Повернутися до входу'**
+  String get forgotPasswordBackToLogin;
+
+  /// No description provided for @resetPasswordTitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Новий пароль'**
+  String get resetPasswordTitle;
+
+  /// No description provided for @resetPasswordSubtitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Введіть новий пароль для акаунта'**
+  String get resetPasswordSubtitle;
+
+  /// No description provided for @resetPasswordResolvingAccount.
+  ///
+  /// In uk, this message translates to:
+  /// **'Перевіряємо посилання...'**
+  String get resetPasswordResolvingAccount;
+
+  /// No description provided for @resetPasswordPassword.
+  ///
+  /// In uk, this message translates to:
+  /// **'Новий пароль'**
+  String get resetPasswordPassword;
+
+  /// No description provided for @resetPasswordSubmit.
+  ///
+  /// In uk, this message translates to:
+  /// **'Зберегти пароль'**
+  String get resetPasswordSubmit;
+
+  /// No description provided for @resetPasswordLoading.
+  ///
+  /// In uk, this message translates to:
+  /// **'Збереження...'**
+  String get resetPasswordLoading;
+
+  /// No description provided for @resetPasswordSuccess.
+  ///
+  /// In uk, this message translates to:
+  /// **'Пароль оновлено. Увійдіть з новим паролем'**
+  String get resetPasswordSuccess;
+
+  /// No description provided for @resetPasswordMissingToken.
+  ///
+  /// In uk, this message translates to:
+  /// **'Посилання для скидання пароля відсутнє або пошкоджене'**
+  String get resetPasswordMissingToken;
+
+  /// No description provided for @resetPasswordRequestAgain.
+  ///
+  /// In uk, this message translates to:
+  /// **'Запитати нове посилання'**
+  String get resetPasswordRequestAgain;
+
+  /// No description provided for @resetPasswordErrorInvalid.
+  ///
+  /// In uk, this message translates to:
+  /// **'Посилання недійсне або застаріле'**
+  String get resetPasswordErrorInvalid;
+
+  /// No description provided for @resetPasswordErrorGeneric.
+  ///
+  /// In uk, this message translates to:
+  /// **'Не вдалося оновити пароль. Спробуйте пізніше'**
+  String get resetPasswordErrorGeneric;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Підтвердження email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verifyEmailSubtitle.
+  ///
+  /// In uk, this message translates to:
+  /// **'Перевіряємо посилання підтвердження'**
+  String get verifyEmailSubtitle;
+
+  /// No description provided for @verifyEmailLoading.
+  ///
+  /// In uk, this message translates to:
+  /// **'Підтверджуємо email...'**
+  String get verifyEmailLoading;
+
+  /// No description provided for @verifyEmailSuccess.
+  ///
+  /// In uk, this message translates to:
+  /// **'Email підтверджено. Можна увійти'**
+  String get verifyEmailSuccess;
+
+  /// No description provided for @verifyEmailInvalid.
+  ///
+  /// In uk, this message translates to:
+  /// **'Посилання підтвердження недійсне або застаріле'**
+  String get verifyEmailInvalid;
+
+  /// No description provided for @verifyEmailError.
+  ///
+  /// In uk, this message translates to:
+  /// **'Не вдалося підтвердити email. Спробуйте пізніше'**
+  String get verifyEmailError;
+
+  /// No description provided for @verifyEmailToLogin.
+  ///
+  /// In uk, this message translates to:
+  /// **'Перейти до входу'**
+  String get verifyEmailToLogin;
+
   /// No description provided for @homeTitle.
   ///
   /// In uk, this message translates to:
   /// **'Головна'**
   String get homeTitle;
+
+  /// No description provided for @navHome.
+  ///
+  /// In uk, this message translates to:
+  /// **'Головна'**
+  String get navHome;
+
+  /// No description provided for @navDirectories.
+  ///
+  /// In uk, this message translates to:
+  /// **'Довідники'**
+  String get navDirectories;
+
+  /// No description provided for @directoriesPlaceholder.
+  ///
+  /// In uk, this message translates to:
+  /// **'Розділ «Довідники» у розробці.'**
+  String get directoriesPlaceholder;
 
   /// No description provided for @homeWelcome.
   ///
@@ -301,7 +565,7 @@ abstract class AppLocalizations {
   /// No description provided for @languageUkShort.
   ///
   /// In uk, this message translates to:
-  /// **'УК'**
+  /// **'UA'**
   String get languageUkShort;
 
   /// No description provided for @languageEnShort.
@@ -334,29 +598,29 @@ abstract class AppLocalizations {
   /// **'Русский'**
   String get languageRussian;
 
-  /// No description provided for @themeAzureBlue.
+  /// No description provided for @themeIndigo.
   ///
   /// In uk, this message translates to:
-  /// **'Azure & Blue'**
-  String get themeAzureBlue;
+  /// **'Індиго'**
+  String get themeIndigo;
 
-  /// No description provided for @themeRoseRed.
+  /// No description provided for @themeEmerald.
   ///
   /// In uk, this message translates to:
-  /// **'Rose & Red'**
-  String get themeRoseRed;
+  /// **'Смарагд'**
+  String get themeEmerald;
 
-  /// No description provided for @themeMagentaViolet.
+  /// No description provided for @themeAmber.
   ///
   /// In uk, this message translates to:
-  /// **'Magenta & Violet'**
-  String get themeMagentaViolet;
+  /// **'Бурштин'**
+  String get themeAmber;
 
-  /// No description provided for @themeCyanOrange.
+  /// No description provided for @themeRaspberry.
   ///
   /// In uk, this message translates to:
-  /// **'Cyan & Orange'**
-  String get themeCyanOrange;
+  /// **'Малина'**
+  String get themeRaspberry;
 }
 
 class _AppLocalizationsDelegate

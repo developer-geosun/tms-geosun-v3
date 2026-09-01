@@ -13,6 +13,7 @@ class ApiClient {
         receiveTimeout: const Duration(seconds: 20),
         headers: {
           ...ngrokSkipBrowserWarningHeaders,
+          ...appClientHeaders,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },

@@ -7,13 +7,16 @@ const languageStorageKey = 'app-language';
 
 /// Підтримувані мови інтерфейсу (uk — за замовчуванням, як у Angular).
 enum AppLanguage {
-  uk('uk'),
-  en('en'),
-  ru('ru');
+  uk('uk', 'UA'),
+  en('en', 'EN'),
+  ru('ru', 'RU');
 
-  const AppLanguage(this.code);
+  const AppLanguage(this.code, this.shortLabel);
 
   final String code;
+
+  /// Код на кнопці вибору мови — завжди латиницею, без локалізації.
+  final String shortLabel;
 
   static AppLanguage fromCode(String? code) {
     return AppLanguage.values.firstWhere(

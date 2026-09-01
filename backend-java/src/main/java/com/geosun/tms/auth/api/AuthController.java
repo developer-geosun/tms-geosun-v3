@@ -1,5 +1,6 @@
 package com.geosun.tms.auth.api;
 
+import com.geosun.tms.auth.config.AppClient;
 import com.geosun.tms.auth.config.OpenApiConfig;
 import com.geosun.tms.auth.dto.request.ForgotPasswordRequest;
 import com.geosun.tms.auth.dto.request.LoginRequest;
@@ -19,16 +20,20 @@ import com.geosun.tms.auth.infrastructure.web.ClientIpResolver;
 import com.geosun.tms.auth.security.UserPrincipal;
 import com.geosun.tms.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,8 +58,15 @@ public class AuthController {
       description = "Creates USER; sends verification email (SMTP errors still return 201).")
   @PostMapping("/register")
   public ResponseEntity<RegisterResponse> register(
-      @Valid @RequestBody RegisterRequest request, HttpServletRequest httpRequest) {
-    RegisterResponse body = authService.register(request, clientIpResolver.resolve(httpRequest));
+      @Valid @RequestBody @NonNull RegisterRequest request,
+      HttpServletRequest httpRequest,
+      @RequestHeader(name = AppClient.HEADER_NAME, required = false)
+          @Parameter(description = "angular або flutter; визначає URL посилань у листі")
+          @Nullable
+          String appClientHeader) {
+    RegisterResponse body =
+        authService.register(
+            request, clientIpResolver.resolve(httpRequest), AppClient.fromHeader(appClientHeader));
     return ResponseEntity.status(HttpStatus.CREATED).body(body);
   }
 
@@ -78,8 +90,12 @@ public class AuthController {
       description = "Anti-enumeration: same 200 for unknown or already verified email.")
   @PostMapping("/resend-verification")
   public OperationSuccessResponse resendVerification(
-      @Valid @RequestBody ResendVerificationRequest request) {
-    return authService.resendVerification(request);
+      @Valid @RequestBody @NonNull ResendVerificationRequest request,
+      @RequestHeader(name = AppClient.HEADER_NAME, required = false)
+          @Parameter(description = "angular або flutter; визначає URL посилань у листі")
+          @Nullable
+          String appClientHeader) {
+    return authService.resendVerification(request, AppClient.fromHeader(appClientHeader));
   }
 
   @Operation(
@@ -87,8 +103,12 @@ public class AuthController {
       description = "Anti-enumeration: same 200 always; email sent only for active verified users.")
   @PostMapping("/forgot-password")
   public OperationSuccessResponse forgotPassword(
-      @Valid @RequestBody ForgotPasswordRequest request) {
-    return authService.forgotPassword(request);
+      @Valid @RequestBody @NonNull ForgotPasswordRequest request,
+      @RequestHeader(name = AppClient.HEADER_NAME, required = false)
+          @Parameter(description = "angular або flutter; визначає URL посилань у листі")
+          @Nullable
+          String appClientHeader) {
+    return authService.forgotPassword(request, AppClient.fromHeader(appClientHeader));
   }
 
   @Operation(

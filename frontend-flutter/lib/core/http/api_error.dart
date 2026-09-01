@@ -54,6 +54,9 @@ const Map<String, String> ngrokSkipBrowserWarningHeaders = {
   'ngrok-skip-browser-warning': 'true',
 };
 
+/// Ідентифікатор Flutter-клієнта для посилань у листах.
+const Map<String, String> appClientHeaders = {'X-App-Client': 'flutter'};
+
 bool isAuthEndpointPath(String path) {
   return path.contains('/auth/login') ||
       path.contains('/auth/register') ||

@@ -72,7 +72,149 @@ class AppLocalizationsUk extends AppLocalizations {
       'Пароль має містити щонайменше 8 символів';
 
   @override
+  String get loginNoAccount => 'Ще не маєте акаунта?';
+
+  @override
+  String get loginForgotPassword => 'Забули пароль?';
+
+  @override
+  String get authRegister => 'Реєстрація';
+
+  @override
+  String get authLogin => 'Увійти';
+
+  @override
+  String get registerTitle => 'Створити акаунт';
+
+  @override
+  String get registerSubtitle => 'Зареєструйтеся за email та паролем';
+
+  @override
+  String get registerConfirmPassword => 'Підтвердіть пароль';
+
+  @override
+  String get registerPasswordRule =>
+      'Пароль має містити щонайменше одну літеру та одну цифру';
+
+  @override
+  String get registerPasswordMismatch => 'Паролі не збігаються';
+
+  @override
+  String get registerSubmit => 'Зареєструватися';
+
+  @override
+  String get registerLoading => 'Створення акаунта...';
+
+  @override
+  String get registerSuccess =>
+      'Акаунт успішно створено. Перевірте пошту для підтвердження email';
+
+  @override
+  String get registerError409 => 'Користувач з таким email вже існує';
+
+  @override
+  String get registerError429 => 'Занадто багато спроб, спробуйте пізніше';
+
+  @override
+  String get registerErrorGeneric => 'Помилка реєстрації, перевірте дані';
+
+  @override
+  String get registerHaveAccount => 'Вже маєте акаунт?';
+
+  @override
+  String get forgotPasswordTitle => 'Відновлення пароля';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Вкажіть email — надішлемо посилання для скидання пароля';
+
+  @override
+  String get forgotPasswordSubmit => 'Надіслати посилання';
+
+  @override
+  String get forgotPasswordLoading => 'Надсилаємо...';
+
+  @override
+  String get forgotPasswordSuccess =>
+      'Якщо акаунт існує, ми надіслали лист із посиланням для скидання пароля';
+
+  @override
+  String get forgotPasswordErrorGeneric =>
+      'Не вдалося надіслати лист. Спробуйте пізніше';
+
+  @override
+  String get forgotPasswordBackToLogin => 'Повернутися до входу';
+
+  @override
+  String get resetPasswordTitle => 'Новий пароль';
+
+  @override
+  String get resetPasswordSubtitle => 'Введіть новий пароль для акаунта';
+
+  @override
+  String get resetPasswordResolvingAccount => 'Перевіряємо посилання...';
+
+  @override
+  String get resetPasswordPassword => 'Новий пароль';
+
+  @override
+  String get resetPasswordSubmit => 'Зберегти пароль';
+
+  @override
+  String get resetPasswordLoading => 'Збереження...';
+
+  @override
+  String get resetPasswordSuccess =>
+      'Пароль оновлено. Увійдіть з новим паролем';
+
+  @override
+  String get resetPasswordMissingToken =>
+      'Посилання для скидання пароля відсутнє або пошкоджене';
+
+  @override
+  String get resetPasswordRequestAgain => 'Запитати нове посилання';
+
+  @override
+  String get resetPasswordErrorInvalid => 'Посилання недійсне або застаріле';
+
+  @override
+  String get resetPasswordErrorGeneric =>
+      'Не вдалося оновити пароль. Спробуйте пізніше';
+
+  @override
+  String get verifyEmailTitle => 'Підтвердження email';
+
+  @override
+  String get verifyEmailSubtitle => 'Перевіряємо посилання підтвердження';
+
+  @override
+  String get verifyEmailLoading => 'Підтверджуємо email...';
+
+  @override
+  String get verifyEmailSuccess => 'Email підтверджено. Можна увійти';
+
+  @override
+  String get verifyEmailInvalid =>
+      'Посилання підтвердження недійсне або застаріле';
+
+  @override
+  String get verifyEmailError =>
+      'Не вдалося підтвердити email. Спробуйте пізніше';
+
+  @override
+  String get verifyEmailToLogin => 'Перейти до входу';
+
+  @override
   String get homeTitle => 'Головна';
+
+  @override
+  String get navHome => 'Головна';
+
+  @override
+  String get navDirectories => 'Довідники';
+
+  @override
+  String get directoriesPlaceholder => 'Розділ «Довідники» у розробці.';
 
   @override
   String get homeWelcome => 'Ви увійшли як';
@@ -114,7 +256,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get themeModeDark => 'Темна';
 
   @override
-  String get languageUkShort => 'УК';
+  String get languageUkShort => 'UA';
 
   @override
   String get languageEnShort => 'EN';
@@ -132,14 +274,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get languageRussian => 'Русский';
 
   @override
-  String get themeAzureBlue => 'Azure & Blue';
+  String get themeIndigo => 'Індиго';
 
   @override
-  String get themeRoseRed => 'Rose & Red';
+  String get themeEmerald => 'Смарагд';
 
   @override
-  String get themeMagentaViolet => 'Magenta & Violet';
+  String get themeAmber => 'Бурштин';
 
   @override
-  String get themeCyanOrange => 'Cyan & Orange';
+  String get themeRaspberry => 'Малина';
 }

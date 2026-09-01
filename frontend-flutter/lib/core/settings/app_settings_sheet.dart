@@ -33,7 +33,7 @@ class AppSettingsSheet extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               l10n.settingsAppearanceTitle,
@@ -45,26 +45,25 @@ class AppSettingsSheet extends ConsumerWidget {
               style: theme.textTheme.labelLarge,
             ),
             const SizedBox(height: 8),
-            SegmentedButton<AppLanguage>(
-              showSelectedIcon: false,
-              segments: [
-                ButtonSegment(
-                  value: AppLanguage.uk,
-                  label: Text(l10n.languageUkShort),
+            Center(
+              child: IntrinsicWidth(
+                child: SegmentedButton<AppLanguage>(
+                  showSelectedIcon: false,
+                  segments: [
+                    for (final language in AppLanguage.values)
+                      ButtonSegment(
+                        value: language,
+                        label: Text(language.shortLabel),
+                      ),
+                  ],
+                  selected: {currentLanguage},
+                  onSelectionChanged: (selection) {
+                    ref
+                        .read(localeProvider.notifier)
+                        .setLanguage(selection.first);
+                  },
                 ),
-                ButtonSegment(
-                  value: AppLanguage.en,
-                  label: Text(l10n.languageEnShort),
-                ),
-                ButtonSegment(
-                  value: AppLanguage.ru,
-                  label: Text(l10n.languageRuShort),
-                ),
-              ],
-              selected: {currentLanguage},
-              onSelectionChanged: (selection) {
-                ref.read(localeProvider.notifier).setLanguage(selection.first);
-              },
+              ),
             ),
             const SizedBox(height: 20),
             Text(
@@ -72,30 +71,34 @@ class AppSettingsSheet extends ConsumerWidget {
               style: theme.textTheme.labelLarge,
             ),
             const SizedBox(height: 8),
-            SegmentedButton<ThemeMode>(
-              segments: [
-                ButtonSegment(
-                  value: ThemeMode.light,
-                  label: Text(l10n.themeModeLight),
-                  icon: const Icon(Icons.light_mode_outlined),
+            Center(
+              child: IntrinsicWidth(
+                child: SegmentedButton<ThemeMode>(
+                  segments: [
+                    ButtonSegment(
+                      value: ThemeMode.light,
+                      label: Text(l10n.themeModeLight),
+                      icon: const Icon(Icons.light_mode_outlined),
+                    ),
+                    ButtonSegment(
+                      value: ThemeMode.system,
+                      label: Text(l10n.themeModeSystem),
+                      icon: const Icon(Icons.brightness_auto_outlined),
+                    ),
+                    ButtonSegment(
+                      value: ThemeMode.dark,
+                      label: Text(l10n.themeModeDark),
+                      icon: const Icon(Icons.dark_mode_outlined),
+                    ),
+                  ],
+                  selected: {themeMode},
+                  onSelectionChanged: (selection) {
+                    ref
+                        .read(themeModeProvider.notifier)
+                        .setThemeMode(selection.first);
+                  },
                 ),
-                ButtonSegment(
-                  value: ThemeMode.system,
-                  label: Text(l10n.themeModeSystem),
-                  icon: const Icon(Icons.brightness_auto_outlined),
-                ),
-                ButtonSegment(
-                  value: ThemeMode.dark,
-                  label: Text(l10n.themeModeDark),
-                  icon: const Icon(Icons.dark_mode_outlined),
-                ),
-              ],
-              selected: {themeMode},
-              onSelectionChanged: (selection) {
-                ref
-                    .read(themeModeProvider.notifier)
-                    .setThemeMode(selection.first);
-              },
+              ),
             ),
             const SizedBox(height: 20),
             Text(
@@ -104,6 +107,7 @@ class AppSettingsSheet extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Wrap(
+              alignment: WrapAlignment.center,
               spacing: 12,
               runSpacing: 12,
               children: [
@@ -126,10 +130,10 @@ class AppSettingsSheet extends ConsumerWidget {
 
   String _accentLabel(AppLocalizations l10n, AppAccentTheme accent) {
     return switch (accent) {
-      AppAccentTheme.azureBlue => l10n.themeAzureBlue,
-      AppAccentTheme.roseRed => l10n.themeRoseRed,
-      AppAccentTheme.magentaViolet => l10n.themeMagentaViolet,
-      AppAccentTheme.cyanOrange => l10n.themeCyanOrange,
+      AppAccentTheme.indigo => l10n.themeIndigo,
+      AppAccentTheme.emerald => l10n.themeEmerald,
+      AppAccentTheme.amber => l10n.themeAmber,
+      AppAccentTheme.raspberry => l10n.themeRaspberry,
     };
   }
 }
