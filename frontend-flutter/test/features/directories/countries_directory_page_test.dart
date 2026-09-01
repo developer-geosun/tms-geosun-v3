@@ -40,7 +40,7 @@ void main() {
   ];
 
   testWidgets(
-    'Таблиця країн має шапку secondaryContainer та сортовані заголовки',
+    'Таблиця країн має шапку surfaceContainer та сортовані заголовки',
     (tester) async {
       await _pumpCountriesPage(
         tester,
@@ -59,18 +59,28 @@ void main() {
       expect(find.text('Назва (EN)'), findsOneWidget);
       expect(find.text('Назва (RU)'), findsOneWidget);
 
-      final headerStyle = tester.widget<Text>(find.text('ISO-2')).style;
-      final onHeader = Theme.of(tester.element(find.text('ISO-2')))
-          .colorScheme
-          .onSecondaryContainer;
-      expect(headerStyle?.color, onHeader);
+      final scheme = Theme.of(tester.element(find.byType(CountriesPagedTable)))
+          .colorScheme;
+      expect(
+        tester
+            .widget<ColoredBox>(find.byKey(const Key('countries-table-header')))
+            .color,
+        scheme.surfaceContainer,
+      );
+      expect(
+        tester.widget<Text>(find.text('ISO-2')).style?.color,
+        scheme.primary,
+      );
+      expect(
+        tester.widget<Text>(find.text('ISO-3')).style?.color,
+        scheme.onSurface,
+      );
 
       expect(find.text('DE'), findsOneWidget);
       expect(find.text('Germany'), findsOneWidget);
+      expect(find.byTooltip('Наступна сторінка'), findsNothing);
+      expect(find.text('3 записи'), findsOneWidget);
 
-      final stripeScheme = Theme.of(
-        tester.element(find.byType(CountriesPagedTable)),
-      ).colorScheme;
       expect(
         tester
             .widget<ColoredBox>(
@@ -82,7 +92,7 @@ void main() {
                   .first,
             )
             .color,
-        stripeScheme.surface,
+        scheme.surface,
       );
       expect(
         tester
@@ -95,7 +105,7 @@ void main() {
                   .first,
             )
             .color,
-        stripeScheme.surfaceContainerHighest,
+        scheme.surfaceContainerLow,
       );
 
       await tester.tap(find.text('Назва (EN)'));
@@ -185,6 +195,7 @@ void main() {
 
     expect(find.text('Country 0'), findsOneWidget);
     expect(find.text('Country 50'), findsNothing);
+    expect(find.textContaining('1–50'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Наступна сторінка'));
     await tester.pumpAndSettle();

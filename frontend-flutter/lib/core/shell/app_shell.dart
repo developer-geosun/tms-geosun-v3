@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../l10n/app_localizations.dart';
-import '../widgets/app_logout_button.dart';
-import '../widgets/app_settings_button.dart';
+import '../widgets/app_account_menu.dart';
 import 'app_navigation.dart';
 
 /// Адаптивний каркас: NavigationRail (≥800px) або drawer + burger (вузький екран).
@@ -50,13 +49,7 @@ class AppShell extends StatelessWidget {
                   )
                 : null,
             actionsPadding: const EdgeInsets.only(right: 8),
-            actions: const [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 4,
-                children: [AppLogoutButton(), AppSettingsButton()],
-              ),
-            ],
+            actions: const [AppAccountMenu()],
           ),
           body: Row(
             children: [

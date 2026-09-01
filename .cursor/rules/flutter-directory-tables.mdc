@@ -15,7 +15,7 @@ alwaysApply: false
 
 ## Оболонка сторінки
 
-- Пошук + `DirectoryRefreshButton` (`AppElevatedIconButton`).
+- Пошук (`hintText`, `maxWidth` 420) + `DirectoryRefreshButton` (`AppElevatedIconButton`).
 - `DirectoryLoadProgress`: **завжди** 4 px, щоб таблиця не стрибала; анімація лише під час завантаження.
 - Помилки API — `showAppSnack` (`AppSnackKind.error`), не текст на сторінці. Успішні дії (синк тощо) — `AppSnackKind.success`.
 - Відступи: 24 px (широкий), 12 px якщо `width < appShellWideBreakpoint` (800).
@@ -34,25 +34,31 @@ alwaysApply: false
 
 | Елемент | Токен |
 |---|---|
-| Шапка | `secondaryContainer` / `onSecondaryContainer` (як вибраний пункт rail) |
+| AppBar | `surface` / `onSurface`, низ — `outlineVariant` |
+| Rail selected | `secondaryContainer` (єдине велике peach/accent-заповнення) |
+| Шапка таблиці | `surfaceContainer` / `onSurface` |
+| Активне сортування | `primary` на підписі й стрілці |
 | Парний рядок | `surface` |
-| Непарний рядок | `surfaceContainerHighest` |
+| Непарний рядок | `surfaceContainerLow` |
+| Hover рядка | `surfaceContainerHigh` |
 | Текст шапки | `titleSmall`, weight 600 |
 
-Не хардкодити hex.
+Не хардкодити hex. Не фарбувати AppBar і шапку таблиці в `secondaryContainer`.
 
 ## Стовпці та compact
 
-- Широкий екран: усі стовпці.
+- Широкий екран: усі стовпці. ISO — `FixedColumnWidth` + chip; назва поточної мови UI ліворуч після ISO, `emphasize`.
 - `width < 800`: менше стовпців (країни: ISO-2, ISO-3, **одна** назва `localizedName` поточною мовою).
-- Клітинки: `maxLines: 1`, `ellipsis`, `Tooltip` з повним текстом.
-- Тап по шапці: той самий стовпець → інверсія напрямку; інший → `ascending: true`. Активний стовпець — стрілка 16 px.
+- Клітинки: `maxLines: 1`, `ellipsis`; `Tooltip` **лише** якщо текст обрізано.
+- Тап по шапці: той самий стовпець → інверсія напрямку; інший → `ascending: true`. Активний стовпець — стрілка 16 px, колір `primary`.
 
 ## Пагінація
 
 - Опції: `[5, 10, 15, 25, 50]`. За замовчуванням і максимум: **50**.
-- Підписи: `MaterialLocalizations` (`rowsPerPageTitle`, `pageRowsInfoTitle`, tooltips сторінок).
-- Compact: два рядки (`Wrap` розмір+діапазон, потім first/prev/next/last). Desktop: один рядок праворуч.
+- `lastRow = min((pageIndex + 1) * rowsPerPage, totalCount)`.
+- Якщо всі рядки на одній сторінці — `directoryRecordCount`, без first/prev/next/last.
+- Інакше підписи `MaterialLocalizations` (`rowsPerPageTitle`, `pageRowsInfoTitle`, tooltips сторінок).
+- Compact: два рядки (`Wrap` розмір+діапазон, потім навігація якщо є). Desktop: один рядок праворуч.
 
 ## Заборонено
 

@@ -239,6 +239,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get directoryRefresh => 'Refresh';
 
   @override
+  String directoryRecordCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count records',
+      one: '$count record',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get directoryEmpty => 'No records found';
 
   @override
@@ -335,6 +346,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsButtonLabel => 'Settings';
+
+  @override
+  String get accountMenuLabel => 'Account';
 
   @override
   String get settingsLanguageSection => 'Language';

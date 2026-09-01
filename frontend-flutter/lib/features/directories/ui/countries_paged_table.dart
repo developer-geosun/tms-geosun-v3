@@ -1,7 +1,13 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/app_localizations.dart';
 import '../domain/country_reference_sort.dart';
 import '../domain/directory_models.dart';
+
+/// Стиль клітинки довідника країн.
+enum CountryTableCellKind { text, isoCode }
 
 /// Опис стовпця таблиці країн.
 class CountryTableColumn {
@@ -9,14 +15,18 @@ class CountryTableColumn {
     required this.label,
     required this.sortColumn,
     required this.valueOf,
+    this.kind = CountryTableCellKind.text,
+    this.emphasize = false,
   });
 
   final String label;
   final CountrySortColumn sortColumn;
   final String Function(CountryReference country) valueOf;
+  final CountryTableCellKind kind;
+  final bool emphasize;
 }
 
-/// Таблиця країн: шапка secondaryContainer, скрол лише у рядках, пагінація до 50.
+/// Таблиця країн: шапка surfaceContainer, скрол лише у рядках, пагінація до 50.
 class CountriesPagedTable extends StatefulWidget {
   const CountriesPagedTable({
     super.key,
@@ -57,19 +67,22 @@ class _CountriesPagedTableState extends State<CountriesPagedTable> {
   final _bodyScrollController = ScrollController();
 
   Map<int, TableColumnWidth> get _columnWidths {
+    // Ширина під заголовок «ISO-2»/«ISO-3» і стрілку сортування.
+    final iso2 = widget.compact
+        ? const FixedColumnWidth(88)
+        : const FixedColumnWidth(104);
+    final iso3 = widget.compact
+        ? const FixedColumnWidth(96)
+        : const FixedColumnWidth(112);
     if (widget.compact) {
-      return const {
-        0: FlexColumnWidth(1),
-        1: FlexColumnWidth(1),
-        2: FlexColumnWidth(2.6),
-      };
+      return {0: iso2, 1: iso3, 2: const FlexColumnWidth(1)};
     }
-    return const {
-      0: FlexColumnWidth(1.1),
-      1: FlexColumnWidth(1.1),
-      2: FlexColumnWidth(2),
-      3: FlexColumnWidth(2),
-      4: FlexColumnWidth(2),
+    return {
+      0: iso2,
+      1: iso3,
+      2: const FlexColumnWidth(1.2),
+      3: const FlexColumnWidth(1),
+      4: const FlexColumnWidth(1),
     };
   }
 
@@ -92,7 +105,8 @@ class _CountriesPagedTableState extends State<CountriesPagedTable> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ColoredBox(
-            color: colorScheme.secondaryContainer,
+            key: const Key('countries-table-header'),
+            color: colorScheme.surfaceContainer,
             child: Table(
               columnWidths: widths,
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -143,12 +157,13 @@ class _CountriesPagedTableState extends State<CountriesPagedTable> {
                           const Divider(height: 1),
                       itemBuilder: (context, index) {
                         final country = widget.rows[index];
-                        // Парні рядки — фон картки, непарні — контрастна смуга.
+                        // Парні рядки — фон картки, непарні — м’який контраст.
                         final rowColor = index.isOdd
-                            ? colorScheme.surfaceContainerHighest
+                            ? colorScheme.surfaceContainerLow
                             : colorScheme.surface;
-                        return ColoredBox(
+                        return _HoverableRow(
                           color: rowColor,
+                          hoverColor: colorScheme.surfaceContainerHigh,
                           child: Table(
                             columnWidths: widths,
                             defaultVerticalAlignment:
@@ -159,8 +174,9 @@ class _CountriesPagedTableState extends State<CountriesPagedTable> {
                                   for (final column in widget.columns)
                                     _BodyCell(
                                       column.valueOf(country),
-                                      tooltip: true,
                                       compact: widget.compact,
+                                      kind: column.kind,
+                                      emphasize: column.emphasize,
                                     ),
                                 ],
                               ),
@@ -187,6 +203,37 @@ class _CountriesPagedTableState extends State<CountriesPagedTable> {
   }
 }
 
+class _HoverableRow extends StatefulWidget {
+  const _HoverableRow({
+    required this.color,
+    required this.hoverColor,
+    required this.child,
+  });
+
+  final Color color;
+  final Color hoverColor;
+  final Widget child;
+
+  @override
+  State<_HoverableRow> createState() => _HoverableRowState();
+}
+
+class _HoverableRowState extends State<_HoverableRow> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: ColoredBox(
+        color: _hovered ? widget.hoverColor : widget.color,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
 class _HeaderCell extends StatelessWidget {
   const _HeaderCell({
     required this.label,
@@ -205,13 +252,12 @@ class _HeaderCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
-      color: colorScheme.onSecondaryContainer,
-      fontWeight: FontWeight.w600,
-    );
+    final color = isActive ? colorScheme.primary : colorScheme.onSurface;
+    final textStyle = Theme.of(context).textTheme.titleSmall
+        ?.copyWith(color: color, fontWeight: FontWeight.w600);
     final padding = compact
-        ? const EdgeInsets.symmetric(horizontal: 8, vertical: 10)
-        : const EdgeInsets.symmetric(horizontal: 12, vertical: 12);
+        ? const EdgeInsets.symmetric(horizontal: 8, vertical: 8)
+        : const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
 
     return Material(
       color: Colors.transparent,
@@ -233,7 +279,7 @@ class _HeaderCell extends StatelessWidget {
                 Icon(
                   ascending ? Icons.arrow_upward : Icons.arrow_downward,
                   size: 16,
-                  color: colorScheme.onSecondaryContainer,
+                  color: color,
                 ),
             ],
           ),
@@ -244,25 +290,117 @@ class _HeaderCell extends StatelessWidget {
 }
 
 class _BodyCell extends StatelessWidget {
-  const _BodyCell(this.text, {this.tooltip = false, this.compact = false});
+  const _BodyCell(
+    this.text, {
+    required this.compact,
+    required this.kind,
+    required this.emphasize,
+  });
 
   final String text;
-  final bool tooltip;
   final bool compact;
+  final CountryTableCellKind kind;
+  final bool emphasize;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final padding = compact
-        ? const EdgeInsets.symmetric(horizontal: 8, vertical: 10)
-        : const EdgeInsets.symmetric(horizontal: 12, vertical: 12);
-    final child = Padding(
-      padding: padding,
-      child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis),
-    );
-    if (!tooltip || text.isEmpty) {
-      return child;
+        ? const EdgeInsets.symmetric(horizontal: 8, vertical: 6)
+        : const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
+
+    if (kind == CountryTableCellKind.isoCode) {
+      return Padding(
+        padding: padding,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: _IsoCodeChip(text),
+        ),
+      );
     }
-    return Tooltip(message: text, child: child);
+
+    final colorScheme = theme.colorScheme;
+    final style = theme.textTheme.bodyMedium?.copyWith(
+      color: emphasize ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
+      fontWeight: emphasize ? FontWeight.w500 : FontWeight.w400,
+    );
+
+    return Padding(
+      padding: padding,
+      child: _OverflowText(text, style: style),
+    );
+  }
+}
+
+class _IsoCodeChip extends StatelessWidget {
+  const _IsoCodeChip(this.code);
+
+  final String code;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Text(
+          code,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.labelMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.4,
+            fontFeatures: const [FontFeature.tabularFigures()],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Текст з tooltip лише коли рядок обрізається.
+class _OverflowText extends StatelessWidget {
+  const _OverflowText(this.text, {this.style});
+
+  final String text;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    if (text.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final textStyle = style ?? DefaultTextStyle.of(context).style;
+        final painter = TextPainter(
+          text: TextSpan(text: text, style: textStyle),
+          maxLines: 1,
+          ellipsis: '\u2026',
+          textDirection: Directionality.of(context),
+        )..layout(maxWidth: constraints.maxWidth);
+        final overflow = painter.didExceedMaxLines;
+        painter.dispose();
+
+        final child = Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: textStyle,
+        );
+        if (!overflow) {
+          return child;
+        }
+        return Tooltip(message: text, child: child);
+      },
+    );
   }
 }
 
@@ -287,15 +425,17 @@ class _TablePaginator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = MaterialLocalizations.of(context);
+    final material = MaterialLocalizations.of(context);
+    final l10n = AppLocalizations.of(context);
     final textStyle = Theme.of(context).textTheme.bodyMedium;
     final pageCount = totalCount == 0 ? 1 : (totalCount / rowsPerPage).ceil();
     final firstRow = totalCount == 0 ? 0 : pageIndex * rowsPerPage + 1;
     final lastRow = totalCount == 0
         ? 0
-        : (firstRow + rowsPerPage - 1).clamp(0, totalCount);
+        : math.min((pageIndex + 1) * rowsPerPage, totalCount);
     final canGoBack = pageIndex > 0;
     final canGoForward = pageIndex < pageCount - 1;
+    final showPageNav = pageCount > 1;
 
     final navButtons = Row(
       mainAxisSize: MainAxisSize.min,
@@ -304,7 +444,7 @@ class _TablePaginator extends StatelessWidget {
           visualDensity: compact
               ? VisualDensity.compact
               : VisualDensity.standard,
-          tooltip: l10n.firstPageTooltip,
+          tooltip: material.firstPageTooltip,
           onPressed: canGoBack ? () => onPageIndexChanged(0) : null,
           icon: const Icon(Icons.first_page),
         ),
@@ -312,7 +452,7 @@ class _TablePaginator extends StatelessWidget {
           visualDensity: compact
               ? VisualDensity.compact
               : VisualDensity.standard,
-          tooltip: l10n.previousPageTooltip,
+          tooltip: material.previousPageTooltip,
           onPressed: canGoBack ? () => onPageIndexChanged(pageIndex - 1) : null,
           icon: const Icon(Icons.chevron_left),
         ),
@@ -320,7 +460,7 @@ class _TablePaginator extends StatelessWidget {
           visualDensity: compact
               ? VisualDensity.compact
               : VisualDensity.standard,
-          tooltip: l10n.nextPageTooltip,
+          tooltip: material.nextPageTooltip,
           onPressed: canGoForward
               ? () => onPageIndexChanged(pageIndex + 1)
               : null,
@@ -330,7 +470,7 @@ class _TablePaginator extends StatelessWidget {
           visualDensity: compact
               ? VisualDensity.compact
               : VisualDensity.standard,
-          tooltip: l10n.lastPageTooltip,
+          tooltip: material.lastPageTooltip,
           onPressed: canGoForward
               ? () => onPageIndexChanged(pageCount - 1)
               : null,
@@ -342,7 +482,7 @@ class _TablePaginator extends StatelessWidget {
     final pageSizeRow = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(l10n.rowsPerPageTitle, style: textStyle),
+        Text(material.rowsPerPageTitle, style: textStyle),
         const SizedBox(width: 8),
         DropdownButton<int>(
           value: rowsPerPage,
@@ -365,7 +505,9 @@ class _TablePaginator extends StatelessWidget {
     );
 
     final rangeText = Text(
-      l10n.pageRowsInfoTitle(firstRow, lastRow, totalCount, false),
+      showPageNav
+          ? material.pageRowsInfoTitle(firstRow, lastRow, totalCount, false)
+          : l10n.directoryRecordCount(totalCount),
       style: textStyle,
     );
 
@@ -381,7 +523,7 @@ class _TablePaginator extends StatelessWidget {
               runSpacing: 4,
               children: [pageSizeRow, rangeText],
             ),
-            navButtons,
+            if (showPageNav) navButtons,
           ],
         ),
       );
@@ -399,7 +541,7 @@ class _TablePaginator extends StatelessWidget {
               pageSizeRow,
               const SizedBox(width: 16),
               rangeText,
-              navButtons,
+              if (showPageNav) navButtons,
             ],
           ),
         ),

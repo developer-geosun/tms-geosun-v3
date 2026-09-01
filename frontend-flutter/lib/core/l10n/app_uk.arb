@@ -71,6 +71,12 @@
   "directorySearch": "Пошук",
   "directoryClearSearch": "Очистити пошук",
   "directoryRefresh": "Оновити",
+  "directoryRecordCount": "{count, plural, one{{count} запис} few{{count} записи} many{{count} записів} other{{count} записів}}",
+  "@directoryRecordCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "directoryEmpty": "Записів не знайдено",
   "directoryLoadFailed": "Не вдалося завантажити довідник",
   "directoryAccessDenied": "Недостатньо прав для перегляду довідника",
@@ -108,6 +114,7 @@
   "settingsTitle": "Налаштування",
   "settingsAppearanceTitle": "Оформлення",
   "settingsButtonLabel": "Налаштування",
+  "accountMenuLabel": "Обліковий запис",
   "settingsLanguageSection": "Мова",
   "settingsThemeModeSection": "Режим",
   "settingsAccentColorSection": "Акцентний колір",

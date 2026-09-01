@@ -71,6 +71,12 @@
   "directorySearch": "Search",
   "directoryClearSearch": "Clear search",
   "directoryRefresh": "Refresh",
+  "directoryRecordCount": "{count, plural, one{{count} record} other{{count} records}}",
+  "@directoryRecordCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "directoryEmpty": "No records found",
   "directoryLoadFailed": "Failed to load the directory",
   "directoryAccessDenied": "You do not have permission to view this directory",
@@ -108,6 +114,7 @@
   "settingsTitle": "Settings",
   "settingsAppearanceTitle": "Appearance",
   "settingsButtonLabel": "Settings",
+  "accountMenuLabel": "Account",
   "settingsLanguageSection": "Language",
   "settingsThemeModeSection": "Mode",
   "settingsAccentColorSection": "Accent color",

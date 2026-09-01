@@ -237,6 +237,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get directoryRefresh => 'Обновить';
 
   @override
+  String directoryRecordCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count записей',
+      many: '$count записей',
+      few: '$count записи',
+      one: '$count запись',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get directoryEmpty => 'Записи не найдены';
 
   @override
@@ -332,6 +345,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settingsButtonLabel => 'Настройки';
+
+  @override
+  String get accountMenuLabel => 'Учётная запись';
 
   @override
   String get settingsLanguageSection => 'Язык';

@@ -238,6 +238,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get directoryRefresh => 'Оновити';
 
   @override
+  String directoryRecordCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count записів',
+      many: '$count записів',
+      few: '$count записи',
+      one: '$count запис',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get directoryEmpty => 'Записів не знайдено';
 
   @override
@@ -333,6 +346,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settingsButtonLabel => 'Налаштування';
+
+  @override
+  String get accountMenuLabel => 'Обліковий запис';
 
   @override
   String get settingsLanguageSection => 'Мова';

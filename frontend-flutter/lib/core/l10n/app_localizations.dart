@@ -526,6 +526,12 @@ abstract class AppLocalizations {
   /// **'Оновити'**
   String get directoryRefresh;
 
+  /// No description provided for @directoryRecordCount.
+  ///
+  /// In uk, this message translates to:
+  /// **'{count, plural, one{{count} запис} few{{count} записи} many{{count} записів} other{{count} записів}}'**
+  String directoryRecordCount(int count);
+
   /// No description provided for @directoryEmpty.
   ///
   /// In uk, this message translates to:
@@ -711,6 +717,12 @@ abstract class AppLocalizations {
   /// In uk, this message translates to:
   /// **'Налаштування'**
   String get settingsButtonLabel;
+
+  /// No description provided for @accountMenuLabel.
+  ///
+  /// In uk, this message translates to:
+  /// **'Обліковий запис'**
+  String get accountMenuLabel;
 
   /// No description provided for @settingsLanguageSection.
   ///

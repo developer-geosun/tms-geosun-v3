@@ -38,10 +38,12 @@ ThemeData _buildAppTheme(AppAccentTheme accent, Brightness brightness) {
     ),
     primaryTextTheme: base.primaryTextTheme.apply(fontFamily: inter),
     appBarTheme: AppBarTheme(
-      backgroundColor: colorScheme.secondaryContainer,
-      foregroundColor: colorScheme.onSecondaryContainer,
+      backgroundColor: colorScheme.surface,
+      foregroundColor: colorScheme.onSurface,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      shape: Border(bottom: BorderSide(color: colorScheme.outlineVariant)),
     ),
     dropdownMenuTheme: DropdownMenuThemeData(textStyle: textTheme.bodyMedium),
     inputDecorationTheme: InputDecorationTheme(

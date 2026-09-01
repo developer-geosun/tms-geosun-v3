@@ -34,6 +34,12 @@ class CountriesDirectoryPage extends ConsumerStatefulWidget {
 
   static const compactSearchRefreshGap = 8.0;
 
+  /// Пошук не розтягується на всю ширину таблиці.
+  static const searchFieldMaxWidth = 420.0;
+
+  /// Ширина круглої кнопки оновлення (для розрахунку поля пошуку).
+  static const searchRefreshButtonExtent = 48.0;
+
   @override
   ConsumerState<CountriesDirectoryPage> createState() =>
       _CountriesDirectoryPageState();
@@ -186,11 +192,13 @@ class _CountriesDirectoryPageState
       label: l10n.directoryCodeAlpha2,
       sortColumn: CountrySortColumn.codeAlpha2,
       valueOf: (country) => country.codeAlpha2,
+      kind: CountryTableCellKind.isoCode,
     );
     final iso3 = CountryTableColumn(
       label: l10n.directoryCodeAlpha3,
       sortColumn: CountrySortColumn.codeAlpha3,
       valueOf: (country) => country.codeAlpha3,
+      kind: CountryTableCellKind.isoCode,
     );
     if (compact) {
       return [
@@ -200,28 +208,34 @@ class _CountriesDirectoryPageState
           label: l10n.directoryName,
           sortColumn: countryNameSortColumn(languageCode),
           valueOf: (country) => country.localizedName(languageCode),
+          emphasize: true,
         ),
       ];
     }
-    return [
-      iso2,
-      iso3,
-      CountryTableColumn(
-        label: l10n.directoryNameUk,
-        sortColumn: CountrySortColumn.nameUk,
-        valueOf: (country) => country.nameUk,
-      ),
-      CountryTableColumn(
-        label: l10n.directoryNameEn,
-        sortColumn: CountrySortColumn.nameEn,
-        valueOf: (country) => country.nameEn,
-      ),
-      CountryTableColumn(
-        label: l10n.directoryNameRu,
-        sortColumn: CountrySortColumn.nameRu,
-        valueOf: (country) => country.nameRu,
-      ),
-    ];
+    final nameUk = CountryTableColumn(
+      label: l10n.directoryNameUk,
+      sortColumn: CountrySortColumn.nameUk,
+      valueOf: (country) => country.nameUk,
+      emphasize: languageCode != 'en' && languageCode != 'ru',
+    );
+    final nameEn = CountryTableColumn(
+      label: l10n.directoryNameEn,
+      sortColumn: CountrySortColumn.nameEn,
+      valueOf: (country) => country.nameEn,
+      emphasize: languageCode == 'en',
+    );
+    final nameRu = CountryTableColumn(
+      label: l10n.directoryNameRu,
+      sortColumn: CountrySortColumn.nameRu,
+      valueOf: (country) => country.nameRu,
+      emphasize: languageCode == 'ru',
+    );
+    final names = switch (languageCode) {
+      'en' => [nameEn, nameUk, nameRu],
+      'ru' => [nameRu, nameUk, nameEn],
+      _ => [nameUk, nameEn, nameRu],
+    };
+    return [iso2, iso3, ...names];
   }
 
   @override
@@ -240,32 +254,49 @@ class _CountriesDirectoryPageState
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(inset, 16, inset, 8),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: _onSearchChanged,
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: (_) => _reload(),
-                  decoration: InputDecoration(
-                    labelText: l10n.directorySearch,
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                            tooltip: l10n.directoryClearSearch,
-                            onPressed: _clearSearch,
-                            icon: const Icon(Icons.close),
-                          )
-                        : null,
-                    border: const OutlineInputBorder(),
-                  ),
+          padding: EdgeInsets.fromLTRB(inset, 12, inset, 8),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final searchWidth = math.min(
+                CountriesDirectoryPage.searchFieldMaxWidth,
+                math.max(
+                  0.0,
+                  constraints.maxWidth -
+                      searchGap -
+                      CountriesDirectoryPage.searchRefreshButtonExtent,
                 ),
-              ),
-              SizedBox(width: searchGap),
-              DirectoryRefreshButton(onPressed: _reload, enabled: !_isLoading),
-            ],
+              );
+              return Row(
+                children: [
+                  SizedBox(
+                    width: searchWidth,
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: _onSearchChanged,
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (_) => _reload(),
+                      decoration: InputDecoration(
+                        hintText: l10n.directorySearch,
+                        prefixIcon: const Icon(Icons.search),
+                        isDense: true,
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                tooltip: l10n.directoryClearSearch,
+                                onPressed: _clearSearch,
+                                icon: const Icon(Icons.close),
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: searchGap),
+                  DirectoryRefreshButton(
+                    onPressed: _reload,
+                    enabled: !_isLoading,
+                  ),
+                ],
+              );
+            },
           ),
         ),
         DirectoryLoadProgress(isLoading: _isLoading),

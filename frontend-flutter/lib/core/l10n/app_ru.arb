@@ -71,6 +71,12 @@
   "directorySearch": "Поиск",
   "directoryClearSearch": "Очистить поиск",
   "directoryRefresh": "Обновить",
+  "directoryRecordCount": "{count, plural, one{{count} запись} few{{count} записи} many{{count} записей} other{{count} записей}}",
+  "@directoryRecordCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "directoryEmpty": "Записи не найдены",
   "directoryLoadFailed": "Не удалось загрузить справочник",
   "directoryAccessDenied": "Недостаточно прав для просмотра справочника",
@@ -108,6 +114,7 @@
   "settingsTitle": "Настройки",
   "settingsAppearanceTitle": "Оформление",
   "settingsButtonLabel": "Настройки",
+  "accountMenuLabel": "Учётная запись",
   "settingsLanguageSection": "Язык",
   "settingsThemeModeSection": "Режим",
   "settingsAccentColorSection": "Акцентный цвет",
