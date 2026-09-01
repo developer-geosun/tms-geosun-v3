@@ -215,8 +215,102 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navDirectories => 'Directories';
 
   @override
-  String get directoriesPlaceholder =>
-      'The Directories section is under development.';
+  String get directoryCountries => 'Countries directory';
+
+  @override
+  String get directoryCurrencies => 'Currencies directory';
+
+  @override
+  String get directoryExchangeRates => 'Exchange rates directory';
+
+  @override
+  String get directoryBack => 'Back to directories';
+
+  @override
+  String get directorySearch => 'Search';
+
+  @override
+  String get directoryClearSearch => 'Clear search';
+
+  @override
+  String get directoryRefresh => 'Refresh';
+
+  @override
+  String get directoryEmpty => 'No records found';
+
+  @override
+  String get directoryLoadFailed => 'Failed to load the directory';
+
+  @override
+  String get directoryAccessDenied =>
+      'You do not have permission to view this directory';
+
+  @override
+  String get directoryCodeAlpha2 => 'ISO-2';
+
+  @override
+  String get directoryCodeAlpha3 => 'ISO-3';
+
+  @override
+  String get directoryName => 'Name';
+
+  @override
+  String get directoryNameUk => 'Name (UA)';
+
+  @override
+  String get directoryNameEn => 'Name (EN)';
+
+  @override
+  String get directoryNameRu => 'Name (RU)';
+
+  @override
+  String get directoryCurrencyCode => 'Code';
+
+  @override
+  String get directoryCurrencyName => 'Name';
+
+  @override
+  String get directoryCurrencyActive => 'Active';
+
+  @override
+  String get directoryCurrencyInactive => 'Inactive';
+
+  @override
+  String get directoryNbuUnits => 'NBU units';
+
+  @override
+  String get directoryRatePerUnit => 'Rate UAH/unit';
+
+  @override
+  String get directoryRateDate => 'Rate date';
+
+  @override
+  String get directoryLoadRates => 'Show rates';
+
+  @override
+  String get directorySyncNbu => 'Refresh NBU rates';
+
+  @override
+  String get directorySyncing => 'Syncing...';
+
+  @override
+  String get directorySyncSuccess => 'NBU rates updated';
+
+  @override
+  String get directorySyncFailed => 'Failed to update NBU rates';
+
+  @override
+  String get directoryRatesLoadFailed =>
+      'Failed to load rates for the selected date';
+
+  @override
+  String get directoryRatesEmpty =>
+      'NBU rates are not loaded yet. Tap “Refresh NBU rates”.';
+
+  @override
+  String directoryRatesSnapshot(String rateDate, String fetchedAt) {
+    return 'NBU rates on $rateDate (updated: $fetchedAt)';
+  }
 
   @override
   String get homeWelcome => 'Signed in as';

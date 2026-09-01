@@ -18,17 +18,32 @@ ThemeData _buildAppTheme(AppAccentTheme accent, Brightness brightness) {
     brightness: brightness,
   );
 
-  return ThemeData(
+  final base = ThemeData(
     useMaterial3: true,
     colorScheme: colorScheme,
     fontFamily: inter,
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    textTheme: const TextTheme(
-      headlineSmall: TextStyle(fontFamily: inter, fontWeight: FontWeight.w600),
-      titleMedium: TextStyle(fontFamily: inter, fontWeight: FontWeight.w600),
-      bodyMedium: TextStyle(fontFamily: inter, fontWeight: FontWeight.w400),
-      labelLarge: TextStyle(fontFamily: inter, fontWeight: FontWeight.w500),
+  );
+  // Увесь Material-текст — Inter; інакше dropdown/пагінатор беруть Roboto.
+  final textTheme = base.textTheme.apply(fontFamily: inter);
+
+  return base.copyWith(
+    textTheme: textTheme.copyWith(
+      headlineSmall: textTheme.headlineSmall?.copyWith(
+        fontWeight: FontWeight.w600,
+      ),
+      titleMedium: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+      bodyMedium: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400),
+      labelLarge: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w500),
     ),
+    primaryTextTheme: base.primaryTextTheme.apply(fontFamily: inter),
+    appBarTheme: AppBarTheme(
+      backgroundColor: colorScheme.secondaryContainer,
+      foregroundColor: colorScheme.onSecondaryContainer,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+    ),
+    dropdownMenuTheme: DropdownMenuThemeData(textStyle: textTheme.bodyMedium),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
     ),

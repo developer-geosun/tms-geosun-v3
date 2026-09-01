@@ -9,7 +9,10 @@ import '../../auth/ui/register_page.dart';
 import '../../auth/ui/reset_password_page.dart';
 import '../../auth/ui/verify_email_page.dart';
 import '../../core/shell/app_shell.dart';
+import '../../features/directories/ui/countries_directory_page.dart';
+import '../../features/directories/ui/currencies_directory_page.dart';
 import '../../features/directories/ui/directories_page.dart';
+import '../../features/directories/ui/exchange_rates_directory_page.dart';
 
 /// Безпечний returnUrl: лише відносний шлях без protocol-relative URL.
 String? sanitizeReturnUrl(String? raw) {
@@ -70,6 +73,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/directories',
             pageBuilder: (context, state) =>
                 const NoTransitionPage(child: DirectoriesPage()),
+          ),
+          GoRoute(
+            path: '/directories/countries',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: CountriesDirectoryPage()),
+          ),
+          GoRoute(
+            path: '/directories/currencies',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: CurrenciesDirectoryPage()),
+          ),
+          GoRoute(
+            path: '/directories/exchange-rates',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ExchangeRatesDirectoryPage()),
           ),
         ],
       ),

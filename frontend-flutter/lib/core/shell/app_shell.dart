@@ -18,7 +18,8 @@ class AppShell extends StatelessWidget {
     final location = GoRouterState.of(context).matchedLocation;
     final destinations = AppNavDestination.items(l10n);
     final selectedIndex = AppNavDestination.indexForLocation(location);
-    final title = destinations[selectedIndex].label(l10n);
+    final title = AppNavDestination.titleForLocation(location, l10n);
+    final showDirectoryBack = AppNavDestination.isNestedDirectory(location);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -41,7 +42,21 @@ class AppShell extends StatelessWidget {
                 ),
           appBar: AppBar(
             title: Text(title),
-            actions: const [AppLogoutButton(), AppSettingsButton()],
+            leading: showDirectoryBack
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    tooltip: l10n.directoryBack,
+                    onPressed: () => context.go('/directories'),
+                  )
+                : null,
+            actionsPadding: const EdgeInsets.only(right: 8),
+            actions: const [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 4,
+                children: [AppLogoutButton(), AppSettingsButton()],
+              ),
+            ],
           ),
           body: Row(
             children: [

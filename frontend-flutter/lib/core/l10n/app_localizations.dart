@@ -478,11 +478,191 @@ abstract class AppLocalizations {
   /// **'Довідники'**
   String get navDirectories;
 
-  /// No description provided for @directoriesPlaceholder.
+  /// No description provided for @directoryCountries.
   ///
   /// In uk, this message translates to:
-  /// **'Розділ «Довідники» у розробці.'**
-  String get directoriesPlaceholder;
+  /// **'Довідник країн'**
+  String get directoryCountries;
+
+  /// No description provided for @directoryCurrencies.
+  ///
+  /// In uk, this message translates to:
+  /// **'Довідник валют'**
+  String get directoryCurrencies;
+
+  /// No description provided for @directoryExchangeRates.
+  ///
+  /// In uk, this message translates to:
+  /// **'Довідник курсів валют'**
+  String get directoryExchangeRates;
+
+  /// No description provided for @directoryBack.
+  ///
+  /// In uk, this message translates to:
+  /// **'Назад до довідників'**
+  String get directoryBack;
+
+  /// No description provided for @directorySearch.
+  ///
+  /// In uk, this message translates to:
+  /// **'Пошук'**
+  String get directorySearch;
+
+  /// No description provided for @directoryClearSearch.
+  ///
+  /// In uk, this message translates to:
+  /// **'Очистити пошук'**
+  String get directoryClearSearch;
+
+  /// No description provided for @directoryRefresh.
+  ///
+  /// In uk, this message translates to:
+  /// **'Оновити'**
+  String get directoryRefresh;
+
+  /// No description provided for @directoryEmpty.
+  ///
+  /// In uk, this message translates to:
+  /// **'Записів не знайдено'**
+  String get directoryEmpty;
+
+  /// No description provided for @directoryLoadFailed.
+  ///
+  /// In uk, this message translates to:
+  /// **'Не вдалося завантажити довідник'**
+  String get directoryLoadFailed;
+
+  /// No description provided for @directoryAccessDenied.
+  ///
+  /// In uk, this message translates to:
+  /// **'Недостатньо прав для перегляду довідника'**
+  String get directoryAccessDenied;
+
+  /// No description provided for @directoryCodeAlpha2.
+  ///
+  /// In uk, this message translates to:
+  /// **'ISO-2'**
+  String get directoryCodeAlpha2;
+
+  /// No description provided for @directoryCodeAlpha3.
+  ///
+  /// In uk, this message translates to:
+  /// **'ISO-3'**
+  String get directoryCodeAlpha3;
+
+  /// No description provided for @directoryName.
+  ///
+  /// In uk, this message translates to:
+  /// **'Назва'**
+  String get directoryName;
+
+  /// No description provided for @directoryNameUk.
+  ///
+  /// In uk, this message translates to:
+  /// **'Назва (UA)'**
+  String get directoryNameUk;
+
+  /// No description provided for @directoryNameEn.
+  ///
+  /// In uk, this message translates to:
+  /// **'Назва (EN)'**
+  String get directoryNameEn;
+
+  /// No description provided for @directoryNameRu.
+  ///
+  /// In uk, this message translates to:
+  /// **'Назва (RU)'**
+  String get directoryNameRu;
+
+  /// No description provided for @directoryCurrencyCode.
+  ///
+  /// In uk, this message translates to:
+  /// **'Код'**
+  String get directoryCurrencyCode;
+
+  /// No description provided for @directoryCurrencyName.
+  ///
+  /// In uk, this message translates to:
+  /// **'Назва'**
+  String get directoryCurrencyName;
+
+  /// No description provided for @directoryCurrencyActive.
+  ///
+  /// In uk, this message translates to:
+  /// **'Активна'**
+  String get directoryCurrencyActive;
+
+  /// No description provided for @directoryCurrencyInactive.
+  ///
+  /// In uk, this message translates to:
+  /// **'Неактивна'**
+  String get directoryCurrencyInactive;
+
+  /// No description provided for @directoryNbuUnits.
+  ///
+  /// In uk, this message translates to:
+  /// **'Од. НБУ'**
+  String get directoryNbuUnits;
+
+  /// No description provided for @directoryRatePerUnit.
+  ///
+  /// In uk, this message translates to:
+  /// **'Курс UAH/од.'**
+  String get directoryRatePerUnit;
+
+  /// No description provided for @directoryRateDate.
+  ///
+  /// In uk, this message translates to:
+  /// **'Дата курсу'**
+  String get directoryRateDate;
+
+  /// No description provided for @directoryLoadRates.
+  ///
+  /// In uk, this message translates to:
+  /// **'Показати курси'**
+  String get directoryLoadRates;
+
+  /// No description provided for @directorySyncNbu.
+  ///
+  /// In uk, this message translates to:
+  /// **'Оновити курси НБУ'**
+  String get directorySyncNbu;
+
+  /// No description provided for @directorySyncing.
+  ///
+  /// In uk, this message translates to:
+  /// **'Синхронізація...'**
+  String get directorySyncing;
+
+  /// No description provided for @directorySyncSuccess.
+  ///
+  /// In uk, this message translates to:
+  /// **'Курси НБУ оновлено'**
+  String get directorySyncSuccess;
+
+  /// No description provided for @directorySyncFailed.
+  ///
+  /// In uk, this message translates to:
+  /// **'Не вдалося оновити курси НБУ'**
+  String get directorySyncFailed;
+
+  /// No description provided for @directoryRatesLoadFailed.
+  ///
+  /// In uk, this message translates to:
+  /// **'Не вдалося завантажити курси на дату'**
+  String get directoryRatesLoadFailed;
+
+  /// No description provided for @directoryRatesEmpty.
+  ///
+  /// In uk, this message translates to:
+  /// **'Курси НБУ ще не завантажені. Натисніть «Оновити курси НБУ».'**
+  String get directoryRatesEmpty;
+
+  /// No description provided for @directoryRatesSnapshot.
+  ///
+  /// In uk, this message translates to:
+  /// **'Курси НБУ на {rateDate} (оновлено: {fetchedAt})'**
+  String directoryRatesSnapshot(String rateDate, String fetchedAt);
 
   /// No description provided for @homeWelcome.
   ///

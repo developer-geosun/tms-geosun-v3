@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../auth/state/auth_controller.dart';
 import '../l10n/app_localizations.dart';
+import 'app_elevated_icon_button.dart';
 
 /// Кнопка виходу — іконка в AppBar, ліворуч від налаштувань.
 class AppLogoutButton extends ConsumerStatefulWidget {
@@ -20,7 +21,7 @@ class _AppLogoutButtonState extends ConsumerState<AppLogoutButton> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return IconButton(
+    return AppElevatedIconButton(
       tooltip: _isLoggingOut ? l10n.homeLogoutLoading : l10n.homeLogout,
       onPressed: _isLoggingOut ? null : _logout,
       icon: _isLoggingOut

@@ -37,6 +37,26 @@ class AppNavDestination {
     }
     return 0;
   }
+
+  static String titleForLocation(String location, AppLocalizations l10n) {
+    if (location.startsWith('/directories/countries')) {
+      return l10n.directoryCountries;
+    }
+    if (location.startsWith('/directories/currencies')) {
+      return l10n.directoryCurrencies;
+    }
+    if (location.startsWith('/directories/exchange-rates')) {
+      return l10n.directoryExchangeRates;
+    }
+    if (location.startsWith('/directories')) {
+      return l10n.navDirectories;
+    }
+    return l10n.navHome;
+  }
+
+  static bool isNestedDirectory(String location) {
+    return location.startsWith('/directories/');
+  }
 }
 
 /// Поріг ширини: NavigationRail (широкий) vs NavigationDrawer (вузький).

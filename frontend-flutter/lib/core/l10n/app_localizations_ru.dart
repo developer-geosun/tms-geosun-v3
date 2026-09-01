@@ -213,7 +213,101 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navDirectories => 'Справочники';
 
   @override
-  String get directoriesPlaceholder => 'Раздел «Справочники» в разработке.';
+  String get directoryCountries => 'Справочник стран';
+
+  @override
+  String get directoryCurrencies => 'Справочник валют';
+
+  @override
+  String get directoryExchangeRates => 'Справочник курсов валют';
+
+  @override
+  String get directoryBack => 'Назад к справочникам';
+
+  @override
+  String get directorySearch => 'Поиск';
+
+  @override
+  String get directoryClearSearch => 'Очистить поиск';
+
+  @override
+  String get directoryRefresh => 'Обновить';
+
+  @override
+  String get directoryEmpty => 'Записи не найдены';
+
+  @override
+  String get directoryLoadFailed => 'Не удалось загрузить справочник';
+
+  @override
+  String get directoryAccessDenied =>
+      'Недостаточно прав для просмотра справочника';
+
+  @override
+  String get directoryCodeAlpha2 => 'ISO-2';
+
+  @override
+  String get directoryCodeAlpha3 => 'ISO-3';
+
+  @override
+  String get directoryName => 'Название';
+
+  @override
+  String get directoryNameUk => 'Название (UA)';
+
+  @override
+  String get directoryNameEn => 'Название (EN)';
+
+  @override
+  String get directoryNameRu => 'Название (RU)';
+
+  @override
+  String get directoryCurrencyCode => 'Код';
+
+  @override
+  String get directoryCurrencyName => 'Название';
+
+  @override
+  String get directoryCurrencyActive => 'Активна';
+
+  @override
+  String get directoryCurrencyInactive => 'Неактивна';
+
+  @override
+  String get directoryNbuUnits => 'Ед. НБУ';
+
+  @override
+  String get directoryRatePerUnit => 'Курс UAH/ед.';
+
+  @override
+  String get directoryRateDate => 'Дата курса';
+
+  @override
+  String get directoryLoadRates => 'Показать курсы';
+
+  @override
+  String get directorySyncNbu => 'Обновить курсы НБУ';
+
+  @override
+  String get directorySyncing => 'Синхронизация...';
+
+  @override
+  String get directorySyncSuccess => 'Курсы НБУ обновлены';
+
+  @override
+  String get directorySyncFailed => 'Не удалось обновить курсы НБУ';
+
+  @override
+  String get directoryRatesLoadFailed => 'Не удалось загрузить курсы на дату';
+
+  @override
+  String get directoryRatesEmpty =>
+      'Курсы НБУ ещё не загружены. Нажмите «Обновить курсы НБУ».';
+
+  @override
+  String directoryRatesSnapshot(String rateDate, String fetchedAt) {
+    return 'Курсы НБУ на $rateDate (обновлено: $fetchedAt)';
+  }
 
   @override
   String get homeWelcome => 'Вы вошли как';

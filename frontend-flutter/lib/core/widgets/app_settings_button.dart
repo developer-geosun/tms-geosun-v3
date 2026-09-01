@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../settings/app_settings_sheet.dart';
+import 'app_elevated_icon_button.dart';
 
 /// Кнопка налаштувань — відкриває нижню панель (мова + оформлення).
 class AppSettingsButton extends StatelessWidget {
@@ -11,7 +12,7 @@ class AppSettingsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return IconButton(
+    return AppElevatedIconButton(
       tooltip: l10n.settingsButtonLabel,
       onPressed: () => showAppSettingsSheet(context),
       icon: const Icon(Icons.settings_outlined),
