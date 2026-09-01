@@ -27,7 +27,7 @@ Backend хранит бинарники через `app.storage.type` (env `APP_
 APP_STORAGE_TYPE=local
 
 # Режим local:
-# - локальный mvn: ./data/uploads (относительно cwd backend)
+# - локальный mvn: ./data/uploads (относительно cwd backend-java)
 # - Docker Compose: всегда /data/uploads (named volume backend_uploads; значение из .env не используется)
 APP_STORAGE_LOCAL_BASE_PATH=./data/uploads
 
@@ -100,7 +100,7 @@ docker compose up --build mysql mailhog minio minio-init backend
 
 Settings → Pages → Build and deployment → Source: **Deploy from a branch** → Branch: **`gh-pages`** / `/ (root)`.
 
-Workflow `.github/workflows/deploy.yml` собирает frontend и пушит в `gh-pages` при push в `master`/`main` (изменения в `frontend/**`) или вручную (`workflow_dispatch`).
+Workflow `.github/workflows/deploy.yml` собирает frontend и пушит в `gh-pages` при push в `master`/`main` (изменения в `frontend-angular/**`) или вручную (`workflow_dispatch`).
 
 ### 3a) Backend + статический IP (Vodafone и т.п.)
 
@@ -171,27 +171,27 @@ docker compose up -d mysql mailhog
 Из корня проекта:
 
 ```bash
-cd backend
+cd backend-java
 mvn spring-boot:run
 ```
 
 Перед запуском убедитесь, что:
 
-- MySQL доступен (из Docker порт хоста обычно `3307` → см. `MYSQL_HOST_PORT` и `DB_URL` в `backend/.env.example` / `application.yml`);
-- переменные из `backend/.env.example` и при необходимости корневого `.env` настроены;
-- для файлов: `APP_STORAGE_TYPE=local`, каталог `./data/uploads` (относительно cwd backend).
+- MySQL доступен (из Docker порт хоста обычно `3307` → см. `MYSQL_HOST_PORT` и `DB_URL` в `backend-java/.env.example` / `application.yml`);
+- переменные из `backend-java/.env.example` и при необходимости корневого `.env` настроены;
+- для файлов: `APP_STORAGE_TYPE=local`, каталог `./data/uploads` (относительно cwd backend-java).
 
 ### 2) Frontend
 
 Из корня проекта:
 
 ```bash
-cd frontend
+cd frontend-angular
 npm install
 npm start
 ```
 
-Перед `npm start` в корневом `.env` задайте ключи карт — они автоматически попадут в локальный `frontend/src/assets/app-config.local.js` (файл игнорируется git):
+Перед `npm start` в корневом `.env` задайте ключи карт — они автоматически попадут в локальный `frontend-angular/src/assets/app-config.local.js` (файл игнорируется git):
 
 - `HERE_API_KEY=<ваш_ключ_here>` — маршруты / геокодинг HERE
 - `CARTO_API_KEY=<ваш_ключ_carto>` — подложка Leaflet без водяного знака CARTO
@@ -257,7 +257,7 @@ docker compose --profile dev up -d frontend-dev
 
 `http://localhost:4200`
 
-Изменения в `frontend/src/*` будут применяться автоматически без пересборки Docker-образа.
+Изменения в `frontend-angular/src/*` будут применяться автоматически без пересборки Docker-образа.
 
 4. Остановить только dev frontend:
 
@@ -275,7 +275,7 @@ docker compose --profile dev down --remove-orphans
 
 - `frontend` — это production preview (build + nginx), подходит для проверки итоговой сборки.
 - `frontend-dev` — это режим разработки (ng serve), подходит для быстрых правок и тестирования.
-- В Docker dev-режиме API проксируется через `frontend/proxy.docker.conf.json` на `http://backend:8080`.
+- В Docker dev-режиме API проксируется через `frontend-angular/proxy.docker.conf.json` на `http://backend:8080`.
 - Для публичного API: режим `static-ip` (порт на хосте) или профили Compose `ngrok` / `ngrok-dev`.
 - Для ссылок из писем укажите `EMAIL_VERIFICATION_LINK_BASE` на URL frontend (локальный или GitHub Pages).
 - На первом запуске `frontend-dev` установит зависимости (`npm ci`), далее старт обычно заметно быстрее.

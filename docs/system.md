@@ -79,8 +79,8 @@
 
 ## Структура проекта
 
-- `frontend/` — Angular приложение.
-- `backend/` — Spring Boot backend (Maven, `src/main/java`, `src/main/resources`).
+- `frontend-angular/` — Angular приложение.
+- `backend-java/` — Spring Boot backend (Maven, `src/main/java`, `src/main/resources`).
 - `docs/specs/` — ТЗ по фичам.
 - `docs/templates/` — шаблоны ТЗ и промптов для LLM.
 
@@ -99,12 +99,12 @@
 ## Как запустить
 
 - Frontend:
-  - `cd frontend`
+  - `cd frontend-angular`
   - `npm install`
   - `npm start`
   - app URL: `http://localhost:4200/`
 - Backend (Spring Boot):
-  - `cd backend`
+  - `cd backend-java`
   - `mvn spring-boot:run`
   - Swagger UI: `http://localhost:8080/swagger-ui.html`
   - Health: `http://localhost:8080/actuator/health`
@@ -118,9 +118,9 @@
 
 ## Что менять осторожно
 
-- `frontend/src/app/app.config.ts` — глобальные провайдеры, роутинг, i18n-конфигурация.
+- `frontend-angular/src/app/app.config.ts` — глобальные провайдеры, роутинг, i18n-конфигурация.
 - `.github/workflows/deploy.yml` — логика деплоя на GitHub Pages.
-- `backend/src/main/resources/application*.yml` — профильные настройки окружений и безопасности.
-- `backend/src/main/java/com/geosun/tms/auth/security/` — JWT/security-конфигурация.
-- `backend/src/main/java/com/geosun/tms/auth/api/` — публичные auth/admin endpoint-ы.
+- `backend-java/src/main/resources/application*.yml` — профильные настройки окружений и безопасности.
+- `backend-java/src/main/java/com/geosun/tms/auth/security/` — JWT/security-конфигурация.
+- `backend-java/src/main/java/com/geosun/tms/auth/api/` — публичные auth/admin endpoint-ы.
 

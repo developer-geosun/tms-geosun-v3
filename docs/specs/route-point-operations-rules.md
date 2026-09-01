@@ -1,7 +1,7 @@
 # Единая спецификация правил операций точек маршрута
 
 ## 1) Назначение
-- Этот документ фиксирует единые правила операций на точках маршрута для `frontend` и `backend`.
+- Этот документ фиксирует единые правила операций на точках маршрута для `frontend-angular` и `backend-java`.
 - Документ должен использоваться как источник истины при изменении валидации, UI-ограничений и серверных проверок.
 
 ## 2) Термины
@@ -88,8 +88,8 @@
 - `UNCLOSED_CUSTOMS`
 
 ## 6) Текущее место реализации
-- Frontend-валидация: `frontend/src/app/pages/route-builder/route-point-operations.utils.ts`.
-- Frontend тесты: `frontend/src/app/pages/route-builder/route-point-operations.utils.spec.ts`.
+- Frontend-валидация: `frontend-angular/src/app/pages/route-builder/route-point-operations.utils.ts`.
+- Frontend тесты: `frontend-angular/src/app/pages/route-builder/route-point-operations.utils.spec.ts`.
 
 ## 7) Правило сопровождения изменений
 - Любое изменение правил операций должно включать:

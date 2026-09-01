@@ -3,19 +3,19 @@ node_modules/
 dist/
 .angular/
 .env
-backend/.env
-frontend/.env
-frontend/src/assets/app-config.local.js
+backend-java/.env
+frontend-angular/.env
+frontend-angular/src/assets/app-config.local.js
 
 # Локальні завантаження файлів (app.storage.type=local)
 data/uploads/
-backend/data/uploads/
-backend/target/test-uploads/
+backend-java/data/uploads/
+backend-java/target/test-uploads/
 
 # Локальна конфігурація clasp (скопіюйте з .clasp.json.example і додайте scriptId)
-backend/.clasp.json
+backend-java/.clasp.json
 
-# IDE / ОС (лише корінь репо; frontend/.vscode залишається з шаблону Angular)
+# IDE / ОС (лише корінь репо; frontend-angular/.vscode залишається з шаблону Angular)
 .idea/
 # У корені .vscode ігноруємо все, крім зафіксованих налаштувань Java для Cursor/VS Code
 /.vscode/*

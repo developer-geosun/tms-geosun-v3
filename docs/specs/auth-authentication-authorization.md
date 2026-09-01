@@ -11,9 +11,9 @@
 - **Expected outcome / Ожидаемый результат:** Пользователь может войти в систему, получать доступ только к разрешенным функциям и безопасно завершать сессию.
 
 ## 2) Context / Контекст
-- **Project/module / Проект/модуль:** `frontend` (Angular 21) + `backend` (Java 21, Spring Boot 3).
+- **Project/module / Проект/модуль:** `frontend-angular` (Angular 21) + `backend-java` (Java 21, Spring Boot 3).
 - **Current behavior / Текущее поведение:** На backend уже реализованы auth endpoint-ы `/api/v1/auth/*` и soft-delete `/api/v1/users/{id}`. Этот документ синхронизирован с фактической реализацией backend v1.
-- **Related docs / Связанные документы:** `docs/system.md`, `backend/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`.
+- **Related docs / Связанные документы:** `docs/system.md`, `backend-java/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`.
 - **Environment constraints / Ограничения окружения:** Frontend должен работать с REST backend по base URL (`http://localhost:8080` локально) и префиксу `/api/v1`.
 
 ## 3) Scope (In) / Scope (входит в задачу)
@@ -198,7 +198,7 @@
 
 ## 12) Implementation Plan / План реализации
 1. Утвердить модель ролей и матрицу доступа.
-2. Реализовать в `backend/src/Code.gs` роутинг `doPost` и endpoints `login/refresh/logout`; `me` реализовать через `doGet` с параметром маршрута или через общий роутер.
+2. Реализовать в `backend-java/src/Code.gs` роутинг `doPost` и endpoints `login/refresh/logout`; `me` реализовать через `doGet` с параметром маршрута или через общий роутер.
 3. Реализовать проверку access token и ролей на backend.
 4. Реализовать frontend auth слой (service, interceptor, guard).
 5. Добавить UI login и обработку состояний.

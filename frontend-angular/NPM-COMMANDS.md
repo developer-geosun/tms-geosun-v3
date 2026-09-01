@@ -4,10 +4,10 @@
 
 | Общие сведения | General |
 | :-- | :-- |
-| Команды выполняйте из каталога `frontend` (рядом лежит `package.json`). | Run commands from the `frontend` directory (where `package.json` lives). |
+| Команды выполняйте из каталога `frontend-angular` (рядом лежит `package.json`). | Run commands from the `frontend-angular` directory (where `package.json` lives). |
 
 ```powershell
-cd E:\MyProjects\GeoSun\tms-geosun-v1\tms-geosun-v1\frontend
+cd E:\MyProjects\GeoSun\tms-geosun-v3\frontend-angular
 ```
 
 | Общие сведения | General |

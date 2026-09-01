@@ -1,6 +1,6 @@
 ---
 description: Единые шрифты и иконки фронтенда — Inter Variable + Material Symbols
-globs: frontend/src/**/*.{scss,css,html,ts}
+globs: frontend-angular/src/**/*.{scss,css,html,ts}
 alwaysApply: false
 ---
 
@@ -11,9 +11,9 @@ alwaysApply: false
 ## Текст
 
 - Единственный UI-шрифт: **`Inter Variable`** (пакет `@fontsource-variable/inter`).
-- Стек: `var(--font-sans)` → `'Inter Variable', system-ui, sans-serif` из [`frontend/src/styles/_fonts.scss`](frontend/src/styles/_fonts.scss).
+- Стек: `var(--font-sans)` → `'Inter Variable', system-ui, sans-serif` из [`frontend-angular/src/styles/_fonts.scss`](frontend-angular/src/styles/_fonts.scss).
 - Моноширинный: только `var(--font-mono)` (не копируй локальные стеки Consolas/Menlo).
-- Темы Material: `brand-family` / `plain-family` = `'Inter Variable'` в [`_theme.scss`](frontend/src/styles/_theme.scss). Не возвращай дефолтный Roboto.
+- Темы Material: `brand-family` / `plain-family` = `'Inter Variable'` в [`_theme.scss`](frontend-angular/src/styles/_theme.scss). Не возвращай дефолтный Roboto.
 - Заголовки страниц (`.page__title`, auth `h1`): **font-weight 600**, не 700.
 - Таблицы в `.table-shell`: опирайся на общие стили page-layout (≈14px / 1.4), не плоди ad-hoc `font-family`.
 

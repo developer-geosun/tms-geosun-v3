@@ -72,7 +72,7 @@ ng test
 
 ### GitHub Actions
 
-Deployment is configured via `.github/workflows/deploy.yml` and runs on push to `main` or `master` when `frontend/**` changes (or via manual `workflow_dispatch`).
+Deployment is configured via `.github/workflows/deploy.yml` and runs on push to `main` or `master` when `frontend-angular/**` changes (or via manual `workflow_dispatch`).
 
 Required repository secrets:
 
@@ -104,7 +104,7 @@ npm run ng -- version
 
 To use Angular AI tooling with Cursor in this project:
 
-1. Create `frontend/.cursor/mcp.json`:
+1. Create `frontend-angular/.cursor/mcp.json`:
 
 ```json
 {
@@ -130,12 +130,12 @@ To use Angular AI tooling with Cursor in this project:
 }
 ```
 
-3. Add Angular AI rules file at `frontend/.cursor/rules/angular-best-practices.mdc`.
+3. Add Angular AI rules file at `frontend-angular/.cursor/rules/angular-best-practices.mdc`.
 
 4. Reload Cursor window/workspace.
 
 ### Quick verification
 
-- Open a new Cursor chat from `frontend`.
+- Open a new Cursor chat from `frontend-angular`.
 - Ask for Angular guidance (for example, request best practices for signals or modern template control flow).
 - Confirm the assistant responds using Angular-aware recommendations and project context.

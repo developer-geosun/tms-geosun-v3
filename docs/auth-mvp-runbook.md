@@ -1,7 +1,7 @@
 # Auth MVP Runbook
 
 ## 1) Подготовка backend (GAS)
-- Развернуть web app с кодом из `backend/src/Code.gs`.
+- Развернуть web app с кодом из `backend-java/src/Code.gs`.
 - В Script Properties задать `AUTH_SECRET` (длинное случайное значение).
 - Проверить наличие листов:
   - `users` с колонками: `id`, `email`, `passwordHash`, `roles`, `status`
@@ -17,8 +17,8 @@
 
 ## 3) Настройка frontend
 - Указать backend URL в:
-  - `frontend/src/environments/environment.ts` -> `apiUrl`
-  - `frontend/src/environments/environment.prod.ts` -> `apiUrl`
+  - `frontend-angular/src/environments/environment.ts` -> `apiUrl`
+  - `frontend-angular/src/environments/environment.prod.ts` -> `apiUrl`
 
 ## 4) Базовые проверки API
 - `POST /auth/login` c валидным email/password:
@@ -42,5 +42,5 @@
   - ожидание: очистка auth state и редирект на `/login`
 
 ## 6) Команды проверки
-- В `frontend/`:
+- В `frontend-angular/`:
   - `npm test -- --watch=false --browsers=ChromeHeadless`

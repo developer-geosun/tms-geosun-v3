@@ -11,7 +11,7 @@
 - **Expected outcome / Ожидаемый результат:** Backend предоставляет API и модель данных для `route requests`, истории маршрутов, расчета протяженности по странам и формирования `quote` с ролевым доступом.
 
 ## 2) Context / Контекст
-- **Project/module / Проект/модуль:** `backend` (Java 21, Spring Boot 3), интеграция с `frontend` (Angular 21).
+- **Project/module / Проект/модуль:** `backend-java` (Java 21, Spring Boot 3), интеграция с `frontend-angular` (Angular 21).
 - **Current behavior / Текущее поведение:** Целевой серверный workflow маршрутов и `quote` в основном домене отсутствует; standalone SPA-страницы `freight-calculation`, `freight-calculation-here` и `routes-history` удалены из кодовой базы и не являются источником требований.
 - **Frontend integration baseline / Базовая интеграция frontend:** При проектировании и реализации учитывать актуальные экраны: `/route-builder` (построение и сохранение маршрута), `/routes` (история и открытие маршрута), `/my-freight-requests` (заявки пользователя), диалог заявки на фрахт из конструктора/списка, `/admin/route-requests` (очередь и quote для admin/manager).
 - **Related docs / Связанные документы:**
@@ -20,7 +20,7 @@
   - `docs/specs/route-immutability-list-filters-deferred-country-breakdown.md` (**блокировка маршрута после заявки, фильтры списка по soft delete, отложенный country breakdown**).
   - `docs/specs/freight-cost-scenario-nbu-pricing.md` (**спецификация расчёта фрахта через числовые сценарии и НБУ**).
   - `docs/system.md`.
-  - `backend/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`.
+  - `backend-java/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`.
 - **Environment constraints / Ограничения окружения:**
   - REST base path: `/api/v1`.
   - Аутентификация и авторизация строго по правилам из `docs/specs/auth-authentication-authorization.md`.

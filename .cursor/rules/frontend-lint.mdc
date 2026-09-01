@@ -1,9 +1,9 @@
 ---
 description: После выполнения плана, перед коммитом или после значительных правок frontend запускать npm run lint:fix
 globs:
-  - frontend/src/**/*.ts
-  - frontend/src/**/*.html
-  - frontend/eslint.config.js
+  - frontend-angular/src/**/*.ts
+  - frontend-angular/src/**/*.html
+  - frontend-angular/eslint.config.js
 alwaysApply: false
 ---
 
@@ -11,11 +11,11 @@ alwaysApply: false
 
 После **выполнения плана**, перед коммитом или после **значительных** правок frontend применяй ESLint с автофиксом. Prettier в проекте нет; аналог Spotless — `lint:fix`.
 
-Скрипт: `npm run lint:fix` → `ng lint --fix` (`frontend/package.json`, конфиг `frontend/eslint.config.js`). Чинит неиспользуемые импорты, часть stylistic TypeScript и правила, которые ESLint умеет править сам.
+Скрипт: `npm run lint:fix` → `ng lint --fix` (`frontend-angular/package.json`, конфиг `frontend-angular/eslint.config.js`). Чинит неиспользуемые импорты, часть stylistic TypeScript и правила, которые ESLint умеет править сам.
 
 ## Команда
 
-Из каталога `frontend/`:
+Из каталога `frontend-angular/`:
 
 ```powershell
 npm run lint:fix
@@ -24,13 +24,13 @@ npm run lint:fix
 Из корня репозитория:
 
 ```powershell
-npm --prefix frontend run lint:fix
+npm --prefix frontend-angular run lint:fix
 ```
 
 ## Когда запускать
 
-- После выполнения плана (все шаги реализации закрыты) — один раз, если в плане менялся `frontend/`.
-- Перед `git commit`, если в коммите есть `frontend/src/**/*.ts` или `*.html`.
+- После выполнения плана (все шаги реализации закрыты) — один раз, если в плане менялся `frontend-angular/`.
+- Перед `git commit`, если в коммите есть `frontend-angular/src/**/*.ts` или `*.html`.
 - После крупного изменения (новая страница, рефакторинг, серия правок по ТЗ) — один раз в конце, не после каждого файла.
 - Если `lint:fix` изменил файлы — оставь их в рабочем дереве (не откатывай).
 

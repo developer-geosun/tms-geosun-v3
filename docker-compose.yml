@@ -69,7 +69,7 @@ services:
   # Spring Boot API (auth/backend)
   backend:
     build:
-      context: ./backend
+      context: ./backend-java
       dockerfile: Dockerfile
     container_name: tms-backend
     depends_on:
@@ -129,7 +129,7 @@ services:
   # Production-збірка frontend, що віддається через nginx у контейнері
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend-angular
       dockerfile: Dockerfile
       args:
         FRONTEND_BUILD_CONFIGURATION: ${FRONTEND_BUILD_CONFIGURATION:-production}

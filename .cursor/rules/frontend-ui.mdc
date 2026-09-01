@@ -1,7 +1,7 @@
 ---
 description: Единообразие UI фронтенда — роли кнопок, оболочка админ-списков, snackbar vs inline
 globs:
-  - frontend/src/**/*.{html,scss,ts}
+  - frontend-angular/src/**/*.{html,scss,ts}
 alwaysApply: false
 ---
 
@@ -33,14 +33,14 @@ Auth (login/register) — отдельное семейство (карточк�
 
 ## Оболочка админ-списка
 
-- SCSS: `@include admin-list-toolbar.admin-list-page-header` и `admin-list-toolbar-actions` из [`_admin-list-toolbar.scss`](frontend/src/styles/_admin-list-toolbar.scss).
+- SCSS: `@include admin-list-toolbar.admin-list-page-header` и `admin-list-toolbar-actions` из [`_admin-list-toolbar.scss`](frontend-angular/src/styles/_admin-list-toolbar.scss).
 - Порядок экшенов: toggle/фильтры → refresh (иконка) → primary create.
 - Таблица в `.table-shell`; handset — `mat-card appearance="outlined"`.
-- Отступы страницы: CSS vars из [`_page-layout.scss`](frontend/src/styles/_page-layout.scss).
+- Отступы страницы: CSS vars из [`_page-layout.scss`](frontend-angular/src/styles/_page-layout.scss).
 
 ## Обратная связь
 
-- Действие (сохранил, удалил, ошибка API) → `showAppSnack` ([`app-snackbar.ts`](frontend/src/app/shared/utils/app-snackbar.ts)).
+- Действие (сохранил, удалил, ошибка API) → `showAppSnack` ([`app-snackbar.ts`](frontend-angular/src/app/shared/utils/app-snackbar.ts)).
 - Ошибка загрузки списка / пустой список → блок на странице.
 - Ошибки полей формы / диалога → inline под полем.
 - Загрузка списка → `mat-progress-bar mode="indeterminate"`, не текст «Завантаження…».

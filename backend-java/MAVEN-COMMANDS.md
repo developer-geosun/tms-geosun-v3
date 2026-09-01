@@ -4,10 +4,10 @@
 
 | Общие сведения | General |
 | :-- | :-- |
-| Рабочий каталог — `backend` (рядом лежит `pom.xml`). | Use the `backend` directory (where `pom.xml` lives). |
+| Рабочий каталог — `backend-java` (рядом лежит `pom.xml`). | Use the `backend-java` directory (where `pom.xml` lives). |
 
 ```powershell
-cd E:\MyProjects\GeoSun\tms-geosun-v1\tms-geosun-v1\backend
+cd E:\MyProjects\GeoSun\tms-geosun-v3\backend-java
 ```
 
 | Общие сведения | General |

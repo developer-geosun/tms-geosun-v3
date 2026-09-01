@@ -5,7 +5,7 @@
 - Связанные документы: `docs/specs/routes-server-workflow-and-freight-quoting.md`, `docs/specs/freight-cost-scenario-nbu-pricing.md`, `docs/specs/route-point-operations-rules.md`, `docs/system.md`.
 
 ## Контекст UI (актуальный роутинг)
-В актуальном приложении (`frontend/src/app/app.routes.ts`) нет отдельных URL под старые сценарии вроде выделенной «истории маршрутов» или `freight-calculation` как отдельной страницы. Требования по UX из §8 реализуются на **существующих** экранах и в shared-компонентах:
+В актуальном приложении (`frontend-angular/src/app/app.routes.ts`) нет отдельных URL под старые сценарии вроде выделенной «истории маршрутов» или `freight-calculation` как отдельной страницы. Требования по UX из §8 реализуются на **существующих** экранах и в shared-компонентах:
 
 | Путь | Назначение |
 |------|------------|
@@ -14,7 +14,7 @@
 | `/my-freight-requests` | Список заявок текущего пользователя (`MyFreightRequestsComponent`). |
 | `/admin/route-requests` | Очередь заявок для ADMIN/MANAGER (`AdminRouteRequestsComponent`). |
 
-Общие диалоги: `RouteFreightRequestDialogComponent`, `RouteDeleteConfirmDialogComponent` (под `frontend/src/app/shared/components/`).
+Общие диалоги: `RouteFreightRequestDialogComponent`, `RouteDeleteConfirmDialogComponent` (под `frontend-angular/src/app/shared/components/`).
 
 Если в репозитории остаются компоненты **без** записи в `app.routes.ts`, они **не** считаются источником требований до подключения к роутингу.
 

@@ -11,7 +11,7 @@
 - **Expected outcome / Ожидаемый результат:** endpoint-ы `/api/v1/admin/users` и страница `/admin/users` (desktop + handset).
 
 ## 2) Context / Контекст
-- **Project/module / Проект/модуль:** `backend` auth + `frontend` admin pages.
+- **Project/module / Проект/модуль:** `backend-java` auth + `frontend-angular` admin pages.
 - **Current behavior / Текущее поведение:** регистрация всегда ставит `USER`; есть только `DELETE /api/v1/users/{id}` (soft-delete, ADMIN).
 - **Related docs / Связанные документы:** `docs/system.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`, `docs/specs/auth-authentication-authorization.md`.
 - **Environment constraints / Ограничения окружения:** Java 21 / Spring Boot 3, Angular 21 + Angular Material, единые breakpoints (`LayoutService`, `bp.handset`).

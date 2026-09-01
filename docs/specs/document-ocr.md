@@ -301,7 +301,7 @@ app:
 - Диалог результата на Angular Material: `mat-list` полей, `mat-chip` с источником (`MRZ` / `LLM`), `mat-progress-bar` во время запроса, невалидные поля — `warn`-цветом с `mat-hint` из `warning`.
 - Кнопка **«Заповнити форму»** переносит только выбранные чекбоксами поля; ничего не сохраняется без явного submit самой формы.
 - Кнопка скрыта, если `GET /provider-info` вернул `enabled: false`.
-- i18n: ключи для uk / en / ru, как в остальных admin-страницах (`frontend/src/app/pages/admin-document-types` — образец структуры).
+- i18n: ключи для uk / en / ru, как в остальных admin-страницах (`frontend-angular/src/app/pages/admin-document-types` — образец структуры).
 
 ---
 

@@ -11,7 +11,7 @@
 - **Expected outcome / Ожидаемый результат:** API `/api/v1/admin/drivers`, `/api/v1/admin/vehicle-combinations` и admin UI.
 
 ## 2) Context / Контекст
-- **Project/module:** `backend` reference + `frontend` admin pages.
+- **Project/module:** `backend-java` reference + `frontend-angular` admin pages.
 - **Current behavior:** ТС в `vehicles`; роль `DRIVER` в users без профиля; автопоездов нет.
 - **Related docs:** `vehicles-reference.md`, `file-storage.md`, `admin-user-management.md`.
 - **Environment:** Java 21 / Spring Boot 3, Angular 21 + Material, Flyway, MySQL.

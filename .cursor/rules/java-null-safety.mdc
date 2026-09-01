@@ -1,8 +1,8 @@
 ---
 description: Java null-safety (JDT 16778128) — обязательные @NonNull и Objects.requireNonNull; проверка Problems перед сдачей
 globs:
-  - backend/src/main/java/**/*.java
-  - backend/src/test/java/**/*.java
+  - backend-java/src/main/java/**/*.java
+  - backend-java/src/test/java/**/*.java
 alwaysApply: false
 ---
 
@@ -14,7 +14,7 @@ alwaysApply: false
 
 ## Обязательно перед завершением Java-задачи
 
-1. Вызови **ReadLints** по всем изменённым `backend/**/*.java`.
+1. Вызови **ReadLints** по всем изменённым `backend-java/**/*.java`.
 2. В **Problems** по этим файлам — **0** предупреждений 16778128 и **0** info **1102** (висячий `@SuppressWarnings("null")`).
 3. Если предупреждения остались — исправь **до** ответа пользователю, не оставляй «на потом».
 

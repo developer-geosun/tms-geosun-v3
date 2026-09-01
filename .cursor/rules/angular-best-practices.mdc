@@ -1,8 +1,8 @@
 ---
 description: Angular — стиль кода, структура и официальные best practices (angular.dev)
 globs:
-  - frontend/src/**/*.ts
-  - frontend/src/**/*.html
+  - frontend-angular/src/**/*.ts
+  - frontend-angular/src/**/*.html
 alwaysApply: false
 ---
 
@@ -16,7 +16,7 @@ alwaysApply: false
 
 ## Структура и имена
 
-- Код приложения — под `frontend/src/`; организация **по фичам/областям**, не по типам (`components/`, `services/` не как главный принцип).
+- Код приложения — под `frontend-angular/src/`; организация **по фичам/областям**, не по типам (`components/`, `services/` не как главный принцип).
 - Имена файлов: слова через **дефис** (`user-profile.component.ts`); тесты — суффикс **`.spec.ts`**.
 - У компонента одно базовое имя для **`.ts` / `.html` / `.css`**. Один основной смысл на файл; избегай слишком общих `utils.ts` / `helpers.ts`, если можно назвать конкретнее.
 
