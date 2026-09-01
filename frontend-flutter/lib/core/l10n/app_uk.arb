@@ -12,7 +12,7 @@
   "loginError403": "Недостатньо прав доступу",
   "loginErrorAccountDisabled": "Акаунт деактивовано. Для активації зверніться до адміністратора.",
   "loginErrorUserDeleted": "Акаунт видалено. Для відновлення зверніться до адміністратора.",
-  "loginErrorEmailNotVerified": "Доступ можливий лише після підтвердження email",
+  "loginErrorEmailNotVerified": "Email ще не підтверджено. Перевірте пошту (і папку «Спам»), відкрийте посилання з листа та повторіть вхід.",
   "loginErrorGeneric": "Помилка входу, спробуйте ще раз",
   "loginServiceUnavailable": "Сервіс тимчасово недоступний. Спробуйте пізніше.",
   "loginEmailRequired": "Введіть email",

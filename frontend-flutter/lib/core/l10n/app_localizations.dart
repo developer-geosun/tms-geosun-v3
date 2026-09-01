@@ -175,7 +175,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginErrorEmailNotVerified.
   ///
   /// In uk, this message translates to:
-  /// **'Доступ можливий лише після підтвердження email'**
+  /// **'Email ще не підтверджено. Перевірте пошту (і папку «Спам»), відкрийте посилання з листа та повторіть вхід.'**
   String get loginErrorEmailNotVerified;
 
   /// No description provided for @loginErrorGeneric.

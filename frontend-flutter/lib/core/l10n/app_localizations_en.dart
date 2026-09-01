@@ -49,7 +49,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginErrorEmailNotVerified =>
-      'Access is available only after email confirmation';
+      'Email is not confirmed yet. Check your inbox (and Spam), open the link in the message, then sign in again.';
 
   @override
   String get loginErrorGeneric => 'Sign in failed, please try again';

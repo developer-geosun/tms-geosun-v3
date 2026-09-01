@@ -49,7 +49,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get loginErrorEmailNotVerified =>
-      'Доступ можливий лише після підтвердження email';
+      'Email ще не підтверджено. Перевірте пошту (і папку «Спам»), відкрийте посилання з листа та повторіть вхід.';
 
   @override
   String get loginErrorGeneric => 'Помилка входу, спробуйте ще раз';

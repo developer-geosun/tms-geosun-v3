@@ -12,7 +12,7 @@
   "loginError403": "You do not have enough permissions",
   "loginErrorAccountDisabled": "Account is deactivated. Contact an administrator to reactivate it.",
   "loginErrorUserDeleted": "Account has been deleted. Contact an administrator to restore it.",
-  "loginErrorEmailNotVerified": "Access is available only after email confirmation",
+  "loginErrorEmailNotVerified": "Email is not confirmed yet. Check your inbox (and Spam), open the link in the message, then sign in again.",
   "loginErrorGeneric": "Sign in failed, please try again",
   "loginServiceUnavailable": "Service is temporarily unavailable. Please try again later.",
   "loginEmailRequired": "Enter email",
