@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "appTitle": "TMS GeoSun",
+  "snackbarClose": "Close",
   "loginTitle": "Sign in",
   "loginSubtitle": "Use email and password to continue",
   "loginEmail": "Email",

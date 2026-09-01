@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/http/api_error.dart';
 import '../../../core/l10n/app_localizations.dart';
+import '../../../core/widgets/app_snackbar.dart';
 import '../data/directories_api.dart';
 import '../domain/directory_models.dart';
 import 'directory_format.dart';
@@ -21,7 +22,6 @@ class _CurrenciesDirectoryPageState
     extends ConsumerState<CurrenciesDirectoryPage> {
   List<CurrencyReference> _currencies = const [];
   bool _isLoading = true;
-  String? _errorMessage;
 
   @override
   void initState() {
@@ -32,7 +32,6 @@ class _CurrenciesDirectoryPageState
   Future<void> _reload() async {
     setState(() {
       _isLoading = true;
-      _errorMessage = null;
     });
     try {
       final currencies = await ref
@@ -52,11 +51,12 @@ class _CurrenciesDirectoryPageState
       setState(() {
         _currencies = const [];
         _isLoading = false;
-        _errorMessage = directoryErrorMessage(
-          error,
-          AppLocalizations.of(context),
-        );
       });
+      showAppSnack(
+        context,
+        message: directoryErrorMessage(error, AppLocalizations.of(context)),
+        kind: AppSnackKind.error,
+      );
     }
   }
 
@@ -72,7 +72,6 @@ class _CurrenciesDirectoryPageState
         child: DirectoryRefreshButton(onPressed: _reload, enabled: !_isLoading),
       ),
       isLoading: _isLoading,
-      errorMessage: _errorMessage,
       isEmpty: _currencies.isEmpty,
       emptyMessage: l10n.directoryEmpty,
       itemCount: _currencies.length,

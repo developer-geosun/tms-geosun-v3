@@ -1,6 +1,7 @@
 {
   "@@locale": "ru",
   "appTitle": "TMS GeoSun",
+  "snackbarClose": "Закрыть",
   "loginTitle": "Вход в систему",
   "loginSubtitle": "Войдите по email и паролю",
   "loginEmail": "Email",

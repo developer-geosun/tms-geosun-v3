@@ -39,7 +39,8 @@ alwaysApply: false
 ## UI
 
 - Primary actions: `FilledButton`; secondary/cancel: `OutlinedButton`.
-- Login card pattern for auth screens; admin-style dense tables are out of scope until admin migration.
+- Login card pattern for auth screens.
+- Directory / paged tables: follow `.cursor/rules/flutter-directory-tables.mdc` (еталон `/directories/countries`).
 
 ## Dev
 

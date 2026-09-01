@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/widgets/app_elevated_icon_button.dart';
 
-/// Спільна оболонка списку довідника: тулбар, прогрес, помилка, порожній стан.
+/// Спільна оболонка списку довідника: тулбар, прогрес, порожній стан.
 class DirectoryPageBody extends StatelessWidget {
   const DirectoryPageBody({
     super.key,
@@ -13,12 +13,10 @@ class DirectoryPageBody extends StatelessWidget {
     required this.itemCount,
     required this.itemBuilder,
     this.header,
-    this.errorMessage,
   });
 
   final Widget? header;
   final bool isLoading;
-  final String? errorMessage;
   final bool isEmpty;
   final String emptyMessage;
   final int itemCount;
@@ -26,32 +24,20 @@ class DirectoryPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ?header,
-        if (isLoading) const LinearProgressIndicator(),
-        if (errorMessage != null)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-            child: Text(
-              errorMessage!,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.error,
-              ),
-            ),
-          ),
+        DirectoryLoadProgress(isLoading: isLoading),
         Expanded(
-          child: isEmpty && !isLoading && errorMessage == null
+          child: isEmpty && !isLoading
               ? Center(
                   child: Padding(
                     padding: const EdgeInsets.all(24),
                     child: Text(
                       emptyMessage,
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                 )
@@ -64,6 +50,25 @@ class DirectoryPageBody extends StatelessWidget {
                 ),
         ),
       ],
+    );
+  }
+}
+
+/// Смуга прогресу постійної висоти: таблиця не зміщується під час оновлення.
+class DirectoryLoadProgress extends StatelessWidget {
+  const DirectoryLoadProgress({super.key, required this.isLoading});
+
+  final bool isLoading;
+
+  static const height = 4.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      child: isLoading
+          ? const LinearProgressIndicator(minHeight: height)
+          : const SizedBox.expand(),
     );
   }
 }

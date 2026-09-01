@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/http/api_error.dart';
 import '../../../core/l10n/app_localizations.dart';
+import '../../../core/widgets/app_snackbar.dart';
 import '../data/directories_api.dart';
 import '../domain/directory_models.dart';
 import 'directory_format.dart';
@@ -23,7 +24,6 @@ class _ExchangeRatesDirectoryPageState
   NbuRatesSnapshot? _snapshot;
   bool _isLoading = true;
   bool _isSyncing = false;
-  String? _errorMessage;
 
   @override
   void initState() {
@@ -34,7 +34,6 @@ class _ExchangeRatesDirectoryPageState
   Future<void> _loadRates() async {
     setState(() {
       _isLoading = true;
-      _errorMessage = null;
     });
     try {
       final snapshot = await ref
@@ -54,17 +53,23 @@ class _ExchangeRatesDirectoryPageState
       setState(() {
         _snapshot = null;
         _isLoading = false;
-        _errorMessage = isMissingNbuRates(error)
-            ? null
-            : directoryRatesErrorMessage(error, AppLocalizations.of(context));
       });
+      if (!isMissingNbuRates(error)) {
+        showAppSnack(
+          context,
+          message: directoryRatesErrorMessage(
+            error,
+            AppLocalizations.of(context),
+          ),
+          kind: AppSnackKind.error,
+        );
+      }
     }
   }
 
   Future<void> _syncRates() async {
     setState(() {
       _isSyncing = true;
-      _errorMessage = null;
     });
     final l10n = AppLocalizations.of(context);
     try {
@@ -79,15 +84,21 @@ class _ExchangeRatesDirectoryPageState
         }
         _isSyncing = false;
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.directorySyncSuccess)));
+      showAppSnack(
+        context,
+        message: l10n.directorySyncSuccess,
+        kind: AppSnackKind.success,
+      );
     } on ApiException {
       if (!mounted) {
         return;
       }
       setState(() => _isSyncing = false);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l10n.directorySyncFailed)));
+      showAppSnack(
+        context,
+        message: l10n.directorySyncFailed,
+        kind: AppSnackKind.error,
+      );
     }
   }
 
@@ -167,7 +178,6 @@ class _ExchangeRatesDirectoryPageState
         ),
       ),
       isLoading: _isLoading,
-      errorMessage: _errorMessage,
       isEmpty: rates.isEmpty,
       emptyMessage: l10n.directoryRatesEmpty,
       itemCount: rates.length,

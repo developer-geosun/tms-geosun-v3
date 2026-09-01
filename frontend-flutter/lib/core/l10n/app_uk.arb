@@ -1,6 +1,7 @@
 {
   "@@locale": "uk",
   "appTitle": "TMS GeoSun",
+  "snackbarClose": "Закрити",
   "loginTitle": "Вхід до системи",
   "loginSubtitle": "Увійдіть за email та паролем",
   "loginEmail": "Email",

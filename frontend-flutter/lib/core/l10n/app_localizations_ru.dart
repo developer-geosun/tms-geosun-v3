@@ -13,6 +13,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'TMS GeoSun';
 
   @override
+  String get snackbarClose => 'Закрыть';
+
+  @override
   String get loginTitle => 'Вход в систему';
 
   @override

@@ -13,6 +13,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'TMS GeoSun';
 
   @override
+  String get snackbarClose => 'Close';
+
+  @override
   String get loginTitle => 'Sign in';
 
   @override

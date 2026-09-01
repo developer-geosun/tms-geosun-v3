@@ -106,6 +106,12 @@ abstract class AppLocalizations {
   /// **'TMS GeoSun'**
   String get appTitle;
 
+  /// No description provided for @snackbarClose.
+  ///
+  /// In uk, this message translates to:
+  /// **'Закрити'**
+  String get snackbarClose;
+
   /// No description provided for @loginTitle.
   ///
   /// In uk, this message translates to:

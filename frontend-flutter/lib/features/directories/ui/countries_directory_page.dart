@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/http/api_error.dart';
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/shell/app_navigation.dart';
+import '../../../core/widgets/app_snackbar.dart';
 import '../data/directories_api.dart';
 import '../domain/country_reference_sort.dart';
 import '../domain/directory_models.dart';
@@ -20,8 +21,7 @@ class CountriesDirectoryPage extends ConsumerStatefulWidget {
 
   static const pageSizeOptions = [5, 10, 15, 25, 50];
   static const maxPageSize = 50;
-  static const desktopPageSize = 10;
-  static const handsetPageSize = 5;
+  static const defaultPageSize = 50;
 
   /// Спільний горизонтальний відступ панелі пошуку та таблиці (широкий екран).
   static const contentInset = 24.0;
@@ -45,12 +45,10 @@ class _CountriesDirectoryPageState
   Timer? _debounce;
   List<CountryReference> _countries = const [];
   bool _isLoading = true;
-  String? _errorMessage;
   CountrySortColumn _sortColumn = CountrySortColumn.codeAlpha2;
   bool _sortAscending = true;
-  int _rowsPerPage = CountriesDirectoryPage.desktopPageSize;
+  int _rowsPerPage = CountriesDirectoryPage.defaultPageSize;
   int _pageIndex = 0;
-  bool _didInitPageSize = false;
 
   @override
   void initState() {
@@ -61,14 +59,6 @@ class _CountriesDirectoryPageState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_didInitPageSize) {
-      _didInitPageSize = true;
-      final isNarrow =
-          MediaQuery.sizeOf(context).width < appShellWideBreakpoint;
-      _rowsPerPage = isNarrow
-          ? CountriesDirectoryPage.handsetPageSize
-          : CountriesDirectoryPage.desktopPageSize;
-    }
     _syncNameSortForCompactLayout();
   }
 
@@ -102,7 +92,6 @@ class _CountriesDirectoryPageState
   Future<void> _reload() async {
     setState(() {
       _isLoading = true;
-      _errorMessage = null;
     });
     try {
       final countries = await ref
@@ -120,11 +109,12 @@ class _CountriesDirectoryPageState
         _countries = const [];
         _isLoading = false;
         _pageIndex = 0;
-        _errorMessage = directoryErrorMessage(
-          error,
-          AppLocalizations.of(context),
-        );
       });
+      showAppSnack(
+        context,
+        message: directoryErrorMessage(error, AppLocalizations.of(context)),
+        kind: AppSnackKind.error,
+      );
     }
   }
 
@@ -237,7 +227,6 @@ class _CountriesDirectoryPageState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
     final compact = MediaQuery.sizeOf(context).width < appShellWideBreakpoint;
     final inset = compact
         ? CountriesDirectoryPage.compactContentInset
@@ -279,17 +268,7 @@ class _CountriesDirectoryPageState
             ],
           ),
         ),
-        if (_isLoading) const LinearProgressIndicator(),
-        if (_errorMessage != null)
-          Padding(
-            padding: EdgeInsets.fromLTRB(inset, 12, inset, 0),
-            child: Text(
-              _errorMessage!,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.error,
-              ),
-            ),
-          ),
+        DirectoryLoadProgress(isLoading: _isLoading),
         Expanded(
           child: Padding(
             padding: EdgeInsets.fromLTRB(inset, 0, inset, 16),

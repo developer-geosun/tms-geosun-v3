@@ -143,22 +143,29 @@ class _CountriesPagedTableState extends State<CountriesPagedTable> {
                           const Divider(height: 1),
                       itemBuilder: (context, index) {
                         final country = widget.rows[index];
-                        return Table(
-                          columnWidths: widths,
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                          children: [
-                            TableRow(
-                              children: [
-                                for (final column in widget.columns)
-                                  _BodyCell(
-                                    column.valueOf(country),
-                                    tooltip: true,
-                                    compact: widget.compact,
-                                  ),
-                              ],
-                            ),
-                          ],
+                        // Парні рядки — фон картки, непарні — контрастна смуга.
+                        final rowColor = index.isOdd
+                            ? colorScheme.surfaceContainerHighest
+                            : colorScheme.surface;
+                        return ColoredBox(
+                          color: rowColor,
+                          child: Table(
+                            columnWidths: widths,
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            children: [
+                              TableRow(
+                                children: [
+                                  for (final column in widget.columns)
+                                    _BodyCell(
+                                      column.valueOf(country),
+                                      tooltip: true,
+                                      compact: widget.compact,
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),
