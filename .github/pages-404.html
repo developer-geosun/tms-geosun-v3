@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <title>TMS GeoSun</title>
+  <script>
+    // SPA fallback для GitHub Pages: Angular (корінь) і Flutter (/flutter/).
+    (function () {
+      var path = location.pathname;
+      var parts = path.split('/').filter(Boolean);
+
+      var flutterIndex = parts.indexOf('flutter');
+      if (flutterIndex !== -1) {
+        var flutterBase = '/' + parts.slice(0, flutterIndex + 1).join('/') + '/';
+        sessionStorage.setItem('flutter_redirect', location.href);
+        location.replace(flutterBase + 'index.html');
+        return;
+      }
+
+      var topLevelRoutes = {
+        login: 1,
+        register: 1,
+        'verify-email': 1,
+        'forgot-password': 1,
+        'reset-password': 1,
+        main: 1,
+        'stop-service': 1,
+        'route-builder': 1,
+        routes: 1,
+        'my-freight-requests': 1,
+        admin: 1,
+        '404': 1,
+        flutter: 1
+      };
+      var baseHref = '/';
+      if (parts.length > 0 && !topLevelRoutes[parts[0]]) {
+        baseHref = '/' + parts[0] + '/';
+      }
+      sessionStorage.redirect = location.href;
+      location.replace(baseHref + 'index.html');
+    })();
+  </script>
+</head>
+<body></body>
+</html>

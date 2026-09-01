@@ -31,6 +31,16 @@
 
   <title>tms_geosun</title>
   <link rel="manifest" href="manifest.json">
+  <script>
+    // Відновлення deep link після GitHub Pages 404 → index.html
+    (function () {
+      var redirect = sessionStorage.getItem('flutter_redirect');
+      if (redirect) {
+        sessionStorage.removeItem('flutter_redirect');
+        history.replaceState(null, '', redirect);
+      }
+    })();
+  </script>
 </head>
 <body>
   <!--

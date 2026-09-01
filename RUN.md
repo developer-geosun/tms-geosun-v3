@@ -74,7 +74,10 @@ docker compose up --build mysql mailhog minio minio-init backend
 
 Архитектура для публичного доступа:
 
-- **Frontend** — статика на GitHub Pages (`https://developer-geosun.github.io/tms-geosun-v2/`).
+- **Frontend (Angular)** — статика на GitHub Pages: `https://developer-geosun.github.io/<repo-name>/`
+- **Frontend (Flutter Web)** — подпапка: `https://developer-geosun.github.io/<repo-name>/flutter/`
+
+Оба клиента деплоятся одним workflow `.github/workflows/deploy.yml` на ветку `gh-pages`.
 - **Backend** — локально (Docker), наружу по выбору: **ngrok** или **статический IP** провайдера (без проксирования UI).
 
 Режим задаётся в корневом `.env`:
@@ -100,7 +103,14 @@ docker compose up --build mysql mailhog minio minio-init backend
 
 Settings → Pages → Build and deployment → Source: **Deploy from a branch** → Branch: **`gh-pages`** / `/ (root)`.
 
-Workflow `.github/workflows/deploy.yml` собирает frontend и пушит в `gh-pages` при push в `master`/`main` (изменения в `frontend-angular/**`) или вручную (`workflow_dispatch`).
+Workflow `.github/workflows/deploy.yml` собирает **Angular** (корень сайта) и **Flutter Web** (`/flutter/`) и пушит в `gh-pages` при push в `master`/`main` (изменения в `frontend-angular/**`, `frontend-flutter/**`) или вручную (`workflow_dispatch`).
+
+| Клиент | URL на Pages |
+| --- | --- |
+| Angular | `https://developer-geosun.github.io/<repo-name>/` |
+| Flutter | `https://developer-geosun.github.io/<repo-name>/flutter/` |
+
+`<repo-name>` — имя репозитория на GitHub (например `tms-geosun-v3`).
 
 ### 3a) Backend + статический IP (Vodafone и т.п.)
 

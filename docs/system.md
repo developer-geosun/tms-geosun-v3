@@ -111,6 +111,7 @@
   - `flutter pub get`
   - `flutter run -d chrome --web-port=4300 --dart-define=API_URL=http://localhost:8080`
   - app URL: `http://localhost:4300/`
+  - GitHub Pages: `https://developer-geosun.github.io/<repo-name>/flutter/`
 - Backend (Spring Boot):
   - `cd backend-java`
   - `mvn spring-boot:run`

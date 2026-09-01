@@ -37,11 +37,30 @@ flutter run -d chrome --web-port=4300 --dart-define=API_URL=https://your-api.exa
 
 ## Build
 
+Локально:
+
 ```bash
 flutter build web --dart-define=API_URL=http://localhost:8080
 ```
 
+GitHub Pages (подпапка `/flutter/`):
+
+```bash
+flutter build web --release \
+  --base-href="/<repo-name>/flutter/" \
+  --dart-define=API_URL=https://your-api.example.com
+```
+
 Output: `build/web/`
+
+## GitHub Pages
+
+При push в `master`/`main` workflow [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) выкладывает:
+
+- Angular → `https://developer-geosun.github.io/<repo-name>/`
+- Flutter → `https://developer-geosun.github.io/<repo-name>/flutter/`
+
+`API_URL` для Flutter берётся из GitHub Secret `API_URL` (тот же, что для Angular). Deep links на Pages обрабатываются через общий `404.html` в корне `gh-pages`.
 
 ## Tests
 

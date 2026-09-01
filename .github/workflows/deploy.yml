@@ -1,6 +1,6 @@
-# Деплой Angular з frontend-angular/ на гілку gh-pages (GitHub Pages: Settings → Pages → branch gh-pages / root)
-# Frontend на GitHub Pages; API — окремо (ngrok або статична IP, див. PUBLIC_ACCESS_MODE).
-# Реєстрація workflow в Actions після увімкнення permissions у новому репозиторії.
+# Деплой Angular (корінь) + Flutter Web (/flutter/) на gh-pages
+# GitHub Pages: Settings → Pages → branch gh-pages / root
+# API — окремо (ngrok або статична IP, див. PUBLIC_ACCESS_MODE).
 name: Deploy to GitHub Pages
 
 on:
@@ -10,7 +10,9 @@ on:
       - main
     paths:
       - "frontend-angular/**"
+      - "frontend-flutter/**"
       - ".github/workflows/deploy.yml"
+      - ".github/pages-404.html"
   workflow_dispatch:
 
 jobs:
@@ -18,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      # Ім'я необов'язкового секрета (динамічний доступ: секрет може бути не створений)
       CARTO_API_KEY_SECRET_NAME: CARTO_API_KEY
     permissions:
       contents: write
@@ -37,22 +38,31 @@ jobs:
           cache: "npm"
           cache-dependency-path: frontend-angular/package-lock.json
 
-      - name: Install dependencies
-        working-directory: frontend-angular
-        run: npm ci --legacy-peer-deps
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
 
-      - name: Resolve Pages base href
+      - name: Resolve Pages base paths
         id: pages
         run: |
           REPO_NAME="${{ github.event.repository.name }}"
-          echo "base_href=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
-          echo "Using base-href=/${REPO_NAME}/"
+          echo "repo_name=${REPO_NAME}" >> "$GITHUB_OUTPUT"
+          echo "angular_base_href=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
+          echo "flutter_base_href=/${REPO_NAME}/flutter/" >> "$GITHUB_OUTPUT"
+          echo "Angular base-href=/${REPO_NAME}/"
+          echo "Flutter base-href=/${REPO_NAME}/flutter/"
+
+      - name: Install Angular dependencies
+        working-directory: frontend-angular
+        run: npm ci --legacy-peer-deps
 
       - name: Build Angular application
         working-directory: frontend-angular
-        run: npx ng build --configuration=production --base-href=${{ steps.pages.outputs.base_href }}
+        run: npx ng build --configuration=production --base-href=${{ steps.pages.outputs.angular_base_href }}
 
-      - name: Inject runtime API config for GitHub Pages
+      - name: Inject runtime API config for Angular (GitHub Pages)
         env:
           API_URL: ${{ secrets.API_URL }}
           CARTO_API_KEY: ${{ secrets[env.CARTO_API_KEY_SECRET_NAME] }}
@@ -64,8 +74,6 @@ jobs:
             echo "Error: $CONFIG not found"
             exit 1
           fi
-          # API_URL — публічний URL backend (https://xxx.ngrok-free.app або http://STATIC_IP:8080)
-          # CARTO_API_KEY — ключ підкладки CARTO (прибирає водяний знак «API KEY REQUIRED»)
           node <<'NODE'
           const fs = require('fs');
           const configPath = 'frontend-angular/dist/tms-geosun/assets/app-config.js';
@@ -82,7 +90,7 @@ jobs:
               );
             }
           } else {
-            console.warn('Warning: secrets.API_URL is empty — frontend will use relative API URLs');
+            console.warn('Warning: secrets.API_URL is empty — Angular will use relative API URLs');
           }
           if (cartoApiKey) {
             if (/cartoApiKey\s*:/.test(content)) {
@@ -97,8 +105,24 @@ jobs:
             console.warn('Warning: secrets.CARTO_API_KEY is empty — CARTO tiles will show API KEY REQUIRED watermark');
           }
           fs.writeFileSync(configPath, content, 'utf8');
-          console.log('Runtime config updated for GitHub Pages deploy');
+          console.log('Angular runtime config updated for GitHub Pages deploy');
           NODE
+
+      - name: Build Flutter Web application
+        working-directory: frontend-flutter
+        env:
+          API_URL: ${{ secrets.API_URL }}
+        run: |
+          set -e
+          flutter pub get
+          API_DEFINE="${API_URL:-http://localhost:8080}"
+          API_DEFINE="${API_DEFINE%/}"
+          if [ -z "${API_URL}" ]; then
+            echo "Warning: secrets.API_URL is empty — Flutter will use default API URL at build time"
+          fi
+          flutter build web --release \
+            --base-href="${{ steps.pages.outputs.flutter_base_href }}" \
+            --dart-define=API_URL="${API_DEFINE}"
 
       - name: Configure Git
         run: |
@@ -110,13 +134,20 @@ jobs:
           DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          DIST="frontend-angular/dist/tms-geosun"
-          if [ ! -d "$DIST" ]; then
-            echo "Error: $DIST directory not found"
+          ANGULAR_DIST="frontend-angular/dist/tms-geosun"
+          FLUTTER_DIST="frontend-flutter/build/web"
+          if [ ! -d "$ANGULAR_DIST" ]; then
+            echo "Error: $ANGULAR_DIST directory not found"
             exit 1
           fi
-          mkdir -p /tmp/build-output
-          cp -r "$DIST"/* /tmp/build-output/
+          if [ ! -d "$FLUTTER_DIST" ]; then
+            echo "Error: $FLUTTER_DIST directory not found"
+            exit 1
+          fi
+          mkdir -p /tmp/build-output/flutter
+          cp -r "$ANGULAR_DIST"/* /tmp/build-output/
+          cp -r "$FLUTTER_DIST"/* /tmp/build-output/flutter/
+          cp .github/pages-404.html /tmp/build-output/404.html
           git remote set-url origin https://${DEPLOY_TOKEN}@github.com/${{ github.repository }}.git
           git fetch origin gh-pages 2>/dev/null || true
           if git show-ref --verify --quiet refs/remotes/origin/gh-pages 2>/dev/null; then
