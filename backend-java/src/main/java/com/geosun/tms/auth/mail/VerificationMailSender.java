@@ -26,7 +26,7 @@ public class VerificationMailSender {
   private static final String TEMPLATE_CLIENT_NAME = "{{CLIENT_NAME}}";
   private static final String TEMPLATE_APP_URL = "{{APP_URL}}";
   private static final String MAIL_SUBJECT =
-      "Email verification / Подтверждение email / Підтвердження email";
+      "Підтвердження email / Email verification / Подтверждение email";
   private static final Resource PLAIN_TEMPLATE_RESOURCE =
       new ClassPathResource("mail/verification-email.txt");
   private static final Resource HTML_TEMPLATE_RESOURCE =

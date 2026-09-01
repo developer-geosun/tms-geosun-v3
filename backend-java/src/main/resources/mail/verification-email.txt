@@ -1,25 +1,21 @@
+UK:
+Ласкаво просимо!
+Підтвердіть email за посиланням:
+{{VERIFICATION_LINK}}
+
 EN:
 Welcome!
 Please verify your email using this link:
 {{VERIFICATION_LINK}}
-
-This email was sent from {{CLIENT_NAME}}:
-{{APP_URL}}
 
 RU:
 Добро пожаловать!
 Подтвердите email по ссылке:
 {{VERIFICATION_LINK}}
 
-Это письмо отправлено из приложения {{CLIENT_NAME}}:
+Цей лист надіслано із застосунку {{CLIENT_NAME}}.
+This email was sent from {{CLIENT_NAME}}.
+Это письмо отправлено из приложения {{CLIENT_NAME}}.
 {{APP_URL}}
 
-UK:
-Ласкаво просимо!
-Підтвердіть email за посиланням:
-{{VERIFICATION_LINK}}
-
-Цей лист надіслано із застосунку {{CLIENT_NAME}}:
-{{APP_URL}}
-
-If you did not create an account / Если вы не создавали аккаунт / Якщо ви не створювали акаунт, просто проігноруйте цей лист.
+Якщо ви не створювали акаунт / If you did not create an account / Если вы не создавали аккаунт, просто проігноруйте цей лист.

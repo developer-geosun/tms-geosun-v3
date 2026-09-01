@@ -25,7 +25,7 @@ public class PasswordResetMailSender {
   private static final String TEMPLATE_LINK = "{{RESET_LINK}}";
   private static final String TEMPLATE_CLIENT_NAME = "{{CLIENT_NAME}}";
   private static final String TEMPLATE_APP_URL = "{{APP_URL}}";
-  private static final String MAIL_SUBJECT = "Password reset / Сброс пароля / Скидання пароля";
+  private static final String MAIL_SUBJECT = "Скидання пароля / Password reset / Сброс пароля";
   private static final Resource PLAIN_TEMPLATE_RESOURCE =
       new ClassPathResource("mail/password-reset-email.txt");
   private static final Resource HTML_TEMPLATE_RESOURCE =
