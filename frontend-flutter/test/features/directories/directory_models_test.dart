@@ -176,5 +176,25 @@ void main() {
       ascending: false,
     );
     expect(byRate.map((c) => c.code), ['EUR', 'USD']);
+
+    final mixed = [
+      currencies[0].copyWith(isActive: false),
+      currencies[1],
+      CurrencyReference(
+        code: 'PLN',
+        numericCode: 985,
+        nameUk: 'Злотий',
+        nbuUnits: 1,
+        minorUnits: 2,
+        isActive: false,
+      ),
+    ];
+    final byActiveDesc = sortCurrencyReferences(
+      mixed,
+      column: CurrencySortColumn.isActive,
+      ascending: false,
+    );
+    expect(byActiveDesc.map((c) => c.code), ['EUR', 'PLN', 'USD']);
+    expect(byActiveDesc.first.isActive, isTrue);
   });
 }

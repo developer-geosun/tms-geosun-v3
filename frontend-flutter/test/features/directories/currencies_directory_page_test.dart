@@ -84,7 +84,7 @@ void main() {
         scheme.surfaceContainer,
       );
       expect(
-        tester.widget<Text>(find.text('Код')).style?.color,
+        tester.widget<Text>(find.text('Активна')).style?.color,
         scheme.primary,
       );
 
@@ -92,6 +92,15 @@ void main() {
       expect(find.text('Євро'), findsOneWidget);
       expect(find.byType(Switch), findsNWidgets(3));
       expect(find.text('Неактивна'), findsNothing);
+      // За замовчуванням активні зверху, неактивні знизу.
+      expect(
+        tester.getTopLeft(find.text('Євро')).dy,
+        lessThan(tester.getTopLeft(find.text('Злотий')).dy),
+      );
+      expect(
+        tester.getTopLeft(find.text('Долар США')).dy,
+        lessThan(tester.getTopLeft(find.text('Злотий')).dy),
+      );
       expect(find.byTooltip('Наступна сторінка'), findsNothing);
       expect(find.text('3 записи'), findsOneWidget);
 

@@ -36,8 +36,10 @@ class _CurrenciesDirectoryPageState
   List<CurrencyReference> _allCurrencies = const [];
   List<CurrencyReference> _currencies = const [];
   bool _isLoading = true;
-  CurrencySortColumn _sortColumn = CurrencySortColumn.code;
-  bool _sortAscending = true;
+
+  /// Початково: активні зверху (isActive desc).
+  CurrencySortColumn _sortColumn = CurrencySortColumn.isActive;
+  bool _sortAscending = false;
   int _rowsPerPage = CurrenciesDirectoryPage.defaultPageSize;
   int _pageIndex = 0;
   final _updatingCodes = <String>{};

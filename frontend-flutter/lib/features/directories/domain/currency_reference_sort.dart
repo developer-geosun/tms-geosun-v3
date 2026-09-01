@@ -107,7 +107,14 @@ List<CurrencyReference> sortCurrencyReferences(
         b.isActive ? 1 : 0,
       ),
     };
-    return ascending ? result : -result;
+    if (result != 0) {
+      return ascending ? result : -result;
+    }
+    // За однакової активності — стабільний порядок за кодом.
+    if (column == CurrencySortColumn.isActive) {
+      return a.code.compareTo(b.code);
+    }
+    return 0;
   }
 
   return [...currencies]..sort(compare);
