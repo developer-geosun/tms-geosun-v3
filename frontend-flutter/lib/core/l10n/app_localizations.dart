@@ -610,6 +610,12 @@ abstract class AppLocalizations {
   /// **'Неактивна'**
   String get directoryCurrencyInactive;
 
+  /// No description provided for @directoryCurrencyUpdateFailed.
+  ///
+  /// In uk, this message translates to:
+  /// **'Не вдалося оновити валюту'**
+  String get directoryCurrencyUpdateFailed;
+
   /// No description provided for @directoryNbuUnits.
   ///
   /// In uk, this message translates to:

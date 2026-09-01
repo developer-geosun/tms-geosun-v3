@@ -90,6 +90,7 @@
   "directoryCurrencyName": "Name",
   "directoryCurrencyActive": "Active",
   "directoryCurrencyInactive": "Inactive",
+  "directoryCurrencyUpdateFailed": "Failed to update currency",
   "directoryNbuUnits": "NBU units",
   "directoryRatePerUnit": "Rate UAH/unit",
   "directoryRateDate": "Rate date",

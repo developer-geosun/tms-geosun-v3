@@ -290,6 +290,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get directoryCurrencyInactive => 'Неактивна';
 
   @override
+  String get directoryCurrencyUpdateFailed => 'Не удалось обновить валюту';
+
+  @override
   String get directoryNbuUnits => 'Ед. НБУ';
 
   @override

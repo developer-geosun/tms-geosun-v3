@@ -90,6 +90,7 @@
   "directoryCurrencyName": "Название",
   "directoryCurrencyActive": "Активна",
   "directoryCurrencyInactive": "Неактивна",
+  "directoryCurrencyUpdateFailed": "Не удалось обновить валюту",
   "directoryNbuUnits": "Ед. НБУ",
   "directoryRatePerUnit": "Курс UAH/ед.",
   "directoryRateDate": "Дата курса",

@@ -30,6 +30,23 @@ class DirectoriesApi {
     ).then((payload) => payload.map(CurrencyReference.fromJson).toList());
   }
 
+  Future<CurrencyReference> updateCurrency({
+    required String code,
+    required bool isActive,
+  }) async {
+    try {
+      final response = await _dio.patch<Map<String, dynamic>>(
+        _config.apiPath(
+          '/api/v1/admin/currencies/${Uri.encodeComponent(code)}',
+        ),
+        data: {'isActive': isActive},
+      );
+      return CurrencyReference.fromJson(response.data ?? const {});
+    } on DioException catch (error) {
+      throw ApiException.fromDio(error);
+    }
+  }
+
   Future<NbuRatesSnapshot> getNbuRates({String? rateDate}) async {
     final payload = await _getObject(
       '/api/v1/admin/currencies/nbu-rates',

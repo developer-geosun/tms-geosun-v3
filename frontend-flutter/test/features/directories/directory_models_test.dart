@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tms_geosun/features/directories/domain/country_reference_sort.dart';
+import 'package:tms_geosun/features/directories/domain/currency_reference_sort.dart';
 import 'package:tms_geosun/features/directories/domain/directory_models.dart';
 import 'package:tms_geosun/features/directories/ui/directory_format.dart';
 
@@ -109,5 +110,71 @@ void main() {
       ascending: false,
     );
     expect(desc.map((c) => c.nameEn), ['Ukraine', 'Poland', 'Germany']);
+  });
+
+  test('filterCurrencyReferences шукає за кодом і назвою', () {
+    const currencies = [
+      CurrencyReference(
+        code: 'USD',
+        numericCode: 840,
+        nameUk: 'Долар США',
+        nbuUnits: 1,
+        minorUnits: 2,
+        isActive: true,
+      ),
+      CurrencyReference(
+        code: 'EUR',
+        numericCode: 978,
+        nameUk: 'Євро',
+        nameEn: 'Euro',
+        nbuUnits: 1,
+        minorUnits: 2,
+        isActive: true,
+      ),
+    ];
+
+    expect(filterCurrencyReferences(currencies, 'eur').map((c) => c.code), [
+      'EUR',
+    ]);
+    expect(filterCurrencyReferences(currencies, '840').map((c) => c.code), [
+      'USD',
+    ]);
+  });
+
+  test('sortCurrencyReferences сортує за кодом і курсом', () {
+    const currencies = [
+      CurrencyReference(
+        code: 'USD',
+        numericCode: 840,
+        nameUk: 'Долар',
+        nbuUnits: 1,
+        minorUnits: 2,
+        isActive: true,
+        latestNbuRatePerUnit: 41,
+      ),
+      CurrencyReference(
+        code: 'EUR',
+        numericCode: 978,
+        nameUk: 'Євро',
+        nbuUnits: 1,
+        minorUnits: 2,
+        isActive: true,
+        latestNbuRatePerUnit: 45,
+      ),
+    ];
+
+    final byCode = sortCurrencyReferences(
+      currencies,
+      column: CurrencySortColumn.code,
+      ascending: true,
+    );
+    expect(byCode.map((c) => c.code), ['EUR', 'USD']);
+
+    final byRate = sortCurrencyReferences(
+      currencies,
+      column: CurrencySortColumn.ratePerUnit,
+      ascending: false,
+    );
+    expect(byRate.map((c) => c.code), ['EUR', 'USD']);
   });
 }

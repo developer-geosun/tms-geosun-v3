@@ -14,31 +14,18 @@ import '../domain/directory_models.dart';
 import 'countries_paged_table.dart';
 import 'directory_format.dart';
 import 'directory_page_body.dart';
+import 'directory_paged_table.dart';
+import 'directory_table_layout.dart';
 
 /// Довідник країн Європи: таблиця з пагінацією та сортуванням стовпців.
 class CountriesDirectoryPage extends ConsumerStatefulWidget {
   const CountriesDirectoryPage({super.key});
 
-  static const pageSizeOptions = [5, 10, 15, 25, 50];
-  static const maxPageSize = 50;
-  static const defaultPageSize = 50;
-
-  /// Спільний горизонтальний відступ панелі пошуку та таблиці (широкий екран).
-  static const contentInset = 24.0;
-
-  /// Відступ контенту на вузькому екрані смартфона.
-  static const compactContentInset = 12.0;
-
-  /// Відступ між полем пошуку та кнопкою оновлення.
-  static const searchRefreshGap = 16.0;
-
-  static const compactSearchRefreshGap = 8.0;
-
-  /// Пошук не розтягується на всю ширину таблиці.
-  static const searchFieldMaxWidth = 420.0;
-
-  /// Ширина круглої кнопки оновлення (для розрахунку поля пошуку).
-  static const searchRefreshButtonExtent = 48.0;
+  static const pageSizeOptions = DirectoryTableLayout.pageSizeOptions;
+  static const maxPageSize = DirectoryTableLayout.maxPageSize;
+  static const defaultPageSize = DirectoryTableLayout.defaultPageSize;
+  static const contentInset = DirectoryTableLayout.contentInset;
+  static const compactContentInset = DirectoryTableLayout.compactContentInset;
 
   @override
   ConsumerState<CountriesDirectoryPage> createState() =>
@@ -139,7 +126,11 @@ class _CountriesDirectoryPageState
       if (resetPage) {
         _pageIndex = 0;
       } else {
-        _pageIndex = _clampPageIndex(_pageIndex, sorted.length, _rowsPerPage);
+        _pageIndex = clampDirectoryPageIndex(
+          _pageIndex,
+          sorted.length,
+          _rowsPerPage,
+        );
       }
     });
   }
@@ -154,7 +145,11 @@ class _CountriesDirectoryPageState
     final rowsPerPage = value.clamp(1, CountriesDirectoryPage.maxPageSize);
     setState(() {
       _rowsPerPage = rowsPerPage;
-      _pageIndex = _clampPageIndex(_pageIndex, _countries.length, rowsPerPage);
+      _pageIndex = clampDirectoryPageIndex(
+        _pageIndex,
+        _countries.length,
+        rowsPerPage,
+      );
     });
   }
 
@@ -188,17 +183,25 @@ class _CountriesDirectoryPageState
     required bool compact,
     required String languageCode,
   }) {
+    final iso2Width = compact
+        ? const FixedColumnWidth(88)
+        : const FixedColumnWidth(104);
+    final iso3Width = compact
+        ? const FixedColumnWidth(96)
+        : const FixedColumnWidth(112);
     final iso2 = CountryTableColumn(
       label: l10n.directoryCodeAlpha2,
       sortColumn: CountrySortColumn.codeAlpha2,
       valueOf: (country) => country.codeAlpha2,
-      kind: CountryTableCellKind.isoCode,
+      kind: DirectoryTableCellKind.codeChip,
+      width: iso2Width,
     );
     final iso3 = CountryTableColumn(
       label: l10n.directoryCodeAlpha3,
       sortColumn: CountrySortColumn.codeAlpha3,
       valueOf: (country) => country.codeAlpha3,
-      kind: CountryTableCellKind.isoCode,
+      kind: DirectoryTableCellKind.codeChip,
+      width: iso3Width,
     );
     if (compact) {
       return [
@@ -209,6 +212,7 @@ class _CountriesDirectoryPageState
           sortColumn: countryNameSortColumn(languageCode),
           valueOf: (country) => country.localizedName(languageCode),
           emphasize: true,
+          width: const FlexColumnWidth(1),
         ),
       ];
     }
@@ -217,18 +221,21 @@ class _CountriesDirectoryPageState
       sortColumn: CountrySortColumn.nameUk,
       valueOf: (country) => country.nameUk,
       emphasize: languageCode != 'en' && languageCode != 'ru',
+      width: const FlexColumnWidth(1.2),
     );
     final nameEn = CountryTableColumn(
       label: l10n.directoryNameEn,
       sortColumn: CountrySortColumn.nameEn,
       valueOf: (country) => country.nameEn,
       emphasize: languageCode == 'en',
+      width: const FlexColumnWidth(1),
     );
     final nameRu = CountryTableColumn(
       label: l10n.directoryNameRu,
       sortColumn: CountrySortColumn.nameRu,
       valueOf: (country) => country.nameRu,
       emphasize: languageCode == 'ru',
+      width: const FlexColumnWidth(1),
     );
     final names = switch (languageCode) {
       'en' => [nameEn, nameUk, nameRu],
@@ -242,62 +249,20 @@ class _CountriesDirectoryPageState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final compact = MediaQuery.sizeOf(context).width < appShellWideBreakpoint;
-    final inset = compact
-        ? CountriesDirectoryPage.compactContentInset
-        : CountriesDirectoryPage.contentInset;
-    final searchGap = compact
-        ? CountriesDirectoryPage.compactSearchRefreshGap
-        : CountriesDirectoryPage.searchRefreshGap;
+    final inset = DirectoryTableLayout.insetFor(compact);
     final languageCode = Localizations.localeOf(context).languageCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(inset, 12, inset, 8),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final searchWidth = math.min(
-                CountriesDirectoryPage.searchFieldMaxWidth,
-                math.max(
-                  0.0,
-                  constraints.maxWidth -
-                      searchGap -
-                      CountriesDirectoryPage.searchRefreshButtonExtent,
-                ),
-              );
-              return Row(
-                children: [
-                  SizedBox(
-                    width: searchWidth,
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: _onSearchChanged,
-                      textInputAction: TextInputAction.search,
-                      onSubmitted: (_) => _reload(),
-                      decoration: InputDecoration(
-                        hintText: l10n.directorySearch,
-                        prefixIcon: const Icon(Icons.search),
-                        isDense: true,
-                        suffixIcon: _searchController.text.isNotEmpty
-                            ? IconButton(
-                                tooltip: l10n.directoryClearSearch,
-                                onPressed: _clearSearch,
-                                icon: const Icon(Icons.close),
-                              )
-                            : null,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: searchGap),
-                  DirectoryRefreshButton(
-                    onPressed: _reload,
-                    enabled: !_isLoading,
-                  ),
-                ],
-              );
-            },
-          ),
+        DirectorySearchBar(
+          controller: _searchController,
+          onChanged: _onSearchChanged,
+          onSubmitted: _reload,
+          onClear: _clearSearch,
+          onRefresh: _reload,
+          refreshEnabled: !_isLoading,
+          compact: compact,
         ),
         DirectoryLoadProgress(isLoading: _isLoading),
         Expanded(
@@ -327,18 +292,4 @@ class _CountriesDirectoryPageState
       ],
     );
   }
-}
-
-int _clampPageIndex(int pageIndex, int totalCount, int rowsPerPage) {
-  if (totalCount == 0) {
-    return 0;
-  }
-  final lastPage = ((totalCount - 1) / rowsPerPage).floor();
-  if (pageIndex > lastPage) {
-    return lastPage;
-  }
-  if (pageIndex < 0) {
-    return 0;
-  }
-  return pageIndex;
 }

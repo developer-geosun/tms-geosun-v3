@@ -291,6 +291,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get directoryCurrencyInactive => 'Неактивна';
 
   @override
+  String get directoryCurrencyUpdateFailed => 'Не вдалося оновити валюту';
+
+  @override
   String get directoryNbuUnits => 'Од. НБУ';
 
   @override

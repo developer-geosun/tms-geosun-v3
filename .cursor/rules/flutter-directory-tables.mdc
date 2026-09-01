@@ -10,8 +10,8 @@ alwaysApply: false
 # Flutter directory tables
 
 Еталон: `/directories/countries`.
-Код: `countries_directory_page.dart`, `countries_paged_table.dart`.
-Не копіюй `PaginatedDataTable` — власна таблиця в `Card`.
+Код: `countries_directory_page.dart`, спільний каркас `directory_paged_table.dart` / `directory_table_layout.dart`.
+Не копіюй `PaginatedDataTable` — власна таблиця в `Card` через `DirectoryPagedTable`.
 
 ## Оболонка сторінки
 
@@ -47,8 +47,8 @@ alwaysApply: false
 
 ## Стовпці та compact
 
-- Широкий екран: усі стовпці. ISO — `FixedColumnWidth` + chip; назва поточної мови UI ліворуч після ISO, `emphasize`.
-- `width < 800`: менше стовпців (країни: ISO-2, ISO-3, **одна** назва `localizedName` поточною мовою).
+- Широкий екран: усі стовпці. ISO/код — `FixedColumnWidth` + chip; назва поточної мови UI підкреслена (`emphasize`).
+- `width < 800`: менше стовпців (країни: ISO-2, ISO-3, **одна** назва; валюти: код, назва, курс).
 - Клітинки: `maxLines: 1`, `ellipsis`; `Tooltip` **лише** якщо текст обрізано.
 - Тап по шапці: той самий стовпець → інверсія напрямку; інший → `ascending: true`. Активний стовпець — стрілка 16 px, колір `primary`.
 

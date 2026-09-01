@@ -90,6 +90,22 @@ class CurrencyReference {
         return nameUk;
     }
   }
+
+  CurrencyReference copyWith({bool? isActive}) {
+    return CurrencyReference(
+      code: code,
+      numericCode: numericCode,
+      nameUk: nameUk,
+      nameEn: nameEn,
+      nameRu: nameRu,
+      nbuUnits: nbuUnits,
+      minorUnits: minorUnits,
+      isActive: isActive ?? this.isActive,
+      displayOrder: displayOrder,
+      latestNbuRatePerUnit: latestNbuRatePerUnit,
+      latestRateDate: latestRateDate,
+    );
+  }
 }
 
 /// Один курс НБУ в знімку на дату.

@@ -290,6 +290,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get directoryCurrencyInactive => 'Inactive';
 
   @override
+  String get directoryCurrencyUpdateFailed => 'Failed to update currency';
+
+  @override
   String get directoryNbuUnits => 'NBU units';
 
   @override
