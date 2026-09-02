@@ -62,7 +62,7 @@ APP_STORAGE_S3_SECRET_KEY=minioadmin
 Затем поднимите MinIO вместе с backend (bucket создаёт сервис `minio-init`):
 
 ```bash
-docker compose up --build mysql mailhog minio minio-init backend
+docker compose up --build mysql minio minio-init backend
 ```
 
 > Смена `APP_STORAGE_TYPE` на уже заполненной БД **не** переносит файлы автоматически — нужны те же `storage_key` в новом хранилище.
@@ -130,7 +130,7 @@ APP_STORAGE_TYPE=local
 Запуск API без туннеля:
 
 ```bash
-docker compose up --build mysql mailhog backend
+docker compose up --build mysql backend
 ```
 
 Проверка снаружи: `http://178.136.237.7:8080/actuator/health`
@@ -156,13 +156,13 @@ APP_STORAGE_TYPE=local
 Запуск API с публичным туннелем:
 
 ```bash
-docker compose up --build mysql mailhog backend ngrok
+docker compose up --build mysql backend ngrok
 ```
 
 или (если задан `COMPOSE_PROFILES=ngrok`):
 
 ```bash
-docker compose up --build mysql mailhog backend
+docker compose up --build mysql backend
 ```
 
 После старта туннеля значение `API_URL` в GitHub Secrets должно совпадать с `https://<NGROK_DOMAIN>` (и при смене домена — перезапустить Deploy workflow).
@@ -174,7 +174,7 @@ docker compose up --build mysql mailhog backend
 Нужен MySQL 8 (локально или только контейнер БД):
 
 ```bash
-docker compose up -d mysql mailhog
+docker compose up -d mysql
 ```
 
 Из корня проекта:
@@ -247,7 +247,7 @@ cp .env.example .env
 docker compose up --build
 
 # С MinIO (хранилище s3) — явно добавьте сервисы:
-# docker compose up --build mysql mailhog minio minio-init backend frontend gateway
+# docker compose up --build mysql minio minio-init backend frontend gateway
 ```
 
 3. Остановка и удаление контейнеров:
@@ -305,19 +305,19 @@ docker compose --profile dev down --remove-orphans
 ### Dev-профиль (frontend-dev + backend)
 
 ```bash
-docker compose --profile dev up -d --build mysql mailhog backend frontend-dev
+docker compose --profile dev up -d --build mysql backend frontend-dev
 ```
 
 С MinIO (s3):
 
 ```bash
-docker compose --profile dev up -d --build mysql mailhog minio minio-init backend frontend-dev
+docker compose --profile dev up -d --build mysql minio minio-init backend frontend-dev
 ```
 
 С публичным API через ngrok в dev:
 
 ```bash
-docker compose --profile dev --profile ngrok-dev up -d --build mysql mailhog backend frontend-dev ngrok-dev
+docker compose --profile dev --profile ngrok-dev up -d --build mysql backend frontend-dev ngrok-dev
 ```
 
 ```bash
@@ -351,19 +351,19 @@ docker compose --profile dev up -d frontend-dev
 Публичный API (backend + статический IP, без ngrok):
 
 ```bash
-docker compose up --build mysql mailhog backend
+docker compose up --build mysql backend
 ```
 
 Публичный API (backend + ngrok):
 
 ```bash
-docker compose --profile ngrok up --build mysql mailhog backend ngrok
+docker compose --profile ngrok up --build mysql backend ngrok
 ```
 
 Backend + MinIO (проверка `APP_STORAGE_TYPE=s3`):
 
 ```bash
-docker compose up --build mysql mailhog minio minio-init backend
+docker compose up --build mysql minio minio-init backend
 ```
 
 Полная остановка dev-профиля (без "Network ... Resource is still in use"):
@@ -375,7 +375,7 @@ docker compose --profile dev --profile ngrok-dev down --remove-orphans
 ### Локальный стек с gateway (без публичного туннеля)
 
 ```bash
-docker compose up --build mysql mailhog backend frontend gateway
+docker compose up --build mysql backend frontend gateway
 ```
 
 ## Полезные URL после запуска
@@ -385,7 +385,6 @@ docker compose up --build mysql mailhog backend frontend gateway
 - Backend health: `http://localhost:8080/actuator/health`
 - Swagger UI: `http://localhost:8080/swagger-ui.html`
 - Gateway (единый локальный вход): `http://localhost:8081`
-- MailHog UI: `http://localhost:8025`
 - MinIO API: `http://localhost:9000`
 - MinIO Console: `http://localhost:9001` (логин/пароль из `MINIO_ROOT_*`)
 - Тест хранилища файлов (ADMIN): `http://localhost:4200/admin/file-storage-test`

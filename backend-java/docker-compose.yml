@@ -1,11 +1,4 @@
 services:
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: tms-mailhog
-    ports:
-      - "${SMTP_PORT:-1025}:1025"
-      - "${MAILHOG_UI_PORT:-8025}:8025"
-
   mysql:
     image: mysql:8.0
     container_name: tms-mysql
@@ -31,8 +24,6 @@ services:
       dockerfile: Dockerfile
     container_name: tms-backend
     depends_on:
-      mailhog:
-        condition: service_started
       mysql:
         condition: service_healthy
     environment:
@@ -50,7 +41,7 @@ services:
       EMAIL_VERIFICATION_EXPIRES_SECONDS: ${EMAIL_VERIFICATION_EXPIRES_SECONDS:-86400}
       ANGULAR_APP_BASE_URL: ${ANGULAR_APP_BASE_URL:-http://localhost:4200}
       FLUTTER_APP_BASE_URL: ${FLUTTER_APP_BASE_URL:-http://localhost:4300}
-      SMTP_HOST: ${SMTP_HOST:-mailhog}
+      SMTP_HOST: ${SMTP_HOST:-localhost}
       SMTP_PORT: ${SMTP_PORT:-1025}
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASSWORD: ${SMTP_PASSWORD:-}

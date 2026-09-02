@@ -21,7 +21,7 @@
 - [ ] `GET /api/v1/auth/me` успішний із заголовком `Authorization: Bearer <accessToken>`.
 - [ ] `POST /api/v1/auth/refresh` ротує сесію, і frontend оновлює обидва токени.
 - [ ] `POST /api/v1/auth/logout` успішний, і frontend очищає стан автентифікації.
-- [ ] `POST /api/v1/auth/forgot-password` повертає успіх для невідомого email (анти-енумерація) і надсилає лист для верифікованих користувачів (перевірити в MailHog).
+- [ ] `POST /api/v1/auth/forgot-password` повертає успіх для невідомого email (анти-енумерація) і надсилає лист для верифікованих користувачів (перевірити в SMTP, якщо налаштовано).
 - [ ] `POST /api/v1/auth/reset-password` з токеном із листа оновлює пароль; старий пароль і старий refresh не працюють.
 
 ### Безпека та обробка помилок
@@ -58,7 +58,7 @@ Use this checklist after syncing frontend with backend auth API (`/api/v1/auth`)
 - [ ] `GET /api/v1/auth/me` succeeds with `Authorization: Bearer <accessToken>`.
 - [ ] `POST /api/v1/auth/refresh` rotates session and frontend updates both tokens.
 - [ ] `POST /api/v1/auth/logout` succeeds and frontend clears auth state.
-- [ ] `POST /api/v1/auth/forgot-password` returns success for unknown email (anti-enumeration) and sends mail for verified users (check MailHog).
+- [ ] `POST /api/v1/auth/forgot-password` returns success for unknown email (anti-enumeration) and sends mail for verified users (check SMTP if configured).
 - [ ] `POST /api/v1/auth/reset-password` with token from email updates password; old password and old refresh fail.
 
 ### Security and Error Handling
