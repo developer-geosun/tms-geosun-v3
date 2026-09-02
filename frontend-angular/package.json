@@ -16,6 +16,10 @@
     "lint:fix": "ng lint --fix"
   },
   "private": true,
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24.0.0",
+    "npm": ">=10"
+  },
   "dependencies": {
     "@angular/animations": "^21.2.19",
     "@angular/cdk": "^21.2.14",

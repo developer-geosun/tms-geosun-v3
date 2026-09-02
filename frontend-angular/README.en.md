@@ -11,8 +11,9 @@ Angular 21 application for GeoSun transport management scenarios.
 
 ## Requirements
 
-- Node.js `>=20`
+- Node.js `22.14` LTS (recommended; minimum `22.13+` on the 22.x line). Also supported: `20.19+` LTS and `24+`.
 - npm `>=10`
+- Pinned in `.nvmrc` (`22.14.0`); run `nvm use` / `fnm use` from `frontend-angular`.
 
 ## Getting started
 

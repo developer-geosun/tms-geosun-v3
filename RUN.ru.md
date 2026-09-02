@@ -4,8 +4,9 @@
 
 ## Требования
 
-- Node.js `>=20`
+- Node.js `22.14` LTS (рекомендуется; минимум `22.13+` на ветке 22). Также поддерживаются `20.19+` LTS и `24+` (CI).
 - npm `>=10`
+- Версия зафиксирована в `frontend-angular/.nvmrc` (`22.14.0`); для nvm/fnm: `nvm use` / `fnm use` из каталога `frontend-angular`.
 - Java `21`
 - Maven `3.9+`
 - MySQL `8` (для локального запуска backend без Docker)

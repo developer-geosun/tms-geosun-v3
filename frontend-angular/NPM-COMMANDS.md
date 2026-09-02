@@ -12,7 +12,7 @@ cd E:\MyProjects\GeoSun\tms-geosun-v3\frontend-angular
 
 | Общие сведения | General |
 | :-- | :-- |
-| Нужны **Node.js** и **npm**, совместимые с версией **Angular** в этом репозитории (см. `package.json` и документацию Angular). | You need **Node.js** and **npm** compatible with the **Angular** version pinned in this repo (see `package.json` and Angular docs). |
+| Нужны **Node.js `22.14` LTS** (рекомендуется; минимум `22.13+`) и **npm `>=10`**. Версия в `.nvmrc`; также подходят `20.19+` LTS и `24+`. | Use **Node.js `22.14` LTS** (recommended; minimum `22.13+`) and **npm `>=10`**. Version pinned in `.nvmrc`; `20.19+` LTS and `24+` also work. |
 
 | Зависимости | Dependencies |
 | :-- | :-- |
