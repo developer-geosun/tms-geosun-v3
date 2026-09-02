@@ -38,14 +38,10 @@ mat-toolbar {
   // overflow РЅРµ РЅР° С‚СѓР»Р±Р°СЂС– вЂ” С–РЅР°РєС€Рµ РѕР±СЂС–Р·Р°С”С‚СЊСЃСЏ .logo-hover-icons РїС–Рґ Р»РѕРіРѕС‚РёРїРѕРј
 }
 
-.logo-icons-group,
-.logo-hover-icons {
+.logo-icons-group {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.logo-icons-group {
+  gap: 4px;
   order: 1;
   flex-shrink: 0;
 }
@@ -85,7 +81,7 @@ app-logo {
   max-width: 340px;
   opacity: 1;
   pointer-events: auto;
-  padding-left: 8px;
+  padding-left: 4px;
 }
 
 .logo-icons-group.is-open .logo-hover-icons > *,
@@ -108,7 +104,7 @@ app-logo {
     opacity: 1;
     overflow: visible;
     pointer-events: auto;
-    padding-left: 8px;
+    padding-left: 4px;
   }
 
   .logo-hover-icons > * {
@@ -197,10 +193,12 @@ app-social-icon {
 // РђРєС‚РёРІРЅРёР№ РїСѓРЅРєС‚ Р±СѓСЂРіРµСЂ-РјРµРЅСЋ Р·Р°РґР°С”С‚СЊСЃСЏ С‡РµСЂРµР· [ngStyle] Сѓ С€Р°Р±Р»РѕРЅС– (navMenuActiveStyles) вЂ” РїРµСЂРµР±РёРІР°С” MDC
 
 // Р“СЂСѓРїР° РєРЅРѕРїРѕРє Р°РІС‚РѕСЂРёР·Р°С†С–С— С‚Р° РЅР°Р»Р°С€С‚СѓРІР°РЅСЊ вЂ” Р±РµР· РїРµСЂРµРЅРѕСЃСѓ С‚Р° СЃС‚РёСЃРЅРµРЅРЅСЏ
+// Група кнопок авторизації та налаштувань — в один ряд, по центру при зростанні toolbar
 .toolbar-actions {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  align-self: center;
   flex-shrink: 0;
   gap: 6px;
 }
@@ -526,7 +524,7 @@ a.company-site-button:active {
   .toolbar-actions {
     grid-column: 2;
     grid-row: 1;
-    align-self: start;
+    align-self: center;
   }
 
   .nav-menu-button.mat-mdc-mini-fab {
