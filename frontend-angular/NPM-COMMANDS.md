@@ -32,7 +32,7 @@ npm install
 
 | Локальная разработка | Local development |
 | :-- | :-- |
-| Запуск dev-сервера Angular с прокси (`proxy.conf.json`). Перед `start` срабатывает `prestart`: скрипт подставляет HERE/CARTO API keys из `HERE_API_KEY` / `CARTO_API_KEY` или из `.env` в корне репозитория в `src/assets/app-config.local.js`. | Angular dev server with `proxy.conf.json`. `prestart` runs first: syncs HERE/CARTO API keys from `HERE_API_KEY` / `CARTO_API_KEY` or repo-root `.env` into `src/assets/app-config.local.js`. |
+| Запуск dev-сервера Angular с прокси (`proxy.conf.json`). Перед `start` срабатывает `prestart`: скрипт подставляет `CARTO_API_KEY` из окружения или из `.env` в корне репозитория в `src/assets/app-config.local.js`. | Angular dev server with `proxy.conf.json`. `prestart` runs first: syncs `CARTO_API_KEY` from env or repo-root `.env` into `src/assets/app-config.local.js`. |
 
 ```powershell
 npm start
@@ -40,7 +40,7 @@ npm start
 
 | Сборка | Production build |
 | :-- | :-- |
-| Продакшен-сборка (`ng build`, конфигурация по умолчанию в `angular.json` — production). Перед сборкой выполняется `prebuild` (тот же sync ключа HERE). | Production build (`ng build`; default configuration in `angular.json` is production). `prebuild` runs first (same HERE key sync). |
+| Продакшен-сборка (`ng build`, конфигурация по умолчанию в `angular.json` — production). Перед сборкой выполняется `prebuild` (тот же sync ключа CARTO). | Production build (`ng build`; default configuration in `angular.json` is production). `prebuild` runs first (same CARTO key sync). |
 
 ```powershell
 npm run build
@@ -117,5 +117,5 @@ npx ng generate component my-widget
 
 | Замечания | Notes |
 | :-- | :-- |
-| Скрипты `start` и `build` завязаны на `scripts/sync-here-key.mjs`; без ключа в `.env` / окружении локальная карта HERE может не работать. | `start` and `build` depend on `scripts/sync-here-key.mjs`; without a key in `.env` / env, local HERE features may not work. |
+| Скрипты `start` и `build` завязаны на `scripts/sync-from-env.mjs`; без `CARTO_API_KEY` в `.env` / окружении на подложке карты может быть водяной знак CARTO. | `start` and `build` depend on `scripts/sync-from-env.mjs`; without `CARTO_API_KEY` in `.env` / env, CARTO tiles may show a watermark. |
 | Для воспроизводимых CI-сборок предпочтительнее **`npm ci`**, чем `npm install`. | For reproducible CI installs, prefer **`npm ci`** over `npm install`. |

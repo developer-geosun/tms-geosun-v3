@@ -137,7 +137,6 @@ services:
     depends_on:
       - backend
     environment:
-      HERE_API_KEY: ${HERE_API_KEY:-}
       CARTO_API_KEY: ${CARTO_API_KEY:-}
     ports:
       - "${FRONTEND_PORT:-4200}:80"

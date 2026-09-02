@@ -6,12 +6,10 @@ import { frontendRoot, readEnvVar } from './read-env.mjs';
 const appConfigLocalPath = path.join(frontendRoot, 'src', 'assets', 'app-config.local.js');
 
 function syncLocalApiKeys() {
-  const hereApiKey = readEnvVar('HERE_API_KEY');
   const cartoApiKey = readEnvVar('CARTO_API_KEY');
   const localConfigContent = `// Локальний runtime-конфіг (генерується автоматично, не комітити).
 window.__APP_CONFIG__ = {
   ...(window.__APP_CONFIG__ || {}),
-  hereApiKey: ${JSON.stringify(hereApiKey)},
   cartoApiKey: ${JSON.stringify(cartoApiKey)}
 };
 `;

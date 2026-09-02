@@ -77,7 +77,6 @@ ng test
 Необхідні секрети репозиторію:
 
 - `API_URL` — публічна базова URL бекенду (ngrok), записується в `assets/app-config.js` під час деплою
-- `HERE_API_KEY` — необов’язковий ключ HERE для карт на Pages
 - `CARTO_API_KEY` — ключ CARTO Basemaps (прибирає водяний знак «API KEY REQUIRED»)
 
 Джерело GitHub Pages: гілка `gh-pages` / корінь.
