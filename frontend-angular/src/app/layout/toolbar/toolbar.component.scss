@@ -78,6 +78,27 @@ app-logo {
   transform: scale(1.06);
 }
 
+// auth-сторінки — іконки GeoSun завжди поруч із логотипом
+.logo-icons-group.always-visible {
+  .logo-hover-icons {
+    position: static;
+    top: auto;
+    left: auto;
+    z-index: auto;
+    max-width: none;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
+    transform: none;
+    padding: 0 0 0 8px;
+  }
+
+  .logo-hover-icons > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 app-logo,
 app-social-icon {
   flex-shrink: 0;

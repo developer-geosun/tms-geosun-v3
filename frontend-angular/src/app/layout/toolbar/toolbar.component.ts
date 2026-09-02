@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   HostListener,
   inject,
@@ -48,6 +49,15 @@ import { UserRole } from '../../shared/models';
   ]
 })
 export class ToolbarComponent {
+  /** Маршрути, де іконки GeoSun біля логотипу показуються постійно */
+  private static readonly logoIconsAlwaysVisibleRoutes = [
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/verify-email',
+    '/reset-password'
+  ] as const;
+
   private readonly themeService = inject(ThemeService);
   readonly configService = inject(ConfigService);
   private readonly translateService = inject(TranslateService);
@@ -71,6 +81,10 @@ export class ToolbarComponent {
   readonly currentLanguage = this.languageService.language;
   readonly currentTheme = this.themeService.theme;
   readonly isLogoIconsOpen = signal(false);
+  /** На auth-сторінках іконки соцмереж завжди видимі */
+  readonly showLogoIconsAlways = computed(() =>
+    ToolbarComponent.logoIconsAlwaysVisibleRoutes.some((route) => this.isAuthRoute(route))
+  );
   readonly isAuthenticated = this.authService.isAuthenticated;
   readonly navigationItems = [
     {
@@ -214,6 +228,12 @@ export class ToolbarComponent {
     this.navigationUrl();
     const url = this.router.url;
     return url === route || url.startsWith(`${route}/`) || url.startsWith(`${route}?`);
+  }
+
+  private isAuthRoute(route: string): boolean {
+    this.navigationUrl();
+    const url = this.router.url;
+    return url === route || url.startsWith(`${route}?`);
   }
 
   /**

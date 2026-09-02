@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
-  <div class="logo-icons-group" [class.is-open]="isLogoIconsOpen()">
+  <div
+    class="logo-icons-group"
+    [class.is-open]="isLogoIconsOpen()"
+    [class.always-visible]="showLogoIconsAlways()">
     <app-logo (click)="toggleLogoIcons($event)"></app-logo>
     <div class="logo-hover-icons">
       <a

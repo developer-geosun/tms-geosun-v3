@@ -5,7 +5,9 @@
         <mat-icon [fontIcon]="status() === 'success' ? 'mark_email_read' : 'mail'"></mat-icon>
       </div>
       <h1>{{ 'pages.verifyEmail.title' | translate }}</h1>
-      <p class="subtitle">{{ 'pages.verifyEmail.subtitle' | translate }}</p>
+      @if (status() === 'loading' || status() === 'idle') {
+        <p class="subtitle">{{ 'pages.verifyEmail.subtitle' | translate }}</p>
+      }
     </div>
 
     @if (status() === 'loading' || status() === 'idle') {
