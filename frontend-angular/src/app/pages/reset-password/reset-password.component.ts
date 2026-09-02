@@ -12,8 +12,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import { AuthService } from '../../core/services';
-
-const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+import { PASSWORD_PATTERN } from '../../shared/constants';
+import { SyncBrowserAutofillDirective } from '../../shared/directives/sync-browser-autofill.directive';
 
 @Component({
   selector: 'app-reset-password',
@@ -32,7 +32,8 @@ const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    TranslateModule
+    TranslateModule,
+    SyncBrowserAutofillDirective
   ]
 })
 export class ResetPasswordComponent {

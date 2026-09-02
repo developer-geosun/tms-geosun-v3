@@ -11,7 +11,7 @@
     <form [formGroup]="form" (ngSubmit)="submit()" class="register-form">
       <mat-form-field appearance="outline">
         <mat-label>{{ 'pages.register.email' | translate }}</mat-label>
-        <input matInput formControlName="email" autocomplete="email" />
+        <input matInput formControlName="email" name="email" autocomplete="email" appSyncBrowserAutofill />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -20,9 +20,15 @@
           matInput
           [type]="isPasswordVisible() ? 'text' : 'password'"
           formControlName="password"
+          name="new-password"
           autocomplete="new-password"
+          appSyncBrowserAutofill
         />
-        @if (form.controls.password.touched && form.controls.password.hasError('pattern')) {
+        @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+          <mat-error>{{ 'pages.register.passwordRequired' | translate }}</mat-error>
+        } @else if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+          <mat-error>{{ 'pages.register.passwordMinLength' | translate }}</mat-error>
+        } @else if (form.controls.password.touched && form.controls.password.hasError('pattern')) {
           <mat-error>{{ 'pages.register.passwordRule' | translate }}</mat-error>
         }
       </mat-form-field>
@@ -33,9 +39,15 @@
           matInput
           [type]="isPasswordVisible() ? 'text' : 'password'"
           formControlName="confirmPassword"
+          name="confirm-new-password"
           autocomplete="new-password"
+          appSyncBrowserAutofill
         />
-        @if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('mismatch')) {
+        @if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('required')) {
+          <mat-error>{{ 'pages.register.passwordRequired' | translate }}</mat-error>
+        } @else if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('minlength')) {
+          <mat-error>{{ 'pages.register.passwordMinLength' | translate }}</mat-error>
+        } @else if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('mismatch')) {
           <mat-error>{{ 'pages.register.passwordMismatch' | translate }}</mat-error>
         }
       </mat-form-field>

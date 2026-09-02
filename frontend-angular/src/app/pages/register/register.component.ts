@@ -11,8 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../core/services';
-
-const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+import { PASSWORD_PATTERN } from '../../shared/constants';
+import { SyncBrowserAutofillDirective } from '../../shared/directives/sync-browser-autofill.directive';
 
 @Component({
   selector: 'app-register',
@@ -31,7 +31,8 @@ const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    TranslateModule
+    TranslateModule,
+    SyncBrowserAutofillDirective
   ]
 })
 export class RegisterComponent {
