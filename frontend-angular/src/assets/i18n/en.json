@@ -123,7 +123,7 @@
     },
     "stopService": {
       "title": "Service temporarily unavailable",
-      "message": "Authorization server is temporarily unavailable",
+      "message": "Technical maintenance is in progress to improve the service",
       "subMessage": "Sign in and registration are currently unavailable",
       "tryLater": "Please try again later",
       "refresh": "Refresh"
