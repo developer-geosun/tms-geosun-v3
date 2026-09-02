@@ -55,7 +55,8 @@ export class ToolbarComponent {
     '/register',
     '/forgot-password',
     '/verify-email',
-    '/reset-password'
+    '/reset-password',
+    '/stop-service'
   ] as const;
 
   private readonly themeService = inject(ThemeService);
