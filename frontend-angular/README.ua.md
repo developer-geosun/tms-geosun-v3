@@ -79,18 +79,13 @@ ng test
 - `API_URL` — публічна базова URL бекенду (ngrok), записується в `assets/app-config.js` під час деплою
 - `CARTO_API_KEY` — ключ CARTO Basemaps (прибирає водяний знак «API KEY REQUIRED»)
 
-Джерело GitHub Pages: гілка `gh-pages` / корінь.
+Джерело GitHub Pages: **GitHub Actions** (workflow `Deploy to GitHub Pages`).
 
 ### Ручний деплой на GitHub Pages
 
-```bash
-npm run deploy
-```
+Production-деплой — через GitHub Actions: **Actions → Deploy to GitHub Pages → Run workflow**.
 
-Команда деплою використовує:
-
-- base href: `/tms-geosun-v3/`
-- каталог виводу: `dist/tms-geosun`
+Локальна команда `npm run deploy` збирає production-бандл і пушить у гілку `gh-pages` через npm-пакет `gh-pages`; за source **GitHub Actions** це **не** оновлює публічний сайт. Використовуйте її лише для відладки або якщо Pages знову перемкнуть на гілку.
 
 ## Корисні команди
 

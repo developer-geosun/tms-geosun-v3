@@ -84,7 +84,7 @@ npm run lint:fix
 
 | Публикация | Deploy (GitHub Pages) |
 | :-- | :-- |
-| Сборка с `--base-href=/tms-geosun-v3/` и выкладка содержимого `dist/tms-geosun` через **gh-pages** (нужны права на репозиторий и настроенный `git remote`). | Production build with `--base-href=/tms-geosun-v3/` and publish `dist/tms-geosun` via **gh-pages** (requires repo permissions and a configured `git remote`). |
+| Сборка с `--base-href=/tms-geosun-v3/` и push в ветку `gh-pages` через npm-пакет **gh-pages** (локально; production — через GitHub Actions). | Production build with `--base-href=/tms-geosun-v3/` and push to branch `gh-pages` via **gh-pages** npm package (local only; production via GitHub Actions). |
 
 ```powershell
 npm run deploy

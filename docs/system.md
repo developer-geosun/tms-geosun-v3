@@ -15,7 +15,7 @@
 - Backend модуль `routes`: сохранение, чтение списка/деталей (в т.ч. `view=active|all|deleted`), soft delete, блокировка `PUT` после заявки, `duplicate`/`restore`.
 - Backend модуль `route-requests`: создание заявок, список заявок пользователя, admin очередь; пробіг по країнах у відповіді заявки — з БД до явного admin `POST .../country-breakdown` (провайдер расчёта выбирается feature flag: `here` или `geojson`).
 - Backend модуль `quotes`: создание draft, отправка оффера, история офферов и idempotency.
-- Деплой frontend на GitHub Pages через GitHub Actions (`main`/`master`); публичный API — по выбору через ngrok или статический IP провайдера (только backend, см. `PUBLIC_ACCESS_MODE` в `.env` / `RUN.md`).
+- Деплой frontend на GitHub Pages через GitHub Actions (`main`/`master`, source **GitHub Actions**); публичный API — по выбору через ngrok или статический IP провайдера (только backend, см. `PUBLIC_ACCESS_MODE` в `.env` / `RUN.md`).
 
 ## Как работает (высокоуровнево)
 
@@ -128,7 +128,7 @@
 ## Что менять осторожно
 
 - `frontend-angular/src/app/app.config.ts` — глобальные провайдеры, роутинг, i18n-конфигурация.
-- `.github/workflows/deploy.yml` — логика деплоя на GitHub Pages.
+- `.github/workflows/deploy.yml` — сборка Angular + Flutter Web, публикация на GitHub Pages через artifact + `deploy-pages`.
 - `backend-java/src/main/resources/application*.yml` — профильные настройки окружений и безопасности.
 - `backend-java/src/main/java/com/geosun/tms/auth/security/` — JWT/security-конфигурация.
 - `backend-java/src/main/java/com/geosun/tms/auth/api/` — публичные auth/admin endpoint-ы.

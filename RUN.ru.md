@@ -77,7 +77,7 @@ docker compose up --build mysql minio minio-init backend
 - **Frontend (Angular)** — статика на GitHub Pages: `https://developer-geosun.github.io/<repo-name>/`
 - **Frontend (Flutter Web)** — подпапка: `https://developer-geosun.github.io/<repo-name>/flutter/`
 
-Оба клиента деплоятся одним workflow `.github/workflows/deploy.yml` на ветку `gh-pages`.
+Оба клиента деплоятся одним workflow `.github/workflows/deploy.yml` через официальный GitHub Pages deploy (artifact + `deploy-pages`).
 - **Backend** — локально (Docker), наружу по выбору: **ngrok** или **статический IP** провайдера (без проксирования UI).
 
 Режим задаётся в корневом `.env`:
@@ -100,9 +100,11 @@ docker compose up --build mysql minio minio-init backend
 
 ### 2) GitHub Pages
 
-Settings → Pages → Build and deployment → Source: **Deploy from a branch** → Branch: **`gh-pages`** / `/ (root)`.
+Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 
-Workflow `.github/workflows/deploy.yml` собирает **Angular** (корень сайта) и **Flutter Web** (`/flutter/`) и пушит в `gh-pages` при push в `master`/`main` (изменения в `frontend-angular/**`, `frontend-flutter/**`) или вручную (`workflow_dispatch`).
+Workflow `.github/workflows/deploy.yml` собирает **Angular** (корень сайта) и **Flutter Web** (`/flutter/`), загружает артефакт и публикует на Pages при push в `master`/`main` (изменения в `frontend-angular/**`, `frontend-flutter/**`) или вручную (**Actions → Deploy to GitHub Pages → Run workflow**).
+
+Для job `deploy` нужны permissions `pages: write` и `id-token: write` (заданы в workflow). В Settings → Actions → General рекомендуется **Read and write permissions** для `GITHUB_TOKEN`.
 
 | Клиент | URL на Pages |
 | --- | --- |

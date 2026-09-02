@@ -79,18 +79,13 @@ Required repository secrets:
 - `API_URL` — public backend base URL (ngrok), written into `assets/app-config.js` at deploy time
 - `CARTO_API_KEY` — CARTO Basemaps key (removes the «API KEY REQUIRED» watermark)
 
-GitHub Pages source: branch `gh-pages` / root.
+GitHub Pages source: **GitHub Actions** (workflow `Deploy to GitHub Pages`).
 
 ### Manual deploy to GitHub Pages
 
-```bash
-npm run deploy
-```
+Production deploy — через GitHub Actions: **Actions → Deploy to GitHub Pages → Run workflow**.
 
-The deploy command uses:
-
-- base href: `/tms-geosun-v3/`
-- output directory: `dist/tms-geosun`
+Local `npm run deploy` builds a production bundle and pushes to the `gh-pages` branch via the **gh-pages** npm package. With Pages source set to **GitHub Actions**, this does **not** update the public site. Use it only for debugging or if Pages is switched back to branch deployment.
 
 ## Useful commands
 
