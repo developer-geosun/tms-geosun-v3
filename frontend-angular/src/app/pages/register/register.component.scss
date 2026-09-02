@@ -104,12 +104,30 @@ h1 {
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 13px;
+  line-height: 1.4;
+
+  mat-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: inherit;
+  }
 }
 
 .error-text {
-  color: var(--mat-sys-error);
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--mat-sys-error);
+  border-radius: 10px;
+  background: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+
+  span {
+    white-space: pre-line;
+  }
 }
 
 .success-text {
@@ -141,10 +159,6 @@ h1 {
   .register-card {
     background: color-mix(in srgb, var(--mat-sys-surface-container-high) 92%, #101218);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-  }
-
-  .error-text {
-    color: color-mix(in srgb, var(--mat-sys-error) 78%, #ff8a80);
   }
 
   .success-text {
