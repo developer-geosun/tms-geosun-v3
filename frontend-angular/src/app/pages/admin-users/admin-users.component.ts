@@ -21,7 +21,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,6 +34,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { SuperAdminPasswordDialogComponent } from '../../shared/components/super-admin-password-dialog/super-admin-password-dialog.component';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 import { getHandsetFriendlyDialogConfig } from '../../shared/utils/handset-friendly-dialog-config';
 import {
   FilterUsersDialogComponent,
@@ -58,7 +58,6 @@ import {
     MatSlideToggleModule,
     MatSortModule,
     MatTableModule,
-    MatProgressBarModule,
     MatTooltipModule
   ],
   templateUrl: './admin-users.component.html',
@@ -116,6 +115,7 @@ export class AdminUsersComponent implements AfterViewInit {
   @ViewChild(MatPaginator) private paginator?: MatPaginator;
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     effect(() => {
       const isHandset = this.layout.isHandset();
       const previous = this.lastHandsetViewport;

@@ -15,7 +15,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -39,6 +38,7 @@ import {
   VehicleScanViewerDialogResult
 } from './vehicle-scan-viewer-dialog.component';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 type VehiclesDisplayMode = 'table' | 'cards';
 
@@ -54,7 +54,6 @@ type VehiclesDisplayMode = 'table' | 'cards';
     MatDialogModule,
     MatIconModule,
     MatPaginatorModule,
-    MatProgressBarModule,
     MatSnackBarModule,
     MatTableModule,
     MatTooltipModule
@@ -162,6 +161,7 @@ export class AdminVehiclesComponent implements OnDestroy {
   });
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     effect(() => {
       this.layout.isHandset();
       this.pageSize.set(

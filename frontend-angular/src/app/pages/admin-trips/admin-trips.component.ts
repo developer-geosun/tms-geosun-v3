@@ -13,7 +13,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -24,6 +23,7 @@ import {
 } from '../../core/api';
 import { LayoutService } from '../../core/layout';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 @Component({
   selector: 'app-admin-trips',
@@ -37,7 +37,6 @@ import { showAppSnack } from '../../shared/utils/app-snackbar';
     MatCardModule,
     MatIconModule,
     MatPaginatorModule,
-    MatProgressBarModule,
     MatSnackBarModule,
     MatTableModule,
     MatTooltipModule
@@ -84,6 +83,7 @@ export class AdminTripsComponent {
   readonly pageSize = signal(AdminTripsComponent.DESKTOP_PAGE_SIZE);
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     effect(() => {
       this.layout.isHandset();
       this.pageSize.set(

@@ -66,10 +66,6 @@
     <p class="banner banner--error">{{ loadError()! | translate }}</p>
   }
 
-  @if (isLoading()) {
-    <mat-progress-bar mode="indeterminate" />
-  }
-
   <mat-card>
     @if (!isLoading() && files().length === 0) {
       <p>{{ 'pages.adminFileStorageTest.empty' | translate }}</p>

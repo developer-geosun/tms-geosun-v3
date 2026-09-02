@@ -17,7 +17,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateService } from '@ngx-translate/core';
@@ -33,6 +32,7 @@ import { LayoutService } from '../../core/layout';
 import { LanguageService } from '../../core/services/language.service';
 import { currencyLocalizedName } from '../../core/utils/currency-localized-name';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 @Component({
   selector: 'app-admin-currencies',
@@ -48,7 +48,6 @@ import { showAppSnack } from '../../shared/utils/app-snackbar';
     MatSlideToggleModule,
     MatTooltipModule,
     MatIconModule,
-    MatProgressBarModule,
     MatFormFieldModule,
     MatInputModule,
     MatExpansionModule
@@ -101,6 +100,7 @@ export class AdminCurrenciesComponent implements AfterViewInit {
   @ViewChild('tableHeaderScroll') private tableHeaderScroll?: ElementRef<HTMLElement>;
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     this.dataSource.sortData = this.sortCurrencies.bind(this);
     effect(() => {
       this.layout.isHandset();

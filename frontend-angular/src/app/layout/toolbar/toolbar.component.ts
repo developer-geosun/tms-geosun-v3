@@ -16,8 +16,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PageLoadingService } from '../../core/services/page-loading.service';
 import { ThemeService, Theme } from '../../core/services/theme.service';
 import { ConfigService } from '../../core/services/config.service';
 import { LanguageService, Language } from '../../core/services/language.service';
@@ -43,6 +45,7 @@ import { UserRole } from '../../shared/models';
     MatButtonModule,
     MatMenuModule,
     MatButtonToggleModule,
+    MatProgressBarModule,
     TranslateModule,
     LogoComponent,
     SocialIconComponent
@@ -66,6 +69,7 @@ export class ToolbarComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
+  readonly pageLoading = inject(PageLoadingService);
 
   /** Після NavigationEnd — щоб OnPush оновлював клас активного маршруту */
   private readonly navigationUrl = signal(this.router.url);

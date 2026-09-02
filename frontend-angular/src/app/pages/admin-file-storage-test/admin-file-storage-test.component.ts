@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +23,7 @@ import { StoredFileContractDto, StoredFilesApiService } from '../../core/api';
 import { LayoutService } from '../../core/layout';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 @Component({
   selector: 'app-admin-file-storage-test',
@@ -37,8 +37,7 @@ import { showAppSnack } from '../../shared/utils/app-snackbar';
     MatIconModule,
     MatPaginatorModule,
     MatTableModule,
-    MatTooltipModule,
-    MatProgressBarModule
+    MatTooltipModule
   ],
   templateUrl: './admin-file-storage-test.component.html',
   styleUrl: './admin-file-storage-test.component.scss',
@@ -89,6 +88,7 @@ export class AdminFileStorageTestComponent implements OnInit {
   readonly pageSizeOptions = [5, 10, 25, 50];
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     this.destroyRef.onDestroy(() => this.revokeAllPreviews());
 
     effect(() => {

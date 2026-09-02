@@ -1,3 +1,4 @@
+<div class="toolbar-shell">
 <mat-toolbar color="primary">
   <div
     class="logo-icons-group"
@@ -92,6 +93,15 @@
     </div>
   </div>
 </mat-toolbar>
+
+<div class="toolbar-shell__progress-slot" aria-hidden="true">
+  <mat-progress-bar
+    class="toolbar-shell__progress"
+    [class.toolbar-shell__progress--active]="pageLoading.isActive()"
+    mode="indeterminate" />
+</div>
+
+</div>
 
 <mat-menu #navigationMenu="matMenu" class="navigation-menu" panelClass="navigation-menu-panel">
   @for (item of navigationItems; track item.route) {

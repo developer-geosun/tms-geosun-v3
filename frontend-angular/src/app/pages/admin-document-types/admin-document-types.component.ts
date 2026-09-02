@@ -19,7 +19,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -38,6 +37,7 @@ import { documentTypeLocalizedName } from '../../core/utils/document-type-locali
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { getHandsetFriendlyDialogConfig } from '../../shared/utils/handset-friendly-dialog-config';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 import { DocumentTypeFormDialogComponent } from './document-type-form-dialog.component';
 
 @Component({
@@ -55,7 +55,6 @@ import { DocumentTypeFormDialogComponent } from './document-type-form-dialog.com
     MatIconModule,
     MatInputModule,
     MatPaginatorModule,
-    MatProgressBarModule,
     MatSnackBarModule,
     MatTableModule,
     MatTooltipModule
@@ -140,6 +139,7 @@ export class AdminDocumentTypesComponent {
   });
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     effect(() => {
       this.layout.isHandset();
       this.pageSize.set(

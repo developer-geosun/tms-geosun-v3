@@ -14,7 +14,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -55,6 +54,7 @@ import { addCartoVoyagerBasemap } from '../../shared/utils/carto-basemap';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { getHandsetFriendlyDialogConfig } from '../../shared/utils/handset-friendly-dialog-config';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 import {
   SendProposalDialogComponent,
   SendProposalDialogData
@@ -75,7 +75,6 @@ import * as L from 'leaflet';
     MatButtonModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -221,6 +220,7 @@ export class AdminRouteRequestsComponent implements AfterViewInit, OnDestroy {
   readonly ownerEmailOptions = signal<string[]>([]);
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     void this.loadNumericScenarios();
     // LayoutService вже має актуальний viewport (root service).
     this.pageSize.set(

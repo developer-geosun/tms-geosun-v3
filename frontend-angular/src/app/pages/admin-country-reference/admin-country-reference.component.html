@@ -35,10 +35,6 @@
     </button>
   </form>
 
-  @if (isLoading()) {
-    <mat-progress-bar class="admin-country-reference__progress" mode="indeterminate" />
-  }
-
   @if (loadError()) {
     <div class="admin-country-reference__messages">
       <p class="admin-country-reference__error">{{ loadError() | translate }}</p>

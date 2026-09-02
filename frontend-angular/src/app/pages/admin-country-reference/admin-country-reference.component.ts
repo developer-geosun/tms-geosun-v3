@@ -19,11 +19,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CountryReferenceApiService, CountryReferenceContractDto } from '../../core/api';
 import { LayoutService } from '../../core/layout';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 @Component({
   selector: 'app-admin-country-reference',
@@ -39,8 +39,7 @@ import { LayoutService } from '../../core/layout';
     MatPaginatorModule,
     MatSortModule,
     MatTooltipModule,
-    MatIconModule,
-    MatProgressBarModule
+    MatIconModule
   ],
   templateUrl: './admin-country-reference.component.html',
   styleUrl: './admin-country-reference.component.scss',
@@ -73,6 +72,7 @@ export class AdminCountryReferenceComponent implements AfterViewInit {
   @ViewChild('tableHeaderScroll') private tableHeaderScroll?: ElementRef<HTMLElement>;
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     this.dataSource.sortData = this.sortCountries.bind(this);
     effect(() => {
       this.layout.isHandset();

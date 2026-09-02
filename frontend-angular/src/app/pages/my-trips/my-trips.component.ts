@@ -13,7 +13,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
@@ -30,6 +29,7 @@ import {
 import { LayoutService } from '../../core/layout';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 interface EditableExpenseLine {
   id: string | null;
@@ -53,7 +53,6 @@ interface EditableExpenseLine {
     MatExpansionModule,
     MatIconModule,
     MatPaginatorModule,
-    MatProgressBarModule,
     MatSelectModule,
     MatSnackBarModule,
     MatTableModule
@@ -118,6 +117,7 @@ export class MyTripsComponent {
   });
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     effect(() => {
       this.layout.isHandset();
       this.pageSize.set(

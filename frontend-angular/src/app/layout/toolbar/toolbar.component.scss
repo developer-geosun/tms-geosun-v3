@@ -1,5 +1,28 @@
 @use 'breakpoints' as bp;
 
+.toolbar-shell {
+  flex-shrink: 0;
+
+  &__progress-slot {
+    height: 3px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  &__progress {
+    display: block;
+    height: 3px;
+    opacity: 0;
+    pointer-events: none;
+    --mdc-linear-progress-active-indicator-color: var(--mat-sys-primary);
+    --mdc-linear-progress-track-color: transparent;
+
+    &--active {
+      opacity: 1;
+    }
+  }
+}
+
 mat-toolbar {
   --mat-toolbar-container-background-color: var(--mat-sys-primary-container);
   --mat-toolbar-container-text-color: var(--mat-sys-on-primary-container);

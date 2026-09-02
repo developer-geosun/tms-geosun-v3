@@ -42,10 +42,6 @@
     </div>
   </header>
 
-  @if (isLoading()) {
-    <mat-progress-bar class="admin-document-types__progress" mode="indeterminate" />
-  }
-
   <form [formGroup]="searchForm" class="admin-document-types__search">
     <mat-form-field appearance="outline" class="admin-document-types__search-field">
       <mat-label>{{ 'pages.adminDocumentTypes.search' | translate }}</mat-label>

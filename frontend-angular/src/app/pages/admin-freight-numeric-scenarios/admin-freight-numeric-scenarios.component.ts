@@ -12,7 +12,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,6 +31,7 @@ import { LayoutService } from '../../core/layout';
 import { parseOptionalFormNumber } from '../../core/utils/parse-optional-form-number';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 @Component({
   selector: 'app-admin-freight-numeric-scenarios',
@@ -49,7 +49,6 @@ import { showAppSnack } from '../../shared/utils/app-snackbar';
     MatCheckboxModule,
     MatTooltipModule,
     MatIconModule,
-    MatProgressBarModule,
     MatDialogModule
   ],
   templateUrl: './admin-freight-numeric-scenarios.component.html',
@@ -111,6 +110,7 @@ export class AdminFreightNumericScenariosComponent {
   });
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     this.scenarioForm.controls.marginType.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((marginType) => this.syncMarginFieldAvailability(marginType));

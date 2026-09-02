@@ -23,7 +23,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -40,6 +39,7 @@ import { LayoutService } from '../../core/layout';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { getHandsetFriendlyDialogConfig } from '../../shared/utils/handset-friendly-dialog-config';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 
 type CombinationsDisplayMode = 'table' | 'cards';
 
@@ -188,7 +188,6 @@ export class VehicleCombinationFormDialogComponent {
     MatDialogModule,
     MatIconModule,
     MatPaginatorModule,
-    MatProgressBarModule,
     MatSnackBarModule,
     MatTableModule,
     MatTooltipModule
@@ -255,6 +254,7 @@ export class AdminVehicleCombinationsComponent {
   });
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     effect(() => {
       this.layout.isHandset();
       this.pageSize.set(

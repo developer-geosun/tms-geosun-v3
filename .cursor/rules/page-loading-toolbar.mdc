@@ -1,0 +1,51 @@
+---
+description: Глобальная полоска загрузки списков в toolbar
+globs:
+  - frontend-angular/src/app/pages/**/*.ts
+  - frontend-angular/src/app/pages/**/*.html
+alwaysApply: false
+---
+
+# Page loading — toolbar progress bar
+
+Для страниц со **списком данных** (загрузка / refresh) используй **глобальную** полоску прогресса внизу `app-toolbar`, а не локальный `mat-progress-bar` на странице.
+
+## Когда применять
+
+- Админ-списки, «мои рейсы» и другие страницы с `isLoading()` при fetch/refresh таблицы или карточек.
+- Не использовать для: submit-кнопок, диалогов, auth-форм, загрузки одной записи (detail), upload без списка.
+
+## Как подключить новую страницу
+
+1. В конструкторе компонента (injection context):
+
+```typescript
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
+
+constructor() {
+  syncPageLoadingToToolbar(this.isLoading);
+}
+```
+
+2. Сигнал `isLoading` (или аналог вроде `isLoadingSets`) должен быть `true` на время HTTP-запроса списка и `false` после завершения. Полоска скрывается не раньше чем через **1 секунду** после начала загрузки (если запрос завершился быстрее) или сразу после 1+ секунд загрузки.
+
+3. **Не добавлять** на страницу:
+
+```html
+<!-- ❌ -->
+<mat-progress-bar mode="indeterminate" />
+```
+
+4. Кнопку refresh по-прежнему блокировать через `[disabled]="isLoading()"`.
+
+## Где живёт индикатор
+
+- Сервис: `PageLoadingService` (`core/services/page-loading.service.ts`)
+- UI: `toolbar.component.html` — слот `.toolbar-shell__progress-slot` (3px) всегда в DOM; анимация включается классом `--active`
+- Синхронизация: `syncPageLoadingToToolbar()`
+
+## Исключения (локальный spinner допустим)
+
+- `mat-spinner` в кнопке submit
+- Диалоги
+- Страницы без toolbar-контекста (если появятся)

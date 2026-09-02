@@ -14,7 +14,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -30,6 +29,7 @@ import { LayoutService } from '../../core/layout';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { getHandsetFriendlyDialogConfig } from '../../shared/utils/handset-friendly-dialog-config';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
+import { syncPageLoadingToToolbar } from '../../shared/utils/sync-page-loading-to-toolbar';
 import { DriverFormDialogComponent } from './driver-form-dialog.component';
 
 @Component({
@@ -44,7 +44,6 @@ import { DriverFormDialogComponent } from './driver-form-dialog.component';
     MatDialogModule,
     MatIconModule,
     MatPaginatorModule,
-    MatProgressBarModule,
     MatSnackBarModule,
     MatTableModule,
     MatTooltipModule
@@ -130,6 +129,7 @@ export class AdminDriversComponent {
   });
 
   constructor() {
+    syncPageLoadingToToolbar(this.isLoading);
     effect(() => {
       this.layout.isHandset();
       this.pageSize.set(

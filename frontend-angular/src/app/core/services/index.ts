@@ -5,4 +5,5 @@ export * from './language.service';
 export * from './auth.service';
 export * from './auth-availability.service';
 export * from './translated-mat-paginator-intl.service';
+export * from './page-loading.service';
 

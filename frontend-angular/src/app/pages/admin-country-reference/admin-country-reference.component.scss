@@ -28,10 +28,6 @@
     flex-shrink: 0;
   }
 
-  &__progress {
-    flex-shrink: 0;
-  }
-
   &__search {
     @include admin-list-toolbar.admin-list-toolbar-actions;
     margin-bottom: 0.5rem;

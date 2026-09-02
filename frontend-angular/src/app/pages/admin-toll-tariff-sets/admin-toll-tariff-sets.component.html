@@ -18,10 +18,6 @@
     </div>
   </header>
 
-  @if (isLoadingSets()) {
-    <mat-progress-bar class="admin-toll-tariff-sets__progress" mode="indeterminate" />
-  }
-
   @if (loadError()) {
     <div class="admin-toll-tariff-sets__messages">
       <p class="admin-toll-tariff-sets__error">{{ loadError() | translate }}</p>

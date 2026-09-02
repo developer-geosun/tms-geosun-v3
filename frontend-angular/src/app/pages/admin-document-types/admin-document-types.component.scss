@@ -32,10 +32,6 @@
     @include admin-list-toolbar.admin-list-toolbar-actions;
   }
 
-  &__progress {
-    flex-shrink: 0;
-  }
-
   &__search {
     display: flex;
     flex-wrap: wrap;
