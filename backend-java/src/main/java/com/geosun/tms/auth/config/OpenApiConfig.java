@@ -24,6 +24,9 @@ MVP authentication API (v1). Access JWT: HS256, mandatory claims `sub` (user id)
 
 Health (no API prefix): `GET /actuator/health`.
 
+Server metadata (no API prefix): `GET /actuator/info` — `server.version`, `server.apiVersion`, \
+`server.repositoryUrl`, `server.buildTime`.
+
 `POST /auth/resend-verification` uses anti-enumeration: identical 200 response for unknown \
 or already verified emails (no email sent).
 """;

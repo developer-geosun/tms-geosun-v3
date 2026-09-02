@@ -89,6 +89,18 @@ class ApiIntegrationTest {
   }
 
   @Test
+  void actuatorInfo_exposesServerMetadata() throws Exception {
+    mockMvc
+        .perform(get("/actuator/info"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.server.apiVersion").value("v1"))
+        .andExpect(
+            jsonPath("$.server.repositoryUrl")
+                .value("https://github.com/developer-geosun/tms-geosun-v3.git"))
+        .andExpect(jsonPath("$.server.version").exists());
+  }
+
+  @Test
   void register_valid_returns201() throws Exception {
     mockMvc
         .perform(

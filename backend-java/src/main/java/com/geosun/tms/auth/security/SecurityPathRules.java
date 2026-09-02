@@ -13,7 +13,9 @@ public final class SecurityPathRules {
     String path = normalizePath(request);
     String method = request.getMethod();
     if ("GET".equalsIgnoreCase(method)) {
-      if ("/actuator/health".equals(path) || path.startsWith("/actuator/health/")) {
+      if ("/actuator/health".equals(path)
+          || path.startsWith("/actuator/health/")
+          || "/actuator/info".equals(path)) {
         return true;
       }
       if ("/swagger-ui.html".equals(path)

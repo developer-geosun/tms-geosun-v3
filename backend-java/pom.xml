@@ -16,6 +16,10 @@
     <name>tms-geosun-backend-java</name>
     <description>MVP auth API backend</description>
 
+    <scm>
+        <url>https://github.com/developer-geosun/tms-geosun-v3.git</url>
+    </scm>
+
     <properties>
         <java.version>21</java.version>
         <spotless.version>2.44.5</spotless.version>
@@ -114,6 +118,19 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <repository>${project.scm.url}</repository>
+                                <apiVersion>v1</apiVersion>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>

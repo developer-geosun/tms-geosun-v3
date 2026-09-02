@@ -45,6 +45,9 @@ management:
     health:
       probes:
         enabled: true
+  info:
+    build:
+      enabled: false
 
 springdoc:
   api-docs:
@@ -55,6 +58,9 @@ springdoc:
   override-with-generic-response: false
 
 app:
+  info:
+    api-version: v1
+    repository-url: ${APP_REPOSITORY_URL:https://github.com/developer-geosun/tms-geosun-v3.git}
   # Режим публічного доступу (інформаційно; тунель керує Docker Compose-профіль ngrok).
   public-access:
     mode: ${PUBLIC_ACCESS_MODE:static-ip}
