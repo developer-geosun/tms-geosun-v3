@@ -131,7 +131,16 @@ h1 {
 }
 
 .success-text {
-  color: color-mix(in srgb, var(--mat-sys-primary) 50%, #2bb673);
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--mat-sys-primary);
+  border-radius: 10px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+
+  span {
+    white-space: pre-line;
+  }
 }
 
 .loading-content {
@@ -159,10 +168,6 @@ h1 {
   .register-card {
     background: color-mix(in srgb, var(--mat-sys-surface-container-high) 92%, #101218);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-  }
-
-  .success-text {
-    color: color-mix(in srgb, var(--mat-sys-primary) 48%, #8ceab2);
   }
 
   .submit-button {
