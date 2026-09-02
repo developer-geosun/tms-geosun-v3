@@ -15,7 +15,6 @@ import org.springframework.mail.MailPreparationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 
 /**
  * Відправка листа з токеном верифікації (без логування токена).
@@ -23,8 +22,6 @@ import org.springframework.util.StreamUtils;
 @Component
 public class VerificationMailSender {
   private static final String TEMPLATE_LINK = "{{VERIFICATION_LINK}}";
-  private static final String TEMPLATE_CLIENT_NAME = "{{CLIENT_NAME}}";
-  private static final String TEMPLATE_APP_URL = "{{APP_URL}}";
   private static final String MAIL_SUBJECT =
       "Підтвердження email / Email verification / Подтверждение email";
   private static final Resource PLAIN_TEMPLATE_RESOURCE =
@@ -34,10 +31,15 @@ public class VerificationMailSender {
 
   private final JavaMailSender mailSender;
   private final AppEmailProperties emailProperties;
+  private final AuthMailComposer mailComposer;
 
-  public VerificationMailSender(JavaMailSender mailSender, AppEmailProperties emailProperties) {
+  public VerificationMailSender(
+      JavaMailSender mailSender,
+      AppEmailProperties emailProperties,
+      AuthMailComposer mailComposer) {
     this.mailSender = mailSender;
     this.emailProperties = emailProperties;
+    this.mailComposer = mailComposer;
   }
 
   public void sendVerificationEmail(String toAddress, String rawToken, @NonNull AppClient appClient)
@@ -62,43 +64,22 @@ public class VerificationMailSender {
       helper.setTo(toAddress);
       helper.setSubject(MAIL_SUBJECT);
       String plainBody =
-          fillTemplate(
-              Objects.requireNonNull(readTemplate(PLAIN_TEMPLATE_RESOURCE)),
-              verificationLink,
-              client);
+          mailComposer.fill(
+              mailComposer.readTemplate(Objects.requireNonNull(PLAIN_TEMPLATE_RESOURCE)),
+              client,
+              TEMPLATE_LINK,
+              verificationLink);
       String htmlBody =
-          fillTemplate(
-              Objects.requireNonNull(readTemplate(HTML_TEMPLATE_RESOURCE)),
-              verificationLink,
-              client);
-      if (plainBody == null || htmlBody == null) {
-        throw new MailPreparationException("Verification email body must not be null");
-      }
+          mailComposer.fill(
+              mailComposer.readTemplate(Objects.requireNonNull(HTML_TEMPLATE_RESOURCE)),
+              client,
+              TEMPLATE_LINK,
+              verificationLink);
       helper.setText(plainBody, htmlBody);
+      mailComposer.addInlineBranding(helper);
     } catch (MessagingException | IOException ex) {
       throw new MailPreparationException("Failed to prepare verification email", ex);
     }
     mailSender.send(message);
-  }
-
-  @NonNull
-  private String fillTemplate(
-      @NonNull String template, @NonNull String verificationLink, @NonNull AppClient client) {
-    return Objects.requireNonNull(
-        template
-            .replace(TEMPLATE_LINK, verificationLink)
-            .replace(TEMPLATE_CLIENT_NAME, emailProperties.resolveClientDisplayName(client))
-            .replace(TEMPLATE_APP_URL, emailProperties.resolveAppBaseUrl(client)));
-  }
-
-  @NonNull
-  private static String readTemplate(Resource resource) throws IOException {
-    try (var inputStream = resource.getInputStream()) {
-      var utf8 = StandardCharsets.UTF_8;
-      if (utf8 == null) {
-        throw new IllegalStateException("UTF-8 charset must be available");
-      }
-      return Objects.requireNonNull(StreamUtils.copyToString(inputStream, utf8));
-    }
   }
 }

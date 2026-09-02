@@ -19,6 +19,8 @@ class AppEmailPropertiesTest {
     assertThat(properties.resolveAppBaseUrl(AppClient.FLUTTER))
         .isEqualTo("https://example.com/tms-geosun-v3/flutter");
     assertThat(properties.resolveClientDisplayName(AppClient.FLUTTER)).isEqualTo("Flutter");
+    assertThat(properties.resolveSiteUrl()).isEqualTo("https://www.geosun.net.ua");
+    assertThat(properties.resolveTelegramUrl()).isEqualTo("https://t.me/+380984894118");
   }
 
   @Test
