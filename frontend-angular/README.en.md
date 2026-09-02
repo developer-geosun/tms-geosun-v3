@@ -32,7 +32,7 @@ Application is available at `http://localhost:4200/`.
 
 ### Dev server in Docker (hot reload)
 
-From the project root (`tms-geosun-v1`), use the dev profile:
+From the project root (`tms-geosun-v3`), use the dev profile:
 
 ```bash
 docker compose stop frontend
@@ -90,7 +90,7 @@ npm run deploy
 
 The deploy command uses:
 
-- base href: `/tms-geosun-v1/`
+- base href: `/tms-geosun-v3/`
 - output directory: `dist/tms-geosun`
 
 ## Useful commands

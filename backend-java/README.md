@@ -20,7 +20,7 @@ docker compose up --build
 
 ## Full stack run (frontend + backend + mysql)
 
-From project root (`tms-geosun-v1`) run:
+From project root (`tms-geosun-v3`) run:
 
 1. Copy root env template and adjust values if needed:
 ```bash
