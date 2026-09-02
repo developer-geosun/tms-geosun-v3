@@ -44,3 +44,6 @@ Thumbs.db
 
 # Автогенерований git commit для build-meta (scripts/write-build-meta.mjs)
 /src/environments/build-meta.generated.ts
+
+# Локальні нотатки (npm audit тощо)
+npm-audit-notes.local.md
