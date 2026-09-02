@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Flutter frontend (TMS GeoSun)
 
+**ЗАМОРОЖЕНО.** Не змінювати цей клієнт, доки користувач явно не зніме заморозку. Активні напрямки: Angular + Java. Див. `work-scope-freeze.mdc`.
+
 ## Stack
 
 - Flutter stable, **Material 3** (not custom widgets when Material fits).
