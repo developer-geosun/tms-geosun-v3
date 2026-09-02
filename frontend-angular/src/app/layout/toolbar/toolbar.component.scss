@@ -121,15 +121,12 @@ app-social-icon {
 .toolbar-nav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 4px;
   margin-right: 8px;
   flex: 1 1 auto;
   min-width: 0;
   max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
 }
 
 // РљРЅРѕРїРєР° В«РіР°РјР±СѓСЂРіРµСЂВ»: Р·Р° Р·Р°РјРѕРІС‡СѓРІР°РЅРЅСЏРј РїСЂРёС…РѕРІР°РЅР°; mat-mini-fab Р·Р°РґР°С” display вЂ” С‚РѕРјСѓ !important
@@ -145,11 +142,21 @@ app-social-icon {
 .nav-button {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-shrink: 0;
-  min-height: 32px;
-  border-radius: 16px !important;
+  min-height: 28px;
+  border-radius: 14px !important;
   line-height: 1;
+  --mdc-outlined-button-container-height: 28px;
+  --mat-outlined-button-horizontal-padding: 8px;
+  --mdc-outlined-button-label-text-size: 12px;
+  --mdc-outlined-button-label-text-weight: 500;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
 }
 
 // РђРєС‚РёРІРЅРёР№ РїСѓРЅРєС‚: С–РЅРІРµСЂСЃС–СЏ primary-container в†” on-primary-container (С„РѕРЅ С– С‚РµРєСЃС‚)
@@ -478,8 +485,30 @@ a.company-site-button:active {
 
 // РЁРёСЂРѕРєРёР№ РµРєСЂР°РЅ: Р»РёС€Рµ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР° РЅР°РІС–РіР°С†С–СЏ (Р±СѓСЂРіРµСЂ РїСЂРёР±СЂР°РЅРѕ Р· РїРѕС‚РѕРєСѓ Р№ Р· С‚Р°Р±-РѕСЂРґРµСЂСѓ)
 @include bp.desktop {
+  .toolbar-end {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 4px;
+  }
+
+  .spacer {
+    display: none;
+  }
+
   .toolbar-nav {
     display: flex;
+    grid-column: 1;
+    grid-row: 1;
+    justify-content: flex-start;
+    margin-right: 0;
+  }
+
+  .toolbar-actions {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
   }
 
   .nav-menu-button.mat-mdc-mini-fab {
