@@ -100,6 +100,7 @@
       "title": "Новий пароль",
       "subtitle": "Введіть новий пароль для акаунта",
       "resolvingAccount": "Перевіряємо посилання...",
+      "email": "Email",
       "password": "Новий пароль",
       "confirmPassword": "Підтвердіть пароль",
       "showPassword": "Показати пароль",

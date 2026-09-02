@@ -52,6 +52,7 @@ export class ResetPasswordComponent {
   private resetToken = '';
 
   readonly form = this.formBuilder.nonNullable.group({
+    email: [''],
     password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(PASSWORD_PATTERN)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
   });
@@ -122,6 +123,7 @@ export class ResetPasswordComponent {
     this.authService.getPasswordResetInfo({ token }).subscribe({
       next: (info) => {
         this.accountEmail.set(info.email);
+        this.form.controls.email.setValue(info.email);
         this.isResolvingAccount.set(false);
       },
       error: (error: { status?: number }) => {
