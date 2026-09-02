@@ -16,6 +16,28 @@
       "cancel": "Cancel",
       "confirm": "Confirm"
     },
+    "appInfoDialog": {
+      "open": "Application info",
+      "title": "Application info",
+      "clientSection": "Client (Angular)",
+      "serverSection": "Server (Java)",
+      "serverLoadError": "Failed to load server info",
+      "close": "Close",
+      "fields": {
+        "appName": "Name",
+        "version": "Version",
+        "apiVersion": "API version",
+        "artifact": "Artifact",
+        "buildTime": "Build time",
+        "production": "Production",
+        "repositoryUrl": "Repository",
+        "commit": "Commit"
+      },
+      "values": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
     "snackbar": {
       "close": "Close message"
     },
