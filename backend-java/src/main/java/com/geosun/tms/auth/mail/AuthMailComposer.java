@@ -25,6 +25,8 @@ public class AuthMailComposer {
   private static final String PLACEHOLDER_CLIENT_NAME = "{{CLIENT_NAME}}";
   private static final String PLACEHOLDER_APP_URL = "{{APP_URL}}";
   private static final String PLACEHOLDER_SITE_URL = "{{SITE_URL}}";
+  private static final String PLACEHOLDER_PHONE = "{{PHONE}}";
+  private static final String PLACEHOLDER_PHONE_TEL = "{{PHONE_TEL}}";
   private static final String PLACEHOLDER_TELEGRAM_URL = "{{TELEGRAM_URL}}";
   private static final String PLACEHOLDER_WHATSAPP_URL = "{{WHATSAPP_URL}}";
   private static final String PLACEHOLDER_VIBER_URL = "{{VIBER_URL}}";
@@ -85,6 +87,8 @@ public class AuthMailComposer {
             .replace(PLACEHOLDER_CLIENT_NAME, emailProperties.resolveClientDisplayName(client))
             .replace(PLACEHOLDER_APP_URL, emailProperties.resolveAppBaseUrl(client))
             .replace(PLACEHOLDER_SITE_URL, emailProperties.resolveSiteUrl())
+            .replace(PLACEHOLDER_PHONE, emailProperties.resolvePhone())
+            .replace(PLACEHOLDER_PHONE_TEL, emailProperties.resolvePhoneTelUrl())
             .replace(PLACEHOLDER_TELEGRAM_URL, emailProperties.resolveTelegramUrl())
             .replace(PLACEHOLDER_WHATSAPP_URL, emailProperties.resolveWhatsappUrl())
             .replace(PLACEHOLDER_VIBER_URL, emailProperties.resolveViberUrl())

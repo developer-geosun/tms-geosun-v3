@@ -20,7 +20,19 @@ class AppEmailPropertiesTest {
         .isEqualTo("https://example.com/tms-geosun-v3/flutter");
     assertThat(properties.resolveClientDisplayName(AppClient.FLUTTER)).isEqualTo("Flutter");
     assertThat(properties.resolveSiteUrl()).isEqualTo("https://www.geosun.net.ua");
+    assertThat(properties.resolvePhone()).isEqualTo("+380(98)4894118");
+    assertThat(properties.resolvePhoneTelUrl()).isEqualTo("tel:+380984894118");
     assertThat(properties.resolveTelegramUrl()).isEqualTo("https://t.me/+380984894118");
+    assertThat(properties.resolveViberUrl()).isEqualTo("https://viber.me/380984894118");
+  }
+
+  @Test
+  void buildsPhoneTelUrlFromDisplayNumber() {
+    AppEmailProperties properties = new AppEmailProperties();
+    properties.setPhone("+380 (98) 489-41-18");
+
+    assertThat(properties.resolvePhone()).isEqualTo("+380 (98) 489-41-18");
+    assertThat(properties.resolvePhoneTelUrl()).isEqualTo("tel:+380984894118");
   }
 
   @Test

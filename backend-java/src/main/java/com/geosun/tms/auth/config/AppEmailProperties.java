@@ -17,9 +17,11 @@ public class AppEmailProperties {
   private static final String DEFAULT_ANGULAR_APP_BASE_URL = "http://localhost:4200";
   private static final String DEFAULT_FLUTTER_APP_BASE_URL = "http://localhost:4300";
   private static final String DEFAULT_SITE_URL = "https://www.geosun.net.ua";
+  private static final String DEFAULT_PHONE = "+380(98)4894118";
   private static final String DEFAULT_TELEGRAM_URL = "https://t.me/+380984894118";
   private static final String DEFAULT_WHATSAPP_URL = "https://wa.me/380984894118";
-  private static final String DEFAULT_VIBER_URL = "viber://chat?number=%2B380984894118";
+  // https, не viber:// — Gmail/Outlook вилучають не-http схеми, іконка стає неклікабельною
+  private static final String DEFAULT_VIBER_URL = "https://viber.me/380984894118";
   private static final String DEFAULT_FACEBOOK_URL =
       "https://www.facebook.com/profile.php?id=100063988064019";
   private static final String VERIFY_EMAIL_PATH = "/verify-email";
@@ -39,6 +41,9 @@ public class AppEmailProperties {
 
   /** Сайт компанії GeoSun (логотип і кнопка WWW у листах). */
   private String siteUrl = DEFAULT_SITE_URL;
+
+  /** Телефон компанії у шапці листа (відображення, напр. +380(98)4894118). */
+  private String phone = DEFAULT_PHONE;
 
   private String telegramUrl = DEFAULT_TELEGRAM_URL;
 
@@ -96,6 +101,14 @@ public class AppEmailProperties {
     this.siteUrl = siteUrl;
   }
 
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
   public String getTelegramUrl() {
     return telegramUrl;
   }
@@ -150,6 +163,22 @@ public class AppEmailProperties {
   @NonNull
   public String resolveSiteUrl() {
     return resolveOrDefault(siteUrl, DEFAULT_SITE_URL);
+  }
+
+  /** Номер телефону компанії для шапки листа. */
+  @NonNull
+  public String resolvePhone() {
+    return resolveOrDefault(phone, DEFAULT_PHONE);
+  }
+
+  /** tel:+380... для клікабельного номера в HTML-листі. */
+  @NonNull
+  public String resolvePhoneTelUrl() {
+    String digits = resolvePhone().replaceAll("[^0-9]", "");
+    if (!StringUtils.hasText(digits)) {
+      return "tel:";
+    }
+    return "tel:+" + digits;
   }
 
   @NonNull

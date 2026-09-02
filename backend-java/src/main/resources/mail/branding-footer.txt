@@ -1,4 +1,5 @@
 GeoSun
+{{PHONE}}
 {{SITE_URL}}
 Telegram: {{TELEGRAM_URL}}
 WhatsApp: {{WHATSAPP_URL}}

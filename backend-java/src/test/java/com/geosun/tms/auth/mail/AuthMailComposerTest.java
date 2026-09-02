@@ -31,6 +31,8 @@ class AuthMailComposerTest {
     assertThat(html).contains("https://example.com/verify-email?token=abc");
     assertThat(html).contains("cid:geosun-logo").contains("cid:icon-telegram");
     assertThat(html).contains("https://www.geosun.net.ua");
+    assertThat(html).contains("+380(98)4894118").contains("tel:+380984894118");
+    assertThat(html).contains("https://viber.me/380984894118");
     assertThat(html).doesNotContain("{{");
   }
 
@@ -46,7 +48,9 @@ class AuthMailComposerTest {
 
     assertThat(plain).contains("UA").contains("EN").contains("RU");
     assertThat(plain).contains("https://example.com/reset-password?token=xyz");
+    assertThat(plain).contains("+380(98)4894118");
     assertThat(plain).contains("Telegram: https://t.me/+380984894118");
+    assertThat(plain).contains("Viber: https://viber.me/380984894118");
     assertThat(plain).doesNotContain("{{");
   }
 
