@@ -47,7 +47,6 @@ mat-toolbar {
 
 .logo-icons-group {
   order: 1;
-  position: relative;
   flex-shrink: 0;
 }
 
@@ -57,26 +56,27 @@ app-logo {
   transition: transform .28s ease;
 }
 
+// Іконки в потоці документа — при розгортанні зсувають меню вправо
 .logo-hover-icons {
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  z-index: 20;
+  display: flex;
   flex-direction: row;
-  padding: 4px 4px 4px 14px;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 0;
   margin: 0;
   max-width: 0;
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
-  transform: translate(-12px, -50%);
-  transition: max-width .45s cubic-bezier(.2, .8, .2, 1), opacity .35s ease, transform .35s ease;
+  transition: max-width .45s cubic-bezier(.2, .8, .2, 1), opacity .35s ease, padding .35s ease;
 }
 
 .logo-hover-icons > * {
   opacity: 0;
   transform: translateX(-6px);
   transition: opacity .28s ease, transform .28s ease;
+  flex-shrink: 0;
 }
 
 .logo-icons-group.is-open .logo-hover-icons,
@@ -85,7 +85,7 @@ app-logo {
   max-width: 340px;
   opacity: 1;
   pointer-events: auto;
-  transform: translate(0, -50%);
+  padding-left: 8px;
 }
 
 .logo-icons-group.is-open .logo-hover-icons > *,
@@ -104,16 +104,11 @@ app-logo {
 // auth-сторінки — іконки GeoSun завжди поруч із логотипом
 .logo-icons-group.always-visible {
   .logo-hover-icons {
-    position: static;
-    top: auto;
-    left: auto;
-    z-index: auto;
     max-width: none;
     opacity: 1;
     overflow: visible;
     pointer-events: auto;
-    transform: none;
-    padding: 0 0 0 8px;
+    padding-left: 8px;
   }
 
   .logo-hover-icons > * {
