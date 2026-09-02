@@ -500,7 +500,7 @@ class ApiIntegrationTest {
   }
 
   @Test
-  void forgotPassword_unverifiedUser_returns200_withoutMail() throws Exception {
+  void forgotPassword_unverifiedUser_returns403_withoutMail() throws Exception {
     mockMvc.perform(
         post("/api/v1/auth/register")
             .contentType(jsonContentType())
@@ -514,8 +514,8 @@ class ApiIntegrationTest {
             post("/api/v1/auth/forgot-password")
                 .contentType(jsonContentType())
                 .content(toJson(new ForgotPasswordRequest("unverified-reset@example.com"))))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.success").value(true));
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.code").value("EMAIL_NOT_VERIFIED"));
     verify(javaMailSender, times(0)).send(anyMailMessage());
   }
 

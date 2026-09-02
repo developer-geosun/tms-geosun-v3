@@ -235,7 +235,7 @@ public class AuthService {
       throw ApiException.forbidden("ACCOUNT_DISABLED", "Account is disabled");
     }
     if (!user.isEmailVerified()) {
-      return new OperationSuccessResponse(true, "Password reset email sent");
+      throw ApiException.forbidden("EMAIL_NOT_VERIFIED", "Email is not verified");
     }
 
     passwordResetTokenRepository.deletePendingByUserId(user.getId());

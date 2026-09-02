@@ -36,7 +36,9 @@ export class ForgotPasswordComponent {
 
   readonly isLoading = signal(false);
   readonly hasSuccess = signal(false);
-  readonly errorCode = signal<'429' | 'account_disabled' | 'user_deleted' | 'generic' | null>(null);
+  readonly errorCode = signal<
+    '429' | 'account_disabled' | 'user_deleted' | 'email_not_verified' | 'generic' | null
+  >(null);
 
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]]
@@ -66,13 +68,16 @@ export class ForgotPasswordComponent {
 
   private mapErrorCode(
     error: { status?: number; error?: { code?: string } }
-  ): '429' | 'account_disabled' | 'user_deleted' | 'generic' {
+  ): '429' | 'account_disabled' | 'user_deleted' | 'email_not_verified' | 'generic' {
     const code = error.error?.code;
     if (error.status === 403 && code === 'ACCOUNT_DISABLED') {
       return 'account_disabled';
     }
     if (error.status === 403 && code === 'USER_DELETED') {
       return 'user_deleted';
+    }
+    if (error.status === 403 && code === 'EMAIL_NOT_VERIFIED') {
+      return 'email_not_verified';
     }
     if (error.status === 429) {
       return '429';

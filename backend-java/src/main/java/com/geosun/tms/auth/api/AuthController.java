@@ -100,7 +100,8 @@ public class AuthController {
 
   @Operation(
       summary = "Forgot password",
-      description = "Anti-enumeration: same 200 always; email sent only for active verified users.")
+      description =
+          "Anti-enumeration for unknown email (200); 403 for disabled/deleted/unverified users.")
   @PostMapping("/forgot-password")
   public OperationSuccessResponse forgotPassword(
       @Valid @RequestBody @NonNull ForgotPasswordRequest request,
