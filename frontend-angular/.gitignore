@@ -41,3 +41,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Автогенерований git commit для build-meta (scripts/write-build-meta.mjs)
+/src/environments/build-meta.generated.ts

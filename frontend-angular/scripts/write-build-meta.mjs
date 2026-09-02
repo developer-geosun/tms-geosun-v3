@@ -4,7 +4,7 @@ import path from 'node:path';
 import { frontendRoot, repoRoot } from './read-env.mjs';
 
 const DEV_COMMIT = 'dev';
-const outputPath = path.join(frontendRoot, 'src', 'environments', 'build-meta.ts');
+const generatedPath = path.join(frontendRoot, 'src', 'environments', 'build-meta.generated.ts');
 
 function readGitValue(args, fallback = DEV_COMMIT) {
   try {
@@ -26,5 +26,5 @@ export const buildMeta = {
 };
 `;
 
-fs.writeFileSync(outputPath, content, 'utf8');
+fs.writeFileSync(generatedPath, content, 'utf8');
 console.log(`[write-build-meta] commit=${commit}`);

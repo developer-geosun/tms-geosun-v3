@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "postinstall": "node ./scripts/write-build-meta.mjs",
     "prestart": "node ./scripts/sync-from-env.mjs && node ./scripts/write-build-meta.mjs",
     "prebuild": "node ./scripts/sync-from-env.mjs && node ./scripts/write-build-meta.mjs",
     "predeploy": "node ./scripts/sync-from-env.mjs && node ./scripts/write-build-meta.mjs",
