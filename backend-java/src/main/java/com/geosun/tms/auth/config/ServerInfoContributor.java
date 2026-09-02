@@ -6,6 +6,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.info.Info;
 import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.info.GitProperties;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +18,15 @@ public class ServerInfoContributor implements InfoContributor {
 
   private final AppInfoProperties appInfo;
   private final BuildProperties buildProperties;
+  private final GitProperties gitProperties;
 
   public ServerInfoContributor(
-      AppInfoProperties appInfo, ObjectProvider<BuildProperties> buildPropertiesProvider) {
+      AppInfoProperties appInfo,
+      ObjectProvider<BuildProperties> buildPropertiesProvider,
+      ObjectProvider<GitProperties> gitPropertiesProvider) {
     this.appInfo = appInfo;
     this.buildProperties = buildPropertiesProvider.getIfAvailable();
+    this.gitProperties = gitPropertiesProvider.getIfAvailable();
   }
 
   @Override
@@ -38,9 +43,22 @@ public class ServerInfoContributor implements InfoContributor {
       details.put("version", buildProperties.getVersion());
       details.put("artifact", buildProperties.getArtifact());
       details.put("buildTime", buildProperties.getTime().toString());
+      putCommitDetails(details);
     } else {
       details.put("version", DEV_VERSION);
+      details.put("commit", DEV_VERSION);
     }
     return details;
+  }
+
+  private void putCommitDetails(Map<String, Object> details) {
+    if (gitProperties != null) {
+      String commit = gitProperties.getShortCommitId();
+      if (commit != null && !commit.isBlank()) {
+        details.put("commit", commit);
+        return;
+      }
+    }
+    details.put("commit", DEV_VERSION);
   }
 }

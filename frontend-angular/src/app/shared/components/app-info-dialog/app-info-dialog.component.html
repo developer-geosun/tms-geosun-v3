@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>{{ 'common.appInfoDialog.title' | translate }}</h2>
+
+<mat-dialog-content class="app-info-dialog__content">
+  <section class="app-info-dialog__section">
+    <h3 class="app-info-dialog__section-title">
+      {{ 'common.appInfoDialog.clientSection' | translate }}
+    </h3>
+    <dl class="app-info-dialog__list">
+      @for (row of clientRows(); track row.labelKey) {
+        <div class="app-info-dialog__row">
+          <dt>{{ row.labelKey | translate }}</dt>
+          <dd>
+            @if (row.href) {
+              <a [href]="row.href" target="_blank" rel="noopener noreferrer">{{ row.value }}</a>
+            } @else if (row.translateValue) {
+              {{ row.value | translate }}
+            } @else {
+              {{ row.value }}
+            }
+          </dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+  <section class="app-info-dialog__section">
+    <h3 class="app-info-dialog__section-title">
+      {{ 'common.appInfoDialog.serverSection' | translate }}
+    </h3>
+
+    @if (loading()) {
+      <div class="app-info-dialog__loading">
+        <mat-spinner diameter="32"></mat-spinner>
+      </div>
+    } @else if (serverError()) {
+      <p class="app-info-dialog__error">{{ 'common.appInfoDialog.serverLoadError' | translate }}</p>
+    } @else {
+      <dl class="app-info-dialog__list">
+        @for (row of serverRows(); track row.labelKey + row.value) {
+          <div class="app-info-dialog__row">
+            <dt>{{ row.labelKey | translate }}</dt>
+            <dd>
+              @if (row.href) {
+                <a [href]="row.href" target="_blank" rel="noopener noreferrer">{{ row.value }}</a>
+              } @else {
+                {{ row.value }}
+              }
+            </dd>
+          </div>
+        }
+      </dl>
+    }
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button type="button" (click)="close()">
+    {{ 'common.appInfoDialog.close' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -16,6 +16,28 @@
       "cancel": "Отмена",
       "confirm": "Подтвердить"
     },
+    "appInfoDialog": {
+      "open": "Информация о приложении",
+      "title": "Информация о приложении",
+      "clientSection": "Клиент (Angular)",
+      "serverSection": "Сервер (Java)",
+      "serverLoadError": "Не удалось загрузить данные сервера",
+      "close": "Закрыть",
+      "fields": {
+        "appName": "Название",
+        "version": "Версия",
+        "apiVersion": "Версия API",
+        "artifact": "Артефакт",
+        "buildTime": "Время сборки",
+        "production": "Production",
+        "repositoryUrl": "Репозиторий",
+        "commit": "Коммит"
+      },
+      "values": {
+        "yes": "Да",
+        "no": "Нет"
+      }
+    },
     "snackbar": {
       "close": "Закрыть сообщение"
     },

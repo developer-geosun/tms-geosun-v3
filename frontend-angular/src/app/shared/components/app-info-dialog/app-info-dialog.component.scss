@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  max-width: min(100vw - 24px, 520px);
+}
+
+.app-info-dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.app-info-dialog__section-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.app-info-dialog__list {
+  margin: 0;
+}
+
+.app-info-dialog__row {
+  display: grid;
+  grid-template-columns: minmax(120px, 38%) 1fr;
+  gap: 8px 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant, #c7c7c7);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  dt {
+    margin: 0;
+    font-size: 13px;
+    color: var(--mat-sys-on-surface-variant, #5f6368);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 13px;
+    word-break: break-word;
+  }
+
+  a {
+    color: var(--mat-sys-primary, #1565c0);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.app-info-dialog__loading {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 4px;
+}
+
+.app-info-dialog__error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--mat-sys-error, #b3261e);
+}
+
+mat-dialog-actions button {
+  min-height: 48px;
+}

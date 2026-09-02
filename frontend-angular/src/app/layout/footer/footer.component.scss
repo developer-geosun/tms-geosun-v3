@@ -61,6 +61,43 @@
       app-social-icon {
         margin: 0;
       }
+
+      .footer-info-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background-color: var(--mat-sys-surface, #ffffff);
+        color: var(--mat-sys-on-surface, #1a1a1a);
+        border: 1px solid rgba(61, 71, 82, 0.25);
+        font-size: 14px;
+        font-weight: 700;
+        font-style: italic;
+        font-family: var(--font-sans);
+        line-height: 1;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover,
+        &:focus-visible {
+          transform: translateY(-2px) scale(1.1);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          background-color: var(--mat-sys-primary, #1565c0);
+          color: var(--mat-sys-on-primary, #ffffff);
+          border-color: transparent;
+          outline: none;
+        }
+
+        &:active {
+          transform: translateY(0) scale(1.05);
+        }
+      }
     }
   }
 }
@@ -77,6 +114,17 @@ app-social-icon:hover {
     svg {
       fill: #fff !important;
     }
+  }
+}
+
+// Handset: кнопка info такого ж розміру, як соцмережі
+@include bp.below-desktop {
+  .app-footer .footer-section .footer-info-button {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    font-size: 12px;
   }
 }
 
@@ -102,6 +150,13 @@ app-social-icon:hover {
           width: auto;
           flex-basis: auto;
           text-align: left;
+        }
+
+        .footer-info-button {
+          width: 28px;
+          height: 28px;
+          min-width: 28px;
+          min-height: 28px;
         }
       }
     }

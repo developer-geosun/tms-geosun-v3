@@ -13,6 +13,14 @@
         <app-social-icon type="viber" [url]="configService.developerViberUrl"></app-social-icon>
         <app-social-icon type="facebook" [url]="configService.developerFacebookUrl"></app-social-icon>
         <app-social-icon type="linkedin" [url]="configService.developerLinkedInUrl"></app-social-icon>
+        <button
+          type="button"
+          class="footer-info-button"
+          (click)="openAppInfoDialog()"
+          [attr.aria-label]="'common.appInfoDialog.open' | translate"
+          [matTooltip]="'common.appInfoDialog.open' | translate">
+          i
+        </button>
       </div>
     }
   </div>

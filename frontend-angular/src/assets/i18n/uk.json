@@ -16,6 +16,28 @@
       "cancel": "Скасувати",
       "confirm": "Підтвердити"
     },
+    "appInfoDialog": {
+      "open": "Інформація про застосунок",
+      "title": "Інформація про застосунок",
+      "clientSection": "Клієнт (Angular)",
+      "serverSection": "Сервер (Java)",
+      "serverLoadError": "Не вдалося завантажити дані сервера",
+      "close": "Закрити",
+      "fields": {
+        "appName": "Назва",
+        "version": "Версія",
+        "apiVersion": "Версія API",
+        "artifact": "Артефакт",
+        "buildTime": "Час збірки",
+        "production": "Production",
+        "repositoryUrl": "Репозиторій",
+        "commit": "Коміт"
+      },
+      "values": {
+        "yes": "Так",
+        "no": "Ні"
+      }
+    },
     "snackbar": {
       "close": "Закрити повідомлення"
     },

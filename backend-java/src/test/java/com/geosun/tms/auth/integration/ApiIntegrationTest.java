@@ -97,7 +97,8 @@ class ApiIntegrationTest {
         .andExpect(
             jsonPath("$.server.repositoryUrl")
                 .value("https://github.com/developer-geosun/tms-geosun-v3.git"))
-        .andExpect(jsonPath("$.server.version").exists());
+        .andExpect(jsonPath("$.server.version").exists())
+        .andExpect(jsonPath("$.server.commit").exists());
   }
 
   @Test
