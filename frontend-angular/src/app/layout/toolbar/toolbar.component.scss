@@ -3,10 +3,12 @@
 .toolbar-shell {
   flex-shrink: 0;
 
+  // Слот завжди зайнятий (без стрибка layout); колір як у toolbar, щоб idle-трек не світився
   &__progress-slot {
     height: 3px;
     flex-shrink: 0;
     overflow: hidden;
+    background-color: var(--mat-sys-primary-container);
   }
 
   &__progress {
@@ -14,8 +16,11 @@
     height: 3px;
     opacity: 0;
     pointer-events: none;
-    --mdc-linear-progress-active-indicator-color: var(--mat-sys-primary);
-    --mdc-linear-progress-track-color: transparent;
+    // Idle-трек = фон toolbar (Material 21 бере --mat-progress-bar-track-color, не лише mdc)
+    --mat-progress-bar-track-color: var(--mat-sys-primary-container);
+    --mdc-linear-progress-track-color: var(--mat-sys-primary-container);
+    --mat-progress-bar-active-indicator-color: var(--mat-sys-on-primary-container);
+    --mdc-linear-progress-active-indicator-color: var(--mat-sys-on-primary-container);
 
     &--active {
       opacity: 1;
