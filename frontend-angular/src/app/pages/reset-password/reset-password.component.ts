@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -50,6 +50,9 @@ export class ResetPasswordComponent {
   readonly errorCode = signal<'invalid' | '429' | 'generic' | null>(null);
   readonly isPasswordVisible = signal(false);
 
+  private readonly passwordInput = viewChild<ElementRef<HTMLInputElement>>('passwordInput');
+  private readonly confirmPasswordInput = viewChild<ElementRef<HTMLInputElement>>('confirmPasswordInput');
+
   private resetToken = '';
 
   readonly form = this.formBuilder.nonNullable.group({
@@ -71,6 +74,7 @@ export class ResetPasswordComponent {
   }
 
   submit(): void {
+    this.syncPasswordsFromDom();
     if (
       this.missingToken() ||
       !this.resetToken ||
@@ -116,6 +120,52 @@ export class ResetPasswordComponent {
         this.errorCode.set('generic');
       }
     });
+  }
+
+  /** Показуємо пароль через property type, без [type]-binding — інакше Angular затирає підказку Chrome. */
+  protected setPasswordVisible(visible: boolean): void {
+    this.isPasswordVisible.set(visible);
+    const type = visible ? 'text' : 'password';
+    const password = this.passwordInput()?.nativeElement;
+    const confirm = this.confirmPasswordInput()?.nativeElement;
+    if (password) {
+      password.type = type;
+    }
+    if (confirm) {
+      confirm.type = type;
+    }
+  }
+
+  /** Користувач не змінює email; поле лишається без readonly, щоб Chrome зберіг логін. */
+  protected preventUsernameEdit(event: Event): void {
+    if (event instanceof KeyboardEvent && this.isUsernameNavigationKey(event)) {
+      return;
+    }
+    event.preventDefault();
+  }
+
+  private isUsernameNavigationKey(event: KeyboardEvent): boolean {
+    if (event.key === 'Tab' || event.key === 'Escape') {
+      return true;
+    }
+    if (event.key.startsWith('Arrow') || event.key === 'Home' || event.key === 'End') {
+      return true;
+    }
+    const copyOrSelect = event.key === 'c' || event.key === 'C' || event.key === 'a' || event.key === 'A';
+    return copyOrSelect && (event.ctrlKey || event.metaKey);
+  }
+
+  private syncPasswordsFromDom(): void {
+    const password = this.passwordInput()?.nativeElement.value;
+    const confirm = this.confirmPasswordInput()?.nativeElement.value;
+    if (password != null && password !== this.form.controls.password.value) {
+      this.form.controls.password.setValue(password);
+      this.form.controls.password.markAsDirty();
+    }
+    if (confirm != null && confirm !== this.form.controls.confirmPassword.value) {
+      this.form.controls.confirmPassword.setValue(confirm);
+      this.form.controls.confirmPassword.markAsDirty();
+    }
   }
 
   private loadAccountEmail(token: string): void {
