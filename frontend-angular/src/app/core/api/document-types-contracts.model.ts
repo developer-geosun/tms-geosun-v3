@@ -1,10 +1,18 @@
 export type DocumentTypeListViewContract = 'active' | 'all' | 'deleted';
 
+export interface DocumentTypeScanPageContractDto {
+  key: string;
+  legendEn: string;
+  legendUa: string;
+  legendRu: string;
+}
+
 export interface DocumentTypeFieldDefinitionContractDto {
   key: string;
   nameUk: string;
   nameEn: string;
   nameRu: string;
+  required: boolean;
 }
 
 export interface DocumentTypeReferenceContractDto {
@@ -13,7 +21,8 @@ export interface DocumentTypeReferenceContractDto {
   nameEn: string;
   nameRu: string;
   countryCode: string;
-  plannedScanPages: number;
+  plannedScanPages: DocumentTypeScanPageContractDto[];
+  comment: string;
   fieldDefinitions: DocumentTypeFieldDefinitionContractDto[];
   deleted: boolean;
   deletedAt: string | null;
@@ -26,7 +35,8 @@ export interface CreateDocumentTypeContractRequest {
   nameEn: string;
   nameRu: string;
   countryCode: string;
-  plannedScanPages: number;
+  plannedScanPages: DocumentTypeScanPageContractDto[];
+  comment: string;
   fieldDefinitions: DocumentTypeFieldDefinitionContractDto[];
 }
 

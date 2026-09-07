@@ -51,15 +51,84 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="document-type-form__field">
-          <mat-label>{{ 'pages.adminDocumentTypes.plannedScanPages' | translate }}</mat-label>
-          <input matInput type="number" min="0" formControlName="plannedScanPages" />
-          <mat-hint>{{ 'pages.adminDocumentTypes.plannedScanPagesHint' | translate }}</mat-hint>
-          @if (fieldError(descriptionForm.controls.plannedScanPages, 'plannedScanPages')) {
-            <mat-error>{{
-              fieldError(descriptionForm.controls.plannedScanPages, 'plannedScanPages')
-            }}</mat-error>
-          }
+          <mat-label>{{ 'pages.adminDocumentTypes.comment' | translate }}</mat-label>
+          <textarea
+            matInput
+            formControlName="comment"
+            rows="2"
+            maxlength="512"
+            autocomplete="off"
+          ></textarea>
+          <mat-hint>{{ 'pages.adminDocumentTypes.commentHint' | translate }}</mat-hint>
         </mat-form-field>
+
+        <section class="document-type-form__pages">
+          <div class="document-type-form__fields-header">
+            <h3>{{ 'pages.adminDocumentTypes.plannedScanPages' | translate }}</h3>
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="isDeleted()"
+              (click)="addScanPageRow()"
+            >
+              <mat-icon aria-hidden="true">add</mat-icon>
+              {{ 'pages.adminDocumentTypes.addScanPage' | translate }}
+            </button>
+          </div>
+
+          @if (plannedScanPages.length === 0) {
+            <p class="document-type-form__fields-empty">
+              {{ 'pages.adminDocumentTypes.noScanPages' | translate }}
+            </p>
+          }
+
+          <div formArrayName="plannedScanPages" class="document-type-form__fields-list">
+            @for (pageGroup of plannedScanPages.controls; track $index; let i = $index) {
+              <div [formGroupName]="i" class="document-type-form__field-row">
+                <div class="document-type-form__field-row-main">
+                  <mat-form-field appearance="outline" class="document-type-form__field-row-key">
+                    <mat-label>{{ 'pages.adminDocumentTypes.scanPageKey' | translate }}</mat-label>
+                    <input matInput formControlName="key" autocomplete="off" />
+                    @if (fieldError(scanPageGroupAt(i).controls['key'], 'scanPageKey')) {
+                      <mat-error>{{
+                        fieldError(scanPageGroupAt(i).controls['key'], 'scanPageKey')
+                      }}</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <div class="document-type-form__field-row-names">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'pages.adminDocumentTypes.legendUa' | translate }}</mat-label>
+                      <input matInput formControlName="legendUa" autocomplete="off" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'pages.adminDocumentTypes.legendEn' | translate }}</mat-label>
+                      <input matInput formControlName="legendEn" autocomplete="off" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'pages.adminDocumentTypes.legendRu' | translate }}</mat-label>
+                      <input matInput formControlName="legendRu" autocomplete="off" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <button
+                  mat-icon-button
+                  type="button"
+                  color="warn"
+                  class="document-type-form__field-row-delete"
+                  [disabled]="isDeleted()"
+                  [attr.aria-label]="'pages.adminDocumentTypes.removeScanPage' | translate"
+                  (click)="removeScanPageRow(i)"
+                >
+                  <mat-icon aria-hidden="true">delete</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+        </section>
       </form>
     </mat-step>
 
@@ -93,15 +162,24 @@
             @for (fieldGroup of fieldDefinitions.controls; track $index; let i = $index) {
               <div [formGroupName]="i" class="document-type-form__field-row">
                 <div class="document-type-form__field-row-main">
-                  <mat-form-field appearance="outline" class="document-type-form__field-row-key">
-                    <mat-label>{{ 'pages.adminDocumentTypes.fieldKey' | translate }}</mat-label>
-                    <input matInput formControlName="key" autocomplete="off" />
-                    @if (fieldError(fieldGroupAt(i).controls['key'], 'fieldKey')) {
-                      <mat-error>{{
-                        fieldError(fieldGroupAt(i).controls['key'], 'fieldKey')
-                      }}</mat-error>
-                    }
-                  </mat-form-field>
+                  <div class="document-type-form__field-row-top">
+                    <mat-form-field appearance="outline" class="document-type-form__field-row-key">
+                      <mat-label>{{ 'pages.adminDocumentTypes.fieldKey' | translate }}</mat-label>
+                      <input matInput formControlName="key" autocomplete="off" />
+                      @if (fieldError(fieldGroupAt(i).controls['key'], 'fieldKey')) {
+                        <mat-error>{{
+                          fieldError(fieldGroupAt(i).controls['key'], 'fieldKey')
+                        }}</mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-checkbox formControlName="required" class="document-type-form__required">
+                      {{ 'pages.adminDocumentTypes.fieldRequired' | translate }}
+                    </mat-checkbox>
+                  </div>
+                  <p class="document-type-form__required-hint">
+                    {{ 'pages.adminDocumentTypes.fieldRequiredHint' | translate }}
+                  </p>
 
                   <div class="document-type-form__field-row-names">
                     <mat-form-field appearance="outline">

@@ -82,6 +82,7 @@ export class AdminDocumentTypesComponent {
     'country',
     'plannedScanPages',
     'fieldCount',
+    'comment',
     'status',
     'actions'
   ];
@@ -201,11 +202,28 @@ export class AdminDocumentTypesComponent {
     return this.countryNameByCode().get(code.toUpperCase()) ?? code.toUpperCase();
   }
 
-  plannedPagesLabel(pages: number): string {
-    if (pages === 0) {
+  plannedPagesLabel(pages: DocumentTypeReferenceContractDto['plannedScanPages']): string {
+    if (!pages || pages.length === 0) {
       return this.translate.instant('pages.adminDocumentTypes.plannedScanPagesUndefined');
     }
-    return String(pages);
+    return String(pages.length);
+  }
+
+  fieldCountLabel(row: DocumentTypeReferenceContractDto): string {
+    const total = row.fieldDefinitions.length;
+    const required = row.fieldDefinitions.filter((field) => field.required).length;
+    return this.translate.instant('pages.adminDocumentTypes.fieldCountValue', {
+      required,
+      total
+    });
+  }
+
+  commentPreview(comment: string | null | undefined): string {
+    const value = (comment ?? '').trim();
+    if (!value) {
+      return '—';
+    }
+    return value.length > 48 ? `${value.slice(0, 48)}…` : value;
   }
 
   async openCreate(): Promise<void> {

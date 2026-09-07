@@ -4,11 +4,14 @@ import com.geosun.tms.auth.exception.ApiException;
 import com.geosun.tms.reference.domain.DocumentTypeFieldDefinition;
 import com.geosun.tms.reference.domain.DocumentTypeListView;
 import com.geosun.tms.reference.domain.DocumentTypeReference;
+import com.geosun.tms.reference.domain.DocumentTypeScanPage;
 import com.geosun.tms.reference.dto.request.CreateDocumentTypeRequest;
 import com.geosun.tms.reference.dto.request.DocumentTypeFieldDefinitionRequest;
+import com.geosun.tms.reference.dto.request.DocumentTypeScanPageRequest;
 import com.geosun.tms.reference.dto.request.UpdateDocumentTypeRequest;
 import com.geosun.tms.reference.dto.response.DocumentTypeFieldDefinitionDto;
 import com.geosun.tms.reference.dto.response.DocumentTypeReferenceDto;
+import com.geosun.tms.reference.dto.response.DocumentTypeScanPageDto;
 import com.geosun.tms.reference.repository.CountryReferenceRepository;
 import com.geosun.tms.reference.repository.DocumentTypeReferenceRepository;
 import java.time.Instant;
@@ -73,7 +76,8 @@ public class DocumentTypeReferenceService {
         normalizeName(request.nameEn()),
         normalizeName(request.nameRu()),
         countryCode,
-        request.plannedScanPages(),
+        normalizeScanPages(request.plannedScanPages()),
+        normalizeComment(request.comment()),
         normalizeFieldDefinitions(request.fieldDefinitions()));
     DocumentTypeReference saved =
         Objects.requireNonNull(documentTypeRepository.save(Objects.requireNonNull(row)));
@@ -95,7 +99,8 @@ public class DocumentTypeReferenceService {
         normalizeName(request.nameEn()),
         normalizeName(request.nameRu()),
         countryCode,
-        request.plannedScanPages(),
+        normalizeScanPages(request.plannedScanPages()),
+        normalizeComment(request.comment()),
         normalizeFieldDefinitions(request.fieldDefinitions()));
     DocumentTypeReference saved =
         Objects.requireNonNull(documentTypeRepository.save(Objects.requireNonNull(row)));
@@ -133,17 +138,64 @@ public class DocumentTypeReferenceService {
       String nameEn,
       String nameRu,
       String countryCode,
-      int plannedScanPages,
+      List<DocumentTypeScanPage> plannedScanPages,
+      String comment,
       List<DocumentTypeFieldDefinition> fieldDefinitions) {
-    if (plannedScanPages < 0) {
-      throw ApiException.badRequest("VALIDATION_ERROR", "plannedScanPages must be >= 0");
-    }
     row.setNameUk(nameUk);
     row.setNameEn(nameEn);
     row.setNameRu(nameRu);
     row.setCountryCode(countryCode);
     row.setPlannedScanPages(plannedScanPages);
+    row.setComment(comment);
     row.setFieldDefinitions(fieldDefinitions);
+  }
+
+  private List<DocumentTypeScanPage> normalizeScanPages(List<DocumentTypeScanPageRequest> raw) {
+    if (raw == null) {
+      throw ApiException.badRequest("VALIDATION_ERROR", "plannedScanPages is required");
+    }
+    Set<String> seenKeys = new HashSet<>();
+    List<DocumentTypeScanPage> normalized = new ArrayList<>();
+    for (DocumentTypeScanPageRequest item : raw) {
+      String key = normalizeScanPageKey(item.key());
+      if (!seenKeys.add(key.toLowerCase(Locale.ROOT))) {
+        throw ApiException.badRequest(
+            "DOCUMENT_TYPE_SCAN_PAGE_KEY_DUPLICATE",
+            "Duplicate scan page key in plannedScanPages: " + key);
+      }
+      normalized.add(
+          new DocumentTypeScanPage(
+              key,
+              normalizeLegend(item.legendEn()),
+              normalizeLegend(item.legendUa()),
+              normalizeLegend(item.legendRu())));
+    }
+    return normalized;
+  }
+
+  private static String normalizeScanPageKey(String key) {
+    if (key == null || key.isBlank()) {
+      throw ApiException.badRequest("VALIDATION_ERROR", "plannedScanPages[].key is required");
+    }
+    return key.trim();
+  }
+
+  private static String normalizeLegend(String value) {
+    if (value == null || value.isBlank()) {
+      throw ApiException.badRequest("VALIDATION_ERROR", "plannedScanPages[].legend is required");
+    }
+    return value.trim();
+  }
+
+  private static String normalizeComment(String comment) {
+    if (comment == null) {
+      return "";
+    }
+    String trimmed = comment.trim();
+    if (trimmed.length() > 512) {
+      throw ApiException.badRequest("VALIDATION_ERROR", "comment must be at most 512 characters");
+    }
+    return trimmed;
   }
 
   private List<DocumentTypeFieldDefinition> normalizeFieldDefinitions(
@@ -151,20 +203,39 @@ public class DocumentTypeReferenceService {
     if (raw == null) {
       throw ApiException.badRequest("VALIDATION_ERROR", "fieldDefinitions is required");
     }
+    if (raw.isEmpty()) {
+      throw ApiException.badRequest(
+          "DOCUMENT_TYPE_FIELDS_EMPTY", "fieldDefinitions must not be empty");
+    }
     Set<String> seenKeys = new HashSet<>();
     List<DocumentTypeFieldDefinition> normalized = new ArrayList<>();
+    boolean hasRequired = false;
     for (DocumentTypeFieldDefinitionRequest item : raw) {
       String key = normalizeFieldKey(item.key());
-      if (!seenKeys.add(key)) {
+      if (!seenKeys.add(key.toLowerCase(Locale.ROOT))) {
         throw ApiException.badRequest(
             "VALIDATION_ERROR", "Duplicate field key in fieldDefinitions: " + key);
+      }
+      if (item.required() == null) {
+        throw ApiException.badRequest(
+            "VALIDATION_ERROR", "fieldDefinitions[].required is required");
+      }
+      boolean required = item.required();
+      if (required) {
+        hasRequired = true;
       }
       normalized.add(
           new DocumentTypeFieldDefinition(
               key,
               normalizeName(item.nameUk()),
               normalizeName(item.nameEn()),
-              normalizeName(item.nameRu())));
+              normalizeName(item.nameRu()),
+              required));
+    }
+    if (!hasRequired) {
+      throw ApiException.badRequest(
+          "DOCUMENT_TYPE_NO_REQUIRED_FIELD",
+          "At least one fieldDefinitions[].required must be true");
     }
     return normalized;
   }
@@ -219,11 +290,17 @@ public class DocumentTypeReferenceService {
   }
 
   private DocumentTypeReferenceDto toDto(DocumentTypeReference row) {
+    List<DocumentTypeScanPageDto> pages =
+        row.getPlannedScanPages().stream()
+            .map(
+                p -> new DocumentTypeScanPageDto(p.key(), p.legendEn(), p.legendUa(), p.legendRu()))
+            .toList();
     List<DocumentTypeFieldDefinitionDto> fields =
         row.getFieldDefinitions().stream()
             .map(
                 f ->
-                    new DocumentTypeFieldDefinitionDto(f.key(), f.nameUk(), f.nameEn(), f.nameRu()))
+                    new DocumentTypeFieldDefinitionDto(
+                        f.key(), f.nameUk(), f.nameEn(), f.nameRu(), f.required()))
             .toList();
     return new DocumentTypeReferenceDto(
         Objects.requireNonNull(row.getId()),
@@ -231,7 +308,8 @@ public class DocumentTypeReferenceService {
         row.getNameEn(),
         row.getNameRu(),
         row.getCountryCode(),
-        row.getPlannedScanPages(),
+        pages,
+        row.getComment() == null ? "" : row.getComment(),
         fields,
         row.isDeleted(),
         row.getDeletedAt(),

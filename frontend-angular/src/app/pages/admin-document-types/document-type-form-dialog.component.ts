@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -30,7 +31,9 @@ import {
   CountryReferenceApiService,
   CountryReferenceContractDto,
   CreateDocumentTypeContractRequest,
+  DocumentTypeFieldDefinitionContractDto,
   DocumentTypeReferenceContractDto,
+  DocumentTypeScanPageContractDto,
   DocumentTypesApiService
 } from '../../core/api';
 import {
@@ -50,6 +53,7 @@ export interface DocumentTypeFormDialogData {
     ReactiveFormsModule,
     TranslateModule,
     MatButtonModule,
+    MatCheckboxModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
@@ -117,7 +121,8 @@ export class DocumentTypeFormDialogComponent {
     nameEn: ['', [Validators.required, Validators.maxLength(128)]],
     nameRu: ['', [Validators.required, Validators.maxLength(128)]],
     countryCode: ['UA', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]],
-    plannedScanPages: [0, [Validators.required, Validators.min(0)]]
+    comment: ['', [Validators.maxLength(512)]],
+    plannedScanPages: this.formBuilder.array<ReturnType<typeof this.createScanPageGroup>>([])
   });
 
   readonly fieldsStepForm = this.formBuilder.group({
@@ -133,8 +138,11 @@ export class DocumentTypeFormDialogComponent {
         nameEn: row.nameEn,
         nameRu: row.nameRu,
         countryCode: row.countryCode.toUpperCase(),
-        plannedScanPages: row.plannedScanPages
+        comment: row.comment ?? ''
       });
+      for (const page of row.plannedScanPages ?? []) {
+        this.plannedScanPages.push(this.createScanPageGroup(page));
+      }
       for (const field of row.fieldDefinitions) {
         this.fieldDefinitions.push(this.createFieldGroup(field));
       }
@@ -143,6 +151,10 @@ export class DocumentTypeFormDialogComponent {
         this.fieldsStepForm.disable();
       }
     }
+  }
+
+  get plannedScanPages(): FormArray {
+    return this.descriptionForm.controls.plannedScanPages;
   }
 
   get fieldDefinitions(): FormArray {
@@ -163,6 +175,18 @@ export class DocumentTypeFormDialogComponent {
 
   goPrev(): void {
     this.onStepChange(0);
+  }
+
+  addScanPageRow(): void {
+    this.plannedScanPages.push(this.createScanPageGroup());
+  }
+
+  removeScanPageRow(index: number): void {
+    this.plannedScanPages.removeAt(index);
+  }
+
+  scanPageGroupAt(index: number): FormGroup {
+    return this.plannedScanPages.at(index) as FormGroup;
   }
 
   addFieldRow(): void {
@@ -187,6 +211,27 @@ export class DocumentTypeFormDialogComponent {
       if (this.descriptionForm.invalid) {
         this.onStepChange(0);
       }
+      return;
+    }
+    if (this.fieldDefinitions.length === 0) {
+      showAppSnack(
+        this.snackBar,
+        this.translate,
+        'pages.adminDocumentTypes.errors.DOCUMENT_TYPE_FIELDS_EMPTY',
+        'error'
+      );
+      return;
+    }
+    const hasRequired = this.fieldDefinitions.controls.some(
+      (control) => (control as FormGroup).controls['required'].value === true
+    );
+    if (!hasRequired) {
+      showAppSnack(
+        this.snackBar,
+        this.translate,
+        'pages.adminDocumentTypes.errors.DOCUMENT_TYPE_NO_REQUIRED_FIELD',
+        'error'
+      );
       return;
     }
     this.saving.set(true);
@@ -237,17 +282,22 @@ export class DocumentTypeFormDialogComponent {
     if (control.hasError('pattern')) {
       return this.translate.instant('pages.adminDocumentTypes.errors.fieldKeyPattern');
     }
+    if (control.hasError('maxlength')) {
+      return this.translate.instant('pages.adminDocumentTypes.errors.invalid');
+    }
     return this.translate.instant('pages.adminDocumentTypes.errors.invalid');
   }
 
-  private createFieldGroup(
-    value?: {
-      key: string;
-      nameUk: string;
-      nameEn: string;
-      nameRu: string;
-    }
-  ) {
+  private createScanPageGroup(value?: DocumentTypeScanPageContractDto) {
+    return this.formBuilder.nonNullable.group({
+      key: [value?.key ?? '', [Validators.required, Validators.maxLength(32)]],
+      legendUa: [value?.legendUa ?? '', [Validators.required, Validators.maxLength(128)]],
+      legendEn: [value?.legendEn ?? '', [Validators.required, Validators.maxLength(128)]],
+      legendRu: [value?.legendRu ?? '', [Validators.required, Validators.maxLength(128)]]
+    });
+  }
+
+  private createFieldGroup(value?: DocumentTypeFieldDefinitionContractDto) {
     return this.formBuilder.nonNullable.group({
       key: [
         value?.key ?? '',
@@ -255,7 +305,8 @@ export class DocumentTypeFormDialogComponent {
       ],
       nameUk: [value?.nameUk ?? '', [Validators.required, Validators.maxLength(128)]],
       nameEn: [value?.nameEn ?? '', [Validators.required, Validators.maxLength(128)]],
-      nameRu: [value?.nameRu ?? '', [Validators.required, Validators.maxLength(128)]]
+      nameRu: [value?.nameRu ?? '', [Validators.required, Validators.maxLength(128)]],
+      required: [value?.required ?? true]
     });
   }
 
@@ -267,12 +318,19 @@ export class DocumentTypeFormDialogComponent {
       nameEn: description.nameEn.trim(),
       nameRu: description.nameRu.trim(),
       countryCode: description.countryCode.trim().toUpperCase(),
-      plannedScanPages: description.plannedScanPages,
+      comment: (description.comment ?? '').trim(),
+      plannedScanPages: description.plannedScanPages.map((page) => ({
+        key: page.key.trim(),
+        legendEn: page.legendEn.trim(),
+        legendUa: page.legendUa.trim(),
+        legendRu: page.legendRu.trim()
+      })),
       fieldDefinitions: fields.fieldDefinitions.map((field) => ({
         key: field.key.trim(),
         nameUk: field.nameUk.trim(),
         nameEn: field.nameEn.trim(),
-        nameRu: field.nameRu.trim()
+        nameRu: field.nameRu.trim(),
+        required: field.required === true
       }))
     };
   }
@@ -300,6 +358,12 @@ export class DocumentTypeFormDialogComponent {
         return 'pages.adminDocumentTypes.errors.COUNTRY_NOT_FOUND';
       case 'DOCUMENT_TYPE_DELETED':
         return 'pages.adminDocumentTypes.errors.DOCUMENT_TYPE_DELETED';
+      case 'DOCUMENT_TYPE_FIELDS_EMPTY':
+        return 'pages.adminDocumentTypes.errors.DOCUMENT_TYPE_FIELDS_EMPTY';
+      case 'DOCUMENT_TYPE_NO_REQUIRED_FIELD':
+        return 'pages.adminDocumentTypes.errors.DOCUMENT_TYPE_NO_REQUIRED_FIELD';
+      case 'DOCUMENT_TYPE_SCAN_PAGE_KEY_DUPLICATE':
+        return 'pages.adminDocumentTypes.errors.DOCUMENT_TYPE_SCAN_PAGE_KEY_DUPLICATE';
       case 'VALIDATION_ERROR':
         return 'pages.adminDocumentTypes.errors.VALIDATION_ERROR';
       case 'NOT_FOUND':

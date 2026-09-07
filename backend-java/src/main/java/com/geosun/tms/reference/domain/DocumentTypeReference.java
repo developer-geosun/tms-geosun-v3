@@ -33,12 +33,16 @@ public class DocumentTypeReference {
   @Column(name = "country_code", nullable = false, length = 2)
   private String countryCode;
 
-  @Column(name = "planned_scan_pages", nullable = false)
-  private int plannedScanPages;
+  @Convert(converter = DocumentTypeScanPagesConverter.class)
+  @Column(name = "planned_scan_pages", nullable = false, columnDefinition = "JSON")
+  private List<DocumentTypeScanPage> plannedScanPages = new ArrayList<>();
 
   @Convert(converter = DocumentTypeFieldDefinitionsConverter.class)
   @Column(name = "field_definitions", nullable = false, columnDefinition = "JSON")
   private List<DocumentTypeFieldDefinition> fieldDefinitions = new ArrayList<>();
+
+  @Column(name = "comment", nullable = false, length = 512)
+  private String comment = "";
 
   @Column(name = "is_deleted", nullable = false)
   private boolean deleted;
@@ -101,12 +105,12 @@ public class DocumentTypeReference {
     this.countryCode = countryCode;
   }
 
-  public int getPlannedScanPages() {
+  public List<DocumentTypeScanPage> getPlannedScanPages() {
     return plannedScanPages;
   }
 
-  public void setPlannedScanPages(int plannedScanPages) {
-    this.plannedScanPages = plannedScanPages;
+  public void setPlannedScanPages(List<DocumentTypeScanPage> plannedScanPages) {
+    this.plannedScanPages = plannedScanPages == null ? new ArrayList<>() : plannedScanPages;
   }
 
   public List<DocumentTypeFieldDefinition> getFieldDefinitions() {
@@ -115,6 +119,14 @@ public class DocumentTypeReference {
 
   public void setFieldDefinitions(List<DocumentTypeFieldDefinition> fieldDefinitions) {
     this.fieldDefinitions = fieldDefinitions == null ? new ArrayList<>() : fieldDefinitions;
+  }
+
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment == null ? "" : comment;
   }
 
   public boolean isDeleted() {
