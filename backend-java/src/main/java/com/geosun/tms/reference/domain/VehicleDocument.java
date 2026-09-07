@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -43,7 +42,6 @@ public class VehicleDocument {
   @JoinColumn(name = "stored_file_id", nullable = false)
   private StoredFile storedFile;
 
-  @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private Instant createdAt;
 
@@ -55,6 +53,10 @@ public class VehicleDocument {
   void assignId() {
     if (id == null) {
       id = UUID.randomUUID().toString();
+    }
+    // Явний createdAt (наприклад, зсув на 1 мкс) не перезаписуємо генератором Hibernate.
+    if (createdAt == null) {
+      createdAt = Instant.now();
     }
   }
 

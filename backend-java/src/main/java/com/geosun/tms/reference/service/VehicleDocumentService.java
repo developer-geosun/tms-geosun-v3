@@ -14,9 +14,9 @@ import com.geosun.tms.storage.domain.StoredFile;
 import com.geosun.tms.storage.dto.StoredFileDto;
 import com.geosun.tms.storage.service.StoredFileService;
 import com.geosun.tms.storage.service.StoredFileService.OpenedStoredFile;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
@@ -75,12 +75,20 @@ public class VehicleDocumentService {
         storedFileService.storeMultipart(file, Objects.requireNonNull(relativeDir), userId);
     StoredFile storedEntity = storedFileService.requireById(Objects.requireNonNull(stored.id()));
 
+    List<VehicleDocument> existing =
+        documentRepository.findByVehicle_IdAndDocumentTypeOrderByCreatedAtDesc(vehicleId, type);
+    Instant previousCreatedAt =
+        existing.isEmpty() ? null : Objects.requireNonNull(existing.get(0)).getCreatedAt();
+
     VehicleDocument doc = new VehicleDocument();
     doc.setVehicle(vehicle);
     doc.setDocumentType(type);
     doc.setValidFrom(validFrom);
     doc.setValidTo(validTo);
     doc.setStoredFile(storedEntity);
+    doc.setCreatedAt(
+        VehicleDocumentRules.nextCreatedAt(
+            previousCreatedAt, Objects.requireNonNull(Instant.now())));
     VehicleDocument saved = documentRepository.save(doc);
     return toVersionDto(saved, LocalDate.now());
   }
@@ -183,14 +191,7 @@ public class VehicleDocumentService {
   @NonNull
   private static List<VehicleDocument> sortNewestFirst(List<VehicleDocument> docs) {
     return Objects.requireNonNull(
-        docs.stream()
-            .sorted(
-                Comparator.comparing(
-                        (VehicleDocument d) -> Objects.requireNonNull(d.getCreatedAt()),
-                        Comparator.reverseOrder())
-                    .thenComparing(
-                        d -> Objects.requireNonNull(d.getId()), Comparator.reverseOrder()))
-            .toList());
+        docs.stream().sorted(VehicleDocumentRules.newestFirst()).toList());
   }
 
   @NonNull
@@ -201,7 +202,7 @@ public class VehicleDocumentService {
     if (versions.isEmpty()) {
       throw ApiException.notFound("Document version not found");
     }
-    return Objects.requireNonNull(versions.get(0));
+    return Objects.requireNonNull(sortNewestFirst(versions).get(0));
   }
 
   @NonNull

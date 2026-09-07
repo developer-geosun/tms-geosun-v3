@@ -22,7 +22,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -297,11 +296,7 @@ public class VehicleService {
     Map<VehicleDocumentType, VehicleDocument> currentByType =
         new EnumMap<>(VehicleDocumentType.class);
     allDocs.stream()
-        .sorted(
-            Comparator.comparing(
-                    (VehicleDocument d) -> Objects.requireNonNull(d.getCreatedAt()),
-                    Comparator.reverseOrder())
-                .thenComparing(d -> Objects.requireNonNull(d.getId()), Comparator.reverseOrder()))
+        .sorted(VehicleDocumentRules.newestFirst())
         .forEach(doc -> currentByType.putIfAbsent(doc.getDocumentType(), doc));
 
     boolean hasExpiredOrMissing = false;

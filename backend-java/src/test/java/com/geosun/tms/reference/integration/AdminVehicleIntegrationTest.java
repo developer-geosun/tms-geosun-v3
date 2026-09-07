@@ -356,6 +356,7 @@ class AdminVehicleIntegrationTest {
             get(ReferenceApiPaths.ADMIN_VEHICLES_BASE + "/" + id + "/documents")
                 .header("Authorization", "Bearer " + token))
         .andExpect(status().isOk())
+        .andExpect(jsonPath("$.documents[0].documentType").value("THIRD_PARTY_LIABILITY"))
         .andExpect(jsonPath("$.documents[0].current.id").value(v2Id))
         .andExpect(jsonPath("$.documents[0].history.length()").value(1))
         .andExpect(jsonPath("$.documents[0].history[0].id").value(v1Id));
