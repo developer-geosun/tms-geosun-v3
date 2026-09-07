@@ -512,7 +512,7 @@
       "nbuNotSynced": "Курси НБУ ще не завантажені. Натисніть «Оновити курси НБУ»."
     },
     "profile": {
-      "title": "Профіль",
+      "title": "Профіль користувача",
       "subtitle": "Контактна картка облікового запису",
       "loading": "Завантаження...",
       "loadFailed": "Не вдалося завантажити профіль",
@@ -523,6 +523,7 @@
       "saveFailed": "Не вдалося зберегти профіль",
       "incompleteBanner": "Заповніть профіль, щоб з вами можна було зв'язатися по заявці",
       "openProfile": "Відкрити профіль",
+      "sectionData": "Дані користувача",
       "sectionIdentity": "ПІБ",
       "sectionPersonType": "Тип особи",
       "sectionChannels": "Канали зв'язку",
@@ -534,12 +535,15 @@
       "personTypeLegal": "Представник юридичної особи",
       "edrpou": "ЄДРПОУ / код у ЄДР",
       "edrpouHint": "8 або 10 цифр",
+      "edrpouDisabledHint": "Доступно для представника юридичної особи",
       "channelEmail": "Email ({{email}})",
       "channelPhone": "Телефон",
       "channelMessengers": "Месенджери",
       "channelsRequired": "Оберіть хоча б один канал зв'язку",
       "addPhone": "Додати телефон",
       "removePhone": "Видалити телефон",
+      "removePhoneConfirm": "Видалити цей номер телефону?",
+      "phonesEmpty": "Телефонів ще немає. Натисніть «+», щоб додати.",
       "phone": "Номер телефону",
       "primaryPhone": "Основний",
       "errors": {

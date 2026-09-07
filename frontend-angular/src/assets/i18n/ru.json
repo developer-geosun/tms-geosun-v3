@@ -512,7 +512,7 @@
       "nbuNotSynced": "Курсы НБУ ещё не загружены. Нажмите «Обновить курсы НБУ»."
     },
     "profile": {
-      "title": "Профиль",
+      "title": "Профиль пользователя",
       "subtitle": "Контактная карточка учётной записи",
       "loading": "Загрузка...",
       "loadFailed": "Не удалось загрузить профиль",
@@ -523,6 +523,7 @@
       "saveFailed": "Не удалось сохранить профиль",
       "incompleteBanner": "Заполните профиль, чтобы с вами можно было связаться по заявке",
       "openProfile": "Открыть профиль",
+      "sectionData": "Данные пользователя",
       "sectionIdentity": "ФИО",
       "sectionPersonType": "Тип лица",
       "sectionChannels": "Каналы связи",
@@ -534,12 +535,15 @@
       "personTypeLegal": "Представитель юридического лица",
       "edrpou": "ЕГРПОУ / код в ЕГР",
       "edrpouHint": "8 или 10 цифр",
+      "edrpouDisabledHint": "Доступно для представителя юридического лица",
       "channelEmail": "Email ({{email}})",
       "channelPhone": "Телефон",
       "channelMessengers": "Мессенджеры",
       "channelsRequired": "Выберите хотя бы один канал связи",
       "addPhone": "Добавить телефон",
       "removePhone": "Удалить телефон",
+      "removePhoneConfirm": "Удалить этот номер телефона?",
+      "phonesEmpty": "Телефонов ещё нет. Нажмите «+», чтобы добавить.",
       "phone": "Номер телефона",
       "primaryPhone": "Основной",
       "errors": {

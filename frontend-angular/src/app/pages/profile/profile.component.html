@@ -1,9 +1,4 @@
 <section class="profile-page" [class.profile-page--handset]="isHandset()">
-  <header class="profile-page__header">
-    <h1 class="page__title">{{ 'pages.profile.title' | translate }}</h1>
-    <p class="profile-page__hint">{{ 'pages.profile.subtitle' | translate }}</p>
-  </header>
-
   @if (isLoading()) {
     <p>{{ 'pages.profile.loading' | translate }}</p>
   } @else if (loadError(); as err) {
@@ -13,135 +8,243 @@
     </button>
   } @else {
     <form class="profile-page__form" [formGroup]="form" (ngSubmit)="save()">
-      <section class="profile-page__section">
-        <h2>{{ 'pages.profile.sectionIdentity' | translate }}</h2>
-        <div class="profile-page__grid">
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'pages.profile.lastName' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="lastName"
-              maxlength="128"
-              (input)="onPersonNameInput('lastName', $event)"
-            />
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'pages.profile.firstName' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="firstName"
-              maxlength="128"
-              (input)="onPersonNameInput('firstName', $event)"
-            />
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'pages.profile.patronymic' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="patronymic"
-              maxlength="128"
-              (input)="onPersonNameInput('patronymic', $event)"
-            />
-          </mat-form-field>
-        </div>
-      </section>
+      <mat-card appearance="outlined" class="profile-page__card">
+        <mat-card-header class="profile-page__card-header">
+          <mat-card-title class="profile-page__card-title">
+            {{ 'pages.profile.title' | translate }}
+          </mat-card-title>
+        </mat-card-header>
 
-      <section class="profile-page__section">
-        <h2>{{ 'pages.profile.sectionPersonType' | translate }}</h2>
-        <mat-radio-group
-          formControlName="personType"
-          class="profile-page__radios"
-          (change)="onPersonTypeChange()"
-        >
-          <mat-radio-button value="INDIVIDUAL">
-            {{ 'pages.profile.personTypeIndividual' | translate }}
-          </mat-radio-button>
-          <mat-radio-button value="LEGAL_ENTITY_REPRESENTATIVE">
-            {{ 'pages.profile.personTypeLegal' | translate }}
-          </mat-radio-button>
-        </mat-radio-group>
+        <mat-card-content class="profile-page__card-content">
+          <div class="profile-page__columns">
+            <!-- Ліва колонка: секції без вкладених карток -->
+            <div class="profile-page__column">
+              <section class="profile-page__section">
+                <h2 class="profile-page__section-title">
+                  {{ 'pages.profile.sectionIdentity' | translate }}
+                </h2>
+                <div class="profile-page__grid">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>{{ 'pages.profile.lastName' | translate }}</mat-label>
+                    <input
+                      matInput
+                      formControlName="lastName"
+                      maxlength="128"
+                      (input)="onPersonNameInput('lastName', $event)"
+                    />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>{{ 'pages.profile.firstName' | translate }}</mat-label>
+                    <input
+                      matInput
+                      formControlName="firstName"
+                      maxlength="128"
+                      (input)="onPersonNameInput('firstName', $event)"
+                    />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>{{ 'pages.profile.patronymic' | translate }}</mat-label>
+                    <input
+                      matInput
+                      formControlName="patronymic"
+                      maxlength="128"
+                      (input)="onPersonNameInput('patronymic', $event)"
+                    />
+                  </mat-form-field>
+                </div>
+              </section>
 
-        @if (isLegalEntity()) {
-          <mat-form-field appearance="outline" class="profile-page__edrpou">
-            <mat-label>{{ 'pages.profile.edrpou' | translate }}</mat-label>
-            <input matInput formControlName="legalEntityEdrpou" maxlength="10" />
-            <mat-hint>{{ 'pages.profile.edrpouHint' | translate }}</mat-hint>
-          </mat-form-field>
-        }
-      </section>
+              <section class="profile-page__section">
+                <h2 class="profile-page__section-title">
+                  {{ 'pages.profile.sectionPersonType' | translate }}
+                </h2>
+                <mat-radio-group
+                  formControlName="personType"
+                  class="profile-page__radios"
+                  (change)="onPersonTypeChange()"
+                >
+                  <mat-radio-button value="INDIVIDUAL">
+                    {{ 'pages.profile.personTypeIndividual' | translate }}
+                  </mat-radio-button>
+                  <mat-radio-button value="LEGAL_ENTITY_REPRESENTATIVE">
+                    {{ 'pages.profile.personTypeLegal' | translate }}
+                  </mat-radio-button>
+                </mat-radio-group>
 
-      <section class="profile-page__section">
-        <h2>{{ 'pages.profile.sectionChannels' | translate }}</h2>
-        <div class="profile-page__channels">
-          <mat-checkbox formControlName="channelEmail">
-            {{ 'pages.profile.channelEmail' | translate: { email: userEmail() } }}
-          </mat-checkbox>
-          <mat-checkbox formControlName="channelPhone">
-            {{ 'pages.profile.channelPhone' | translate }}
-          </mat-checkbox>
-          <mat-checkbox formControlName="channelMessengers">
-            {{ 'pages.profile.channelMessengers' | translate }}
-          </mat-checkbox>
-        </div>
-      </section>
+                <!-- Завжди видно; активне лише для представника юрособи -->
+                <mat-form-field
+                  appearance="outline"
+                  class="profile-page__edrpou"
+                  subscriptSizing="dynamic"
+                >
+                  <mat-label>{{ 'pages.profile.edrpou' | translate }}</mat-label>
+                  <input matInput formControlName="legalEntityEdrpou" maxlength="10" />
+                  <mat-hint>
+                    {{
+                      (isLegalEntity()
+                        ? 'pages.profile.edrpouHint'
+                        : 'pages.profile.edrpouDisabledHint'
+                      ) | translate
+                    }}
+                  </mat-hint>
+                </mat-form-field>
+              </section>
 
-      <section class="profile-page__section" formArrayName="phones">
-        <div class="profile-page__phones-header">
-          <h2>{{ 'pages.profile.sectionPhones' | translate }}</h2>
+              <section class="profile-page__section">
+                <h2 class="profile-page__section-title">
+                  {{ 'pages.profile.sectionChannels' | translate }}
+                </h2>
+                <div class="profile-page__channels">
+                  <mat-checkbox formControlName="channelEmail">
+                    {{ 'pages.profile.channelEmail' | translate: { email: userEmail() } }}
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="channelPhone">
+                    {{ 'pages.profile.channelPhone' | translate }}
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="channelMessengers">
+                    {{ 'pages.profile.channelMessengers' | translate }}
+                  </mat-checkbox>
+                </div>
+              </section>
+            </div>
+
+            <!-- Права колонка: телефони -->
+            <div class="profile-page__column profile-page__column--phones" formArrayName="phones">
+              <section class="profile-page__section profile-page__section--phones">
+                <div class="profile-page__phones-header">
+                  <h2 class="profile-page__section-title">
+                    {{ 'pages.profile.sectionPhones' | translate }}
+                  </h2>
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    type="button"
+                    class="admin-list-toolbar__icon-action"
+                    (click)="addPhone()"
+                    [disabled]="phones.length >= 5"
+                    [attr.aria-label]="'pages.profile.addPhone' | translate"
+                    [matTooltip]="'pages.profile.addPhone' | translate"
+                  >
+                    <mat-icon aria-hidden="true">add</mat-icon>
+                  </button>
+                </div>
+
+                @if (phones.length === 0) {
+                  <p class="profile-page__phones-empty">
+                    {{ 'pages.profile.phonesEmpty' | translate }}
+                  </p>
+                } @else {
+                  <div class="profile-page__phones-list">
+                    @for (phoneCtrl of phones.controls; track $index; let i = $index) {
+                      <div class="profile-page__phone-row" [formGroupName]="i">
+                        <div class="profile-page__phone-body">
+                          <div class="profile-page__phone-main">
+                            <mat-form-field
+                              appearance="outline"
+                              class="profile-page__phone-input"
+                              subscriptSizing="dynamic"
+                            >
+                              <mat-label>{{ 'pages.profile.phone' | translate }}</mat-label>
+                              <input
+                                matInput
+                                formControlName="phone"
+                                maxlength="32"
+                                placeholder="+380..."
+                              />
+                            </mat-form-field>
+                            <mat-radio-button
+                              class="profile-page__phone-primary"
+                              [checked]="phoneCtrl.get('primary')?.value"
+                              (change)="setPrimary(i)"
+                            >
+                              {{ 'pages.profile.primaryPhone' | translate }}
+                            </mat-radio-button>
+                          </div>
+
+                          <div class="profile-page__phone-flags">
+                            <mat-checkbox formControlName="telegram">
+                              <span class="profile-page__messenger">
+                                <svg
+                                  class="profile-page__messenger-icon profile-page__messenger-icon--telegram"
+                                  viewBox="0 0 24 24"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"
+                                  />
+                                </svg>
+                                Telegram
+                              </span>
+                            </mat-checkbox>
+                            <mat-checkbox formControlName="whatsapp">
+                              <span class="profile-page__messenger">
+                                <svg
+                                  class="profile-page__messenger-icon profile-page__messenger-icon--whatsapp"
+                                  viewBox="0 0 24 24"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
+                                  />
+                                </svg>
+                                WhatsApp
+                              </span>
+                            </mat-checkbox>
+                            <mat-checkbox formControlName="viber">
+                              <span class="profile-page__messenger">
+                                <svg
+                                  class="profile-page__messenger-icon profile-page__messenger-icon--viber"
+                                  viewBox="0 0 24 24"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    d="M11.4 0C9.405.028 5.334.344 3.017 2.626 1.062 4.63.016 7.44 0 11.4v.024c0 .54.012 3.9 2.268 6.444l.048.06-.96 3.564c-.072.276 0 .54.216.72a.68.68 0 0 0 .42.156c.072 0 .156-.012.24-.036l3.672-1.32.084.048C7.848 22.056 9.564 22.8 11.4 22.8h.024c3.936-.012 6.744-1.068 8.724-3.024 2.292-2.328 2.604-6.408 2.628-8.376V11.4c-.024-3.96-1.068-6.768-3.024-8.748C17.784 1.056 14.364.012 11.424 0h-.024zm.048 1.824h.012c2.628.012 5.568.9 7.212 2.556 1.632 1.644 2.532 4.38 2.556 7.02v.012c-.024 1.764-.3 5.412-2.196 7.332-1.632 1.608-4.068 2.496-7.584 2.508h-.012c-1.584 0-3.072-.648-4.8-1.824l-.216-.144-.252.096-2.436.876.66-2.436.12-.432-.3-.336c-1.8-2.016-2.196-4.824-2.196-6.64v-.012c.012-2.64.912-5.376 2.556-7.02 1.632-1.644 3.96-2.532 7.176-2.556zm-3.48 3.54c-.192.012-.48.096-.696.48-.228.396-.852 1.668-.852 3.24 0 1.572.876 3.132.996 3.348.12.216 1.704 2.736 4.188 3.732 2.052.828 2.472.66 2.916.624.444-.036 1.44-.588 1.644-1.164.204-.576.204-1.068.144-1.176-.06-.108-.228-.18-.48-.312-.252-.132-1.44-.708-1.668-.792-.228-.084-.396-.12-.564.132-.168.252-.648.792-.792.96-.144.168-.288.18-.54.06-.252-.12-1.056-.39-2.016-1.236-.744-.66-1.248-1.476-1.392-1.728-.144-.252-.012-.388.108-.516.108-.108.252-.288.372-.432.12-.144.168-.24.252-.408.084-.168.036-.312-.024-.444-.06-.132-.564-1.356-.768-1.86-.192-.468-.396-.48-.564-.492z"
+                                  />
+                                </svg>
+                                Viber
+                              </span>
+                            </mat-checkbox>
+                          </div>
+                        </div>
+
+                        <button
+                          mat-icon-button
+                          type="button"
+                          class="profile-page__phone-remove"
+                          (click)="removePhone(i)"
+                          [matTooltip]="'pages.profile.removePhone' | translate"
+                          [attr.aria-label]="'pages.profile.removePhone' | translate"
+                        >
+                          <mat-icon aria-hidden="true">delete</mat-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
+              </section>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions align="end" class="profile-page__footer">
           <button
             mat-stroked-button
             type="button"
-            (click)="addPhone()"
-            [disabled]="phones.length >= 5"
+            (click)="reload()"
+            [disabled]="isSaving() || !isDirty()"
           >
-            <mat-icon fontIcon="add" aria-hidden="true"></mat-icon>
-            {{ 'pages.profile.addPhone' | translate }}
+            {{ 'pages.profile.cancel' | translate }}
           </button>
-        </div>
-
-        @for (phoneCtrl of phones.controls; track $index; let i = $index) {
-          <div class="profile-page__phone-row" [formGroupName]="i">
-            <mat-form-field appearance="outline" class="profile-page__phone-input">
-              <mat-label>{{ 'pages.profile.phone' | translate }}</mat-label>
-              <input matInput formControlName="phone" maxlength="32" placeholder="+380..." />
-            </mat-form-field>
-            <div class="profile-page__phone-flags">
-              <mat-checkbox formControlName="telegram">Telegram</mat-checkbox>
-              <mat-checkbox formControlName="whatsapp">WhatsApp</mat-checkbox>
-              <mat-checkbox formControlName="viber">Viber</mat-checkbox>
-              <mat-radio-button
-                [checked]="phoneCtrl.get('primary')?.value"
-                (change)="setPrimary(i)"
-              >
-                {{ 'pages.profile.primaryPhone' | translate }}
-              </mat-radio-button>
-            </div>
-            <button
-              mat-icon-button
-              type="button"
-              color="warn"
-              (click)="removePhone(i)"
-              [attr.aria-label]="'pages.profile.removePhone' | translate"
-            >
-              <mat-icon fontIcon="delete" aria-hidden="true"></mat-icon>
-            </button>
-          </div>
-        }
-      </section>
-
-      <div class="profile-page__actions">
-        <button mat-stroked-button type="button" (click)="reload()" [disabled]="isSaving()">
-          {{ 'pages.profile.cancel' | translate }}
-        </button>
-        <button
-          mat-flat-button
-          color="primary"
-          type="submit"
-          [disabled]="isSaving() || form.invalid"
-        >
-          {{ 'pages.profile.save' | translate }}
-        </button>
-      </div>
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="isSaving() || !isDirty()"
+          >
+            {{ 'pages.profile.save' | translate }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
     </form>
   }
 </section>

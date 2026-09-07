@@ -1,11 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
   computed,
   inject,
   signal
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import {
   FormArray,
@@ -14,12 +16,15 @@ import {
   Validators
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   ContactChannelContract,
@@ -31,6 +36,7 @@ import {
 import { LayoutService } from '../../core/layout';
 import { AuthService } from '../../core/services/auth.service';
 import { extractApiError } from '../../core/utils/api-error';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
 import { sanitizeDriverPersonNameInput } from '../admin-drivers/driver-person-name.util';
 import { firstValueFrom } from 'rxjs';
@@ -43,11 +49,13 @@ import { firstValueFrom } from 'rxjs';
     ReactiveFormsModule,
     TranslateModule,
     MatButtonModule,
+    MatCardModule,
     MatCheckboxModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTooltipModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -58,12 +66,15 @@ export class ProfileComponent implements OnInit {
   private readonly profileApi = inject(UserProfileApiService);
   private readonly authService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
   private readonly translate = inject(TranslateService);
   private readonly layout = inject(LayoutService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly isHandset = this.layout.isHandset;
   readonly isLoading = signal(true);
   readonly isSaving = signal(false);
+  readonly isDirty = signal(false);
   readonly loadError = signal<string | null>(null);
   readonly userEmail = computed(() => this.authService.user()?.email ?? '');
 
@@ -72,12 +83,18 @@ export class ProfileComponent implements OnInit {
     firstName: ['', [Validators.required, Validators.maxLength(128)]],
     patronymic: ['', [Validators.maxLength(128)]],
     personType: this.formBuilder.nonNullable.control<PersonTypeContract>('INDIVIDUAL'),
-    legalEntityEdrpou: ['', [Validators.maxLength(10)]],
+    legalEntityEdrpou: [{ value: '', disabled: true }, [Validators.maxLength(10)]],
     channelEmail: [true],
     channelPhone: [false],
     channelMessengers: [false],
     phones: this.formBuilder.array([])
   });
+
+  constructor() {
+    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.isDirty.set(this.form.dirty);
+    });
+  }
 
   ngOnInit(): void {
     void this.reload();
@@ -96,12 +113,14 @@ export class ProfileComponent implements OnInit {
     const sanitized = sanitizeDriverPersonNameInput(input.value);
     this.form.controls[controlName].setValue(sanitized, { emitEvent: false });
     input.value = sanitized;
+    this.form.controls[controlName].markAsDirty();
+    this.isDirty.set(true);
   }
 
   onPersonTypeChange(): void {
-    if (!this.isLegalEntity()) {
-      this.form.controls.legalEntityEdrpou.setValue('');
-    }
+    this.syncLegalEntityEdrpouState({ clearWhenIndividual: true });
+    this.form.markAsDirty();
+    this.isDirty.set(true);
   }
 
   addPhone(): void {
@@ -113,23 +132,39 @@ export class ProfileComponent implements OnInit {
     if (isFirst) {
       this.form.controls.channelPhone.setValue(true);
     }
+    this.form.markAsDirty();
+    this.isDirty.set(true);
   }
 
-  removePhone(index: number): void {
-    this.phones.removeAt(index);
-    if (this.phones.length === 0) {
+  async removePhone(index: number): Promise<void> {
+    const ok = await firstValueFrom(
+      this.dialog
+        .open(ConfirmDialogComponent, {
+          data: { messageKey: 'pages.profile.removePhoneConfirm' }
+        })
+        .afterClosed()
+    );
+    if (!ok) {
       return;
     }
-    const hasPrimary = this.phones.controls.some((c) => c.get('primary')?.value === true);
-    if (!hasPrimary) {
-      this.phones.at(0).get('primary')?.setValue(true);
+
+    this.phones.removeAt(index);
+    if (this.phones.length > 0) {
+      const hasPrimary = this.phones.controls.some((c) => c.get('primary')?.value === true);
+      if (!hasPrimary) {
+        this.phones.at(0).get('primary')?.setValue(true, { emitEvent: false });
+      }
     }
+    this.form.markAsDirty();
+    this.isDirty.set(true);
   }
 
   setPrimary(index: number): void {
     this.phones.controls.forEach((ctrl, i) => {
       ctrl.get('primary')?.setValue(i === index, { emitEvent: false });
     });
+    this.form.markAsDirty();
+    this.isDirty.set(true);
   }
 
   async reload(): Promise<void> {
@@ -147,14 +182,18 @@ export class ProfileComponent implements OnInit {
   }
 
   async save(): Promise<void> {
-    if (this.form.invalid || this.isSaving()) {
+    if (this.isSaving() || !this.isDirty()) {
+      return;
+    }
+
+    const clientError = this.validateClient();
+    if (clientError) {
       this.form.markAllAsTouched();
+      showAppSnack(this.snackBar, this.translate, clientError, 'error');
       return;
     }
+
     const payload = this.toRequest();
-    if (!payload) {
-      return;
-    }
     this.isSaving.set(true);
     try {
       const saved = await this.profileApi.putMine(payload);
@@ -194,6 +233,23 @@ export class ProfileComponent implements OnInit {
         )
       );
     }
+    this.syncLegalEntityEdrpouState({ clearWhenIndividual: false });
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.isDirty.set(false);
+  }
+
+  /** ЄДРПОУ завжди в формі; редагування лише для представника юрособи. */
+  private syncLegalEntityEdrpouState(options: { clearWhenIndividual: boolean }): void {
+    const ctrl = this.form.controls.legalEntityEdrpou;
+    if (this.isLegalEntity()) {
+      ctrl.enable({ emitEvent: false });
+      return;
+    }
+    if (options.clearWhenIndividual) {
+      ctrl.setValue('', { emitEvent: false });
+    }
+    ctrl.disable({ emitEvent: false });
   }
 
   private createPhoneGroup(
@@ -214,7 +270,43 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private toRequest(): UpdateUserProfileRequest | null {
+  /** Клієнтська перевірка перед відправкою; повертає ключ i18n або null. */
+  private validateClient(): string | null {
+    if (this.form.invalid) {
+      return 'pages.profile.errors.validation';
+    }
+
+    const raw = this.form.getRawValue();
+    const hasChannel = raw.channelEmail || raw.channelPhone || raw.channelMessengers;
+    if (!hasChannel) {
+      return 'pages.profile.channelsRequired';
+    }
+
+    const phoneRows = raw.phones as {
+      phone: string;
+      telegram: boolean;
+      whatsapp: boolean;
+      viber: boolean;
+    }[];
+
+    if (raw.channelPhone) {
+      const hasPhone = phoneRows.some((p) => p.phone.trim().length > 0);
+      if (!hasPhone) {
+        return 'pages.profile.errors.channelPhoneRequired';
+      }
+    }
+
+    if (raw.channelMessengers) {
+      const hasMessenger = phoneRows.some((p) => p.telegram || p.whatsapp || p.viber);
+      if (!hasMessenger) {
+        return 'pages.profile.errors.channelMessengerRequired';
+      }
+    }
+
+    return null;
+  }
+
+  private toRequest(): UpdateUserProfileRequest {
     const raw = this.form.getRawValue();
     const channels: ContactChannelContract[] = [];
     if (raw.channelEmail) {
@@ -225,10 +317,6 @@ export class ProfileComponent implements OnInit {
     }
     if (raw.channelMessengers) {
       channels.push('MESSENGERS');
-    }
-    if (channels.length === 0) {
-      showAppSnack(this.snackBar, this.translate, 'pages.profile.channelsRequired', 'error');
-      return null;
     }
 
     const personType = raw.personType;
