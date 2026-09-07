@@ -1,9 +1,15 @@
 <app-toolbar></app-toolbar>
 
-<div class="content">  
+<div class="content">
+  @if (showProfileBanner()) {
+    <div class="profile-incomplete-banner" role="status">
+      <span>{{ 'pages.profile.incompleteBanner' | translate }}</span>
+      <a mat-stroked-button routerLink="/profile">
+        {{ 'pages.profile.openProfile' | translate }}
+      </a>
+    </div>
+  }
   <router-outlet></router-outlet>
 </div>
 
 <app-footer></app-footer>
-
-

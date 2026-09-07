@@ -41,6 +41,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/main/main.component').then((m) => m.MainComponent)
   },
   {
+    path: 'profile',
+    canActivate: [authAvailabilityGuard, serviceStopGuard, authGuard],
+    data: { roles: ['admin', 'manager', 'driver', 'user'] },
+    loadComponent: () => import('./pages/profile/profile.component').then((m) => m.ProfileComponent)
+  },
+  {
     path: 'stop-service',
     loadComponent: () => import('./pages/stop-service/stop-service.component').then((m) => m.StopServiceComponent)
   },
@@ -109,7 +115,7 @@ export const routes: Routes = [
   {
     path: 'admin/users',
     canActivate: [authAvailabilityGuard, serviceStopGuard, authGuard],
-    data: { roles: ['admin'] },
+    data: { roles: ['admin', 'manager'] },
     loadComponent: () =>
       import('./pages/admin-users/admin-users.component').then((m) => m.AdminUsersComponent)
   },

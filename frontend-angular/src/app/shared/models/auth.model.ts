@@ -1,9 +1,35 @@
 export type UserRole = 'admin' | 'manager' | 'driver' | 'user';
 
+export type PersonType = 'INDIVIDUAL' | 'LEGAL_ENTITY_REPRESENTATIVE';
+
+export type ContactChannel = 'EMAIL' | 'PHONE' | 'MESSENGERS';
+
+export interface AuthUserContactPhone {
+  id: string;
+  phone: string;
+  primary: boolean;
+  telegram: boolean;
+  whatsapp: boolean;
+  viber: boolean;
+}
+
+export interface AuthUserProfile {
+  lastName: string | null;
+  firstName: string | null;
+  patronymic: string | null;
+  personType: PersonType | null;
+  legalEntityEdrpou: string | null;
+  preferredChannels: ContactChannel[];
+  phones: AuthUserContactPhone[];
+  profileComplete: boolean;
+}
+
 export interface AuthUser {
   id: string;
   email: string;
   role: UserRole;
+  displayName?: string;
+  profile?: AuthUserProfile;
 }
 
 export interface LoginRequest {

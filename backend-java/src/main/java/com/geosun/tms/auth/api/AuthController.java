@@ -148,7 +148,7 @@ public class AuthController {
   @Operation(summary = "Current user profile")
   @SecurityRequirement(name = OpenApiConfig.BEARER_SCHEME)
   @GetMapping("/me")
-  public UserPublicDto me(@AuthenticationPrincipal UserPrincipal principal) {
+  public UserPublicDto me(@AuthenticationPrincipal @NonNull UserPrincipal principal) {
     return authService.me(principal);
   }
 }

@@ -2,15 +2,19 @@ package com.geosun.tms.auth.service;
 
 import com.geosun.tms.auth.domain.user.Role;
 import com.geosun.tms.auth.domain.user.User;
+import com.geosun.tms.auth.dto.mapper.UserDtoMapper;
 import com.geosun.tms.auth.dto.request.AdminUserListQuery;
 import com.geosun.tms.auth.dto.response.PageResponse;
 import com.geosun.tms.auth.dto.response.UserAdminDto;
+import com.geosun.tms.auth.dto.response.UserProfileDto;
 import com.geosun.tms.auth.exception.ApiException;
 import com.geosun.tms.auth.repository.RefreshTokenRepository;
 import com.geosun.tms.auth.repository.UserRepository;
 import com.geosun.tms.auth.repository.UserSpecifications;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -32,14 +36,17 @@ public class AdminUserService {
   private final UserRepository userRepository;
   private final RefreshTokenRepository refreshTokenRepository;
   private final SuperAdminPasswordService superAdminPasswordService;
+  private final UserProfileService userProfileService;
 
   public AdminUserService(
       UserRepository userRepository,
       RefreshTokenRepository refreshTokenRepository,
-      SuperAdminPasswordService superAdminPasswordService) {
+      SuperAdminPasswordService superAdminPasswordService,
+      UserProfileService userProfileService) {
     this.userRepository = userRepository;
     this.refreshTokenRepository = refreshTokenRepository;
     this.superAdminPasswordService = superAdminPasswordService;
+    this.userProfileService = userProfileService;
   }
 
   @Transactional(readOnly = true)
@@ -50,9 +57,20 @@ public class AdminUserService {
     Sort sort = resolveSort(query.sort(), query.order());
     Page<User> result =
         userRepository.findAll(
-            UserSpecifications.adminFilter(query.email(), query.role(), query.active(), deleted),
+            UserSpecifications.adminFilter(
+                query.email(), query.name(), query.role(), query.active(), deleted),
             PageRequest.of(page, size, sort));
-    List<UserAdminDto> content = result.getContent().stream().map(this::toDto).toList();
+    List<String> ids =
+        result.getContent().stream().map(u -> Objects.requireNonNull(u.getId())).toList();
+    Map<String, UserProfileDto> profiles = userProfileService.getByUserIds(ids);
+    List<UserAdminDto> content =
+        result.getContent().stream()
+            .map(
+                user ->
+                    UserDtoMapper.toAdminDto(
+                        Objects.requireNonNull(user),
+                        profiles.getOrDefault(user.getId(), UserProfileDto.empty())))
+            .toList();
     return new PageResponse<>(
         content,
         result.getTotalElements(),
@@ -63,7 +81,9 @@ public class AdminUserService {
 
   @Transactional(readOnly = true)
   public UserAdminDto getById(@NonNull String rawId) {
-    return toDto(requireUser(rawId));
+    User user = requireUser(rawId);
+    return UserDtoMapper.toAdminDto(
+        user, userProfileService.getByUserId(Objects.requireNonNull(user.getId())));
   }
 
   @Transactional
@@ -85,7 +105,7 @@ public class AdminUserService {
     }
     user.setRole(newRole);
     refreshTokenRepository.revokeAllActiveByUserId(user.getId(), Instant.now());
-    return toDto(userRepository.save(user));
+    return toDto(userRepository.save(Objects.requireNonNull(user)));
   }
 
   @Transactional
@@ -104,7 +124,7 @@ public class AdminUserService {
     if (!active) {
       refreshTokenRepository.revokeAllActiveByUserId(user.getId(), Instant.now());
     }
-    return toDto(userRepository.save(user));
+    return toDto(userRepository.save(Objects.requireNonNull(user)));
   }
 
   @Transactional
@@ -121,7 +141,7 @@ public class AdminUserService {
     user.setDeletedAt(Instant.now());
     user.setActive(false);
     refreshTokenRepository.revokeAllActiveByUserId(user.getId(), Instant.now());
-    userRepository.save(user);
+    userRepository.save(Objects.requireNonNull(user));
   }
 
   /**
@@ -142,7 +162,7 @@ public class AdminUserService {
     user.setDeleted(false);
     user.setDeletedAt(null);
     user.setActive(true);
-    return toDto(userRepository.save(user));
+    return toDto(userRepository.save(Objects.requireNonNull(user)));
   }
 
   private User requireUser(@NonNull String rawId) {
@@ -187,15 +207,7 @@ public class AdminUserService {
   }
 
   private UserAdminDto toDto(User user) {
-    return new UserAdminDto(
-        user.getId(),
-        user.getEmail(),
-        user.getRole().name(),
-        user.isActive(),
-        user.isDeleted(),
-        user.isEmailVerified(),
-        user.getCreatedAt(),
-        user.getUpdatedAt(),
-        user.getDeletedAt());
+    return UserDtoMapper.toAdminDto(
+        user, userProfileService.getByUserId(Objects.requireNonNull(user.getId())));
   }
 }

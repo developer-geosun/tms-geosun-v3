@@ -72,6 +72,15 @@
           <button
             mat-mini-fab
             type="button"
+            class="auth-button"
+            (click)="navigateToProfile()"
+            [attr.aria-label]="'navigation.profile' | translate"
+            [attr.title]="'navigation.profile' | translate">
+            <mat-icon fontIcon="person" aria-hidden="true"></mat-icon>
+          </button>
+          <button
+            mat-mini-fab
+            type="button"
             class="auth-button register-button"
             (click)="logout()"
             [attr.aria-label]="'auth.logout' | translate"

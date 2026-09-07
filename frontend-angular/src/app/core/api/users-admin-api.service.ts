@@ -20,6 +20,9 @@ export class UsersAdminApiService {
     if (listParams.email?.trim()) {
       params = params.set('email', listParams.email.trim());
     }
+    if (listParams.name?.trim()) {
+      params = params.set('name', listParams.name.trim());
+    }
     if (listParams.role) {
       params = params.set('role', listParams.role);
     }

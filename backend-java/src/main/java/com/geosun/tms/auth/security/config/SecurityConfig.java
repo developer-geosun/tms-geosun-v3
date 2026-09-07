@@ -30,7 +30,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
- * Stateless JWT, публічні auth-маршрути; /admin/users/**, /admin/stored-files/**, /admin/super-admin/** та /admin/document-types/** лише для ADMIN.
+ * Stateless JWT, публічні auth-маршрути; GET /admin/users — ADMIN/MANAGER; мутації users і інші admin — ADMIN.
  */
 @Configuration
 @EnableWebSecurity
@@ -77,6 +77,10 @@ public class SecurityConfig {
                     "/api/v1/auth/reset-password",
                     "/api/v1/auth/refresh")
                 .permitAll()
+                // Список і картка користувачів — ADMIN і MANAGER (лише читання контактів)
+                .requestMatchers(HttpMethod.GET, "/api/v1/admin/users", "/api/v1/admin/users/*")
+                .hasAnyRole("ADMIN", "MANAGER")
+                // Мутації обліковок і PUT профілю — лише ADMIN
                 .requestMatchers("/api/v1/admin/users", "/api/v1/admin/users/**")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/admin/stored-files", "/api/v1/admin/stored-files/**")

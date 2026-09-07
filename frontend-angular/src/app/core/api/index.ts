@@ -18,6 +18,8 @@ export * from './toll-tariff-sets-contracts.model';
 export * from './freight-cost-calculations-contracts.model';
 export * from './users-admin-api.service';
 export * from './users-admin-contracts.model';
+export * from './user-profile-api.service';
+export * from './user-profile-contracts.model';
 export * from './stored-files-api.service';
 export * from './stored-files-contracts.model';
 export * from './vehicles-api.service';

@@ -60,6 +60,10 @@ export class BackendApiService {
     return this.build('/admin/users');
   }
 
+  get myProfile(): string {
+    return this.build('/users/me/profile');
+  }
+
   get adminStoredFiles(): string {
     return this.build('/admin/stored-files');
   }

@@ -8,6 +8,11 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="filter-users-dialog__field">
+      <mat-label>{{ 'pages.adminUsers.name' | translate }}</mat-label>
+      <input matInput formControlName="name" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-users-dialog__field">
       <mat-label>{{ 'pages.adminUsers.role' | translate }}</mat-label>
       <mat-select formControlName="role">
         <mat-option value="">{{ 'pages.adminUsers.any' | translate }}</mat-option>

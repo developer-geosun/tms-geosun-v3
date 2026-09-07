@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
   signal,
@@ -40,6 +41,7 @@ import {
   FilterUsersDialogComponent,
   FilterUsersDialogResult
 } from './filter-users-dialog.component';
+import { UserProfileDialogComponent } from './user-profile-dialog.component';
 
 @Component({
   selector: 'app-admin-users',
@@ -79,6 +81,7 @@ export class AdminUsersComponent implements AfterViewInit {
   readonly roleOptions: AdminUserRole[] = ['USER', 'MANAGER', 'DRIVER', 'ADMIN'];
   readonly pageSizeOptions = [5, 10, 15, 25, 50];
   readonly displayedColumns = [
+    'displayName',
     'email',
     'role',
     'active',
@@ -86,6 +89,9 @@ export class AdminUsersComponent implements AfterViewInit {
     'createdAt',
     'actions'
   ] as const;
+
+  /** MANAGER лише читає контакти; мутації обліковки — лише ADMIN. */
+  readonly canManageUsers = computed(() => this.authService.hasAnyRole(['admin']));
 
   readonly users = signal<UserAdminContractDto[]>([]);
   readonly totalElements = signal(0);
@@ -102,6 +108,7 @@ export class AdminUsersComponent implements AfterViewInit {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     email: [''],
+    name: [''],
     role: ['' as '' | AdminUserRole],
     active: ['' as '' | 'true' | 'false'],
     deleted: ['false' as '' | 'true' | 'false']
@@ -163,6 +170,7 @@ export class AdminUsersComponent implements AfterViewInit {
       const filters = this.filterForm.getRawValue();
       const page = await this.usersApi.list({
         email: filters.email || undefined,
+        name: filters.name || undefined,
         role: filters.role || undefined,
         active: filters.active === '' ? undefined : filters.active === 'true',
         deleted: filters.deleted === '' ? undefined : filters.deleted === 'true',
@@ -191,6 +199,7 @@ export class AdminUsersComponent implements AfterViewInit {
   async resetFilters(): Promise<void> {
     this.filterForm.reset({
       email: '',
+      name: '',
       role: '',
       active: '',
       deleted: 'false'
@@ -229,10 +238,29 @@ export class AdminUsersComponent implements AfterViewInit {
     const filters = this.filterForm.getRawValue();
     return (
       !!filters.email.trim() ||
+      !!filters.name.trim() ||
       !!filters.role ||
       !!filters.active ||
       filters.deleted !== 'false'
     );
+  }
+
+  async openProfile(row: UserAdminContractDto): Promise<void> {
+    const ref = this.dialog.open(
+      UserProfileDialogComponent,
+      getHandsetFriendlyDialogConfig({
+        width: 'min(720px, calc(100vw - 24px))',
+        maxHeight: 'min(92vh, 900px)',
+        data: {
+          user: row,
+          readonly: !this.canManageUsers()
+        }
+      })
+    );
+    const changed = await firstValueFrom(ref.afterClosed());
+    if (changed) {
+      await this.reload();
+    }
   }
 
   onPage(event: PageEvent): void {

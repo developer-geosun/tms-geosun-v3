@@ -99,6 +99,12 @@ export class ToolbarComponent {
       roles: ['admin', 'manager', 'driver', 'user'] as const
     },
     {
+      route: '/profile',
+      labelKey: 'navigation.profile',
+      icon: 'person',
+      roles: ['admin', 'manager', 'driver', 'user'] as const
+    },
+    {
       route: '/route-builder',
       labelKey: 'pages.routeBuilder.newRoute',
       icon: 'add',
@@ -175,7 +181,7 @@ export class ToolbarComponent {
     {
       route: '/admin/users',
       labelKey: 'navigation.adminUsers',
-      roles: ['admin'] as const
+      roles: ['admin', 'manager'] as const
     },
     {
       route: '/admin/file-storage-test',
@@ -214,6 +220,10 @@ export class ToolbarComponent {
 
   navigateToLogin(): void {
     this.router.navigate(['/login']);
+  }
+
+  navigateToProfile(): void {
+    this.router.navigate(['/profile']);
   }
 
   navigateTo(route: string): void {

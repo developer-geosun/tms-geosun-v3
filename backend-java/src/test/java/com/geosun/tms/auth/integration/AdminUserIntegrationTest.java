@@ -53,7 +53,7 @@ class AdminUserIntegrationTest {
   @MockBean private JavaMailSender javaMailSender;
 
   @Test
-  void managerAndUser_forbiddenOnAdminUsers() throws Exception {
+  void managerCanListUsers_userForbidden() throws Exception {
     User manager = saveUser("manager-adm@example.com", "Secret123", Role.MANAGER);
     User plain = saveUser("user-adm@example.com", "Secret123", Role.USER);
     Session managerSession = login(manager.getEmail(), "Secret123");
@@ -62,8 +62,7 @@ class AdminUserIntegrationTest {
     mockMvc
         .perform(
             get("/api/v1/admin/users").header("Authorization", "Bearer " + managerSession.access()))
-        .andExpect(status().isForbidden())
-        .andExpect(jsonPath("$.code").value("FORBIDDEN"));
+        .andExpect(status().isOk());
     mockMvc
         .perform(
             get("/api/v1/admin/users").header("Authorization", "Bearer " + userSession.access()))

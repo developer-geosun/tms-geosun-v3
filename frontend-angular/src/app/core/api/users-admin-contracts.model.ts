@@ -1,3 +1,9 @@
+import {
+  ContactChannelContract,
+  PersonTypeContract,
+  UserProfileContractDto
+} from './user-profile-contracts.model';
+
 export type AdminUserRole = 'USER' | 'MANAGER' | 'DRIVER' | 'ADMIN';
 
 export interface UserAdminContractDto {
@@ -10,10 +16,13 @@ export interface UserAdminContractDto {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  displayName: string;
+  profile: UserProfileContractDto;
 }
 
 export interface AdminUserListParams {
   email?: string;
+  name?: string;
   role?: AdminUserRole;
   active?: boolean;
   deleted?: boolean;
@@ -32,3 +41,5 @@ export interface UpdateUserRoleContractRequest {
 export interface UpdateUserActiveContractRequest {
   active: boolean;
 }
+
+export type { ContactChannelContract, PersonTypeContract, UserProfileContractDto };

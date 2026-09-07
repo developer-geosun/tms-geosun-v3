@@ -10,6 +10,7 @@ import { AdminUserRole } from '../../core/api';
 
 export interface UserFilterValues {
   email: string;
+  name: string;
   role: '' | AdminUserRole;
   active: '' | 'true' | 'false';
   deleted: '' | 'true' | 'false';
@@ -26,6 +27,7 @@ export type FilterUsersDialogResult =
 
 const DEFAULT_FILTERS: UserFilterValues = {
   email: '',
+  name: '',
   role: '',
   active: '',
   deleted: 'false'
@@ -54,6 +56,7 @@ export class FilterUsersDialogComponent {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     email: [this.data.filters.email],
+    name: [this.data.filters.name ?? ''],
     role: [this.data.filters.role],
     active: [this.data.filters.active],
     deleted: [this.data.filters.deleted || DEFAULT_FILTERS.deleted]

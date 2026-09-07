@@ -10,7 +10,7 @@
 - Frontend на Angular 21 с маршрутизацией, i18n и auth-слоем (`AuthService`, `AuthGuard`, `AuthInterceptor`, login-page).
 - **Flutter Web client** (`frontend-flutter/`): каркас + auth (login/refresh/logout/me), i18n uk/en/ru, порт dev `:4300`. Бизнес-экраны и mobile — следующие фазы; Angular остаётся основным UI для admin и route-builder.
 - Экраны `/route-builder` (построение и сохранение маршрута), `/routes` (список и открытие сохранённых маршрутов), `/my-freight-requests` (заявки пользователя) и диалог заявки на фрахт работают через backend API.
-- Есть admin-страницы `/admin/route-requests` (очередь, ИИ-расчёт, quote), `/admin/freight-calculation-scenarios` (сценарии), `/admin/users` (управление пользователями и ролями, только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, а также `/my-trips` для водителя.
+- Есть admin-страницы `/admin/route-requests` (очередь, ИИ-расчёт, quote), `/admin/freight-calculation-scenarios` (сценарии), `/admin/users` (список/карточка с контактами: `ADMIN` и `MANAGER` read; мутации учётки и PUT профиля — только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, а также `/my-trips` для водителя и `/profile` (self-service профиль учётки для всех ролей).
 - Backend на Java 21 + Spring Boot 3 с JWT auth, refresh token rotation и RBAC.
 - Backend модуль `routes`: сохранение, чтение списка/деталей (в т.ч. `view=active|all|deleted`), soft delete, блокировка `PUT` после заявки, `duplicate`/`restore`.
 - Backend модуль `route-requests`: создание заявок, список заявок пользователя, admin очередь; пробіг по країнах у відповіді заявки — з БД до явного admin `POST .../country-breakdown` (провайдер расчёта выбирается feature flag: `here` или `geojson`).
@@ -23,7 +23,8 @@
 
 ## Основные сущности
 
-- **User**: пользователь системы.
+- **User**: пользователь системы (auth: email, роль, флаги).
+- **UserProfile**: контактная карточка учётки (ПІБ, тип лица, ЄДРПОУ, телефоны, каналы) — отдельные таблицы `user_profiles` / `user_contact_phones`, не колонки `users`.
 - **Role**: роль пользователя (`admin`, `manager`, `driver`, `user`) для RBAC.
 - **Session/Token**: access/refresh контекст для авторизации запросов.
 - **Route**: сохраненный snapshot маршрута (polyline, точки, метаданные).
@@ -40,7 +41,9 @@
 - `POST /api/v1/auth/login` — вход пользователя (`access token` + `refresh token` + профиль).
 - `POST /api/v1/auth/refresh` — обновление пары токенов (rotation).
 - `POST /api/v1/auth/logout` — завершение текущей refresh-сессии.
-- `GET /api/v1/auth/me` — профиль текущего пользователя.
+- `GET /api/v1/auth/me` — текущий пользователь: `id`, `email`, `role`, `displayName`, вложенный `profile`.
+- `GET /api/v1/users/me/profile` — свой профиль учётки.
+- `PUT /api/v1/users/me/profile` — полная замена своего профиля и телефонов.
 - `POST /api/v1/routes` — сохранить маршрут.
 - `GET /api/v1/routes/my?view=active|all|deleted` — список своих маршрутов (по умолчанию `active`).
 - `GET /api/v1/routes/my/{id}` — детали своего маршрута (в т.ч. soft-deleted для restore-потока).
@@ -57,8 +60,9 @@
 - `POST /api/v1/admin/route-requests/{id}/quotes` — создать draft quote (`ADMIN`/`MANAGER`).
 - `POST /api/v1/admin/quotes/{id}/send` — отправить quote (`ADMIN`/`MANAGER`).
 - `GET /api/v1/admin/route-requests/{id}/quotes` — получить историю quote (`ADMIN`/`MANAGER`).
-- `GET /api/v1/admin/users` — список пользователей с фильтрами и пагинацией (`ADMIN`).
-- `GET /api/v1/admin/users/{id}` — карточка пользователя (`ADMIN`).
+- `GET /api/v1/admin/users` — список пользователей с фильтрами (email, name, роль, …) и пагинацией (`ADMIN`/`MANAGER`); в ответе `displayName` + `profile`.
+- `GET /api/v1/admin/users/{id}` — карточка пользователя с профилем (`ADMIN`/`MANAGER`).
+- `PUT /api/v1/admin/users/{id}/profile` — редактирование профиля любого пользователя (`ADMIN`).
 - `PATCH /api/v1/admin/users/{id}/role` — смена роли (`ADMIN`).
 - `PATCH /api/v1/admin/users/{id}/active` — activate/deactivate (`ADMIN`).
 - `DELETE /api/v1/admin/users/{id}` — soft-delete пользователя (`ADMIN`); legacy: `DELETE /api/v1/users/{id}`.
@@ -74,7 +78,8 @@
 
 - Пароли валидируются по email/password, backend хранит password hash и роли.
 - Защищенные endpoint-ы проверяют `access token` и роли (`admin`, `manager`, `driver`, `user`).
-- Управление пользователями и ролями — только `ADMIN` (см. `docs/specs/admin-user-management.md`).
+- Управление ролями / active / soft-delete — только `ADMIN` (см. `docs/specs/admin-user-management.md`).
+- Контактный профиль учётки: self GET/PUT для любой роли; чужой GET — `ADMIN`/`MANAGER`; чужой PUT — `ADMIN` (см. `docs/specs/user-profile.md`).
 - Frontend автоматически выполняет одноразовый refresh при `401` через HTTP interceptor.
 - При неуспешном refresh frontend очищает auth state и редиректит на `/login`.
 

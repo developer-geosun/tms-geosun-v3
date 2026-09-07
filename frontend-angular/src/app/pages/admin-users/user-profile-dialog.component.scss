@@ -1,0 +1,64 @@
+@use 'breakpoints' as bp;
+
+.user-profile-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: min(560px, 100%);
+}
+
+.user-profile-dialog__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0 0 0.5rem;
+}
+
+.user-profile-dialog__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.user-profile-dialog__radios,
+.user-profile-dialog__channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.user-profile-dialog__phones-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.user-profile-dialog__phone-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.5rem;
+  align-items: start;
+  margin-bottom: 0.5rem;
+}
+
+.user-profile-dialog__flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  align-items: center;
+}
+
+@include bp.handset {
+  .user-profile-dialog__grid,
+  .user-profile-dialog__phone-row {
+    grid-template-columns: 1fr;
+  }
+}

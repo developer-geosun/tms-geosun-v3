@@ -65,6 +65,7 @@ public class AuthService {
   private final VerificationMailSender verificationMailSender;
   private final PasswordResetMailSender passwordResetMailSender;
   private final RateLimitService rateLimitService;
+  private final UserProfileService userProfileService;
 
   public AuthService(
       UserRepository userRepository,
@@ -77,7 +78,8 @@ public class AuthService {
       AppEmailProperties appEmailProperties,
       VerificationMailSender verificationMailSender,
       PasswordResetMailSender passwordResetMailSender,
-      RateLimitService rateLimitService) {
+      RateLimitService rateLimitService,
+      UserProfileService userProfileService) {
     this.userRepository = userRepository;
     this.emailVerificationTokenRepository = emailVerificationTokenRepository;
     this.passwordResetTokenRepository = passwordResetTokenRepository;
@@ -89,6 +91,7 @@ public class AuthService {
     this.verificationMailSender = verificationMailSender;
     this.passwordResetMailSender = passwordResetMailSender;
     this.rateLimitService = rateLimitService;
+    this.userProfileService = userProfileService;
   }
 
   @Transactional
@@ -360,11 +363,7 @@ public class AuthService {
 
     String access = jwtService.createAccessToken(user.getId(), next.getId());
     return new AuthTokensResponse(
-        access,
-        newRaw,
-        "Bearer",
-        jwtProperties.getExpiresSeconds(),
-        UserDtoMapper.toPublicDto(user));
+        access, newRaw, "Bearer", jwtProperties.getExpiresSeconds(), toPublicUser(user));
   }
 
   private boolean isWithinReuseGrace_(RefreshToken token) {
@@ -414,9 +413,13 @@ public class AuthService {
     return new LogoutResponse(true, "Logged out successfully");
   }
 
+  @Transactional(readOnly = true)
   public UserPublicDto me(UserPrincipal principal) {
-    return new UserPublicDto(
-        principal.getUserId(), principal.getEmail(), principal.getRole().name());
+    User user =
+        userRepository
+            .findById(Objects.requireNonNull(principal.getUserId()))
+            .orElseThrow(() -> ApiException.notFound("User not found"));
+    return toPublicUser(user);
   }
 
   private AuthTokensResponse issueTokens(User user) {
@@ -430,6 +433,11 @@ public class AuthService {
 
     String access = jwtService.createAccessToken(user.getId(), refresh.getId());
     return new AuthTokensResponse(
-        access, raw, "Bearer", jwtProperties.getExpiresSeconds(), UserDtoMapper.toPublicDto(user));
+        access, raw, "Bearer", jwtProperties.getExpiresSeconds(), toPublicUser(user));
+  }
+
+  private UserPublicDto toPublicUser(User user) {
+    return UserDtoMapper.toPublicDto(
+        user, userProfileService.getByUserId(Objects.requireNonNull(user.getId())));
   }
 }

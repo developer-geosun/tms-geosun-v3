@@ -1,0 +1,132 @@
+<h2 mat-dialog-title>{{ titleKey() | translate }}</h2>
+
+<mat-dialog-content class="user-profile-dialog">
+  <p class="user-profile-dialog__meta">
+    <strong>{{ displayName }}</strong>
+    <span>{{ userEmail }}</span>
+  </p>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="user-profile-dialog__grid">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'pages.profile.lastName' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="lastName"
+          maxlength="128"
+          (input)="onPersonNameInput('lastName', $event)"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'pages.profile.firstName' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="firstName"
+          maxlength="128"
+          (input)="onPersonNameInput('firstName', $event)"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'pages.profile.patronymic' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="patronymic"
+          maxlength="128"
+          (input)="onPersonNameInput('patronymic', $event)"
+        />
+      </mat-form-field>
+    </div>
+
+    <mat-radio-group
+      formControlName="personType"
+      class="user-profile-dialog__radios"
+      (change)="onPersonTypeChange()"
+    >
+      <mat-radio-button value="INDIVIDUAL">
+        {{ 'pages.profile.personTypeIndividual' | translate }}
+      </mat-radio-button>
+      <mat-radio-button value="LEGAL_ENTITY_REPRESENTATIVE">
+        {{ 'pages.profile.personTypeLegal' | translate }}
+      </mat-radio-button>
+    </mat-radio-group>
+
+    @if (isLegalEntity()) {
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'pages.profile.edrpou' | translate }}</mat-label>
+        <input matInput formControlName="legalEntityEdrpou" maxlength="10" />
+        <mat-hint>{{ 'pages.profile.edrpouHint' | translate }}</mat-hint>
+      </mat-form-field>
+    }
+
+    <div class="user-profile-dialog__channels">
+      <mat-checkbox formControlName="channelEmail">
+        {{ 'pages.profile.channelEmail' | translate: { email: userEmail } }}
+      </mat-checkbox>
+      <mat-checkbox formControlName="channelPhone">
+        {{ 'pages.profile.channelPhone' | translate }}
+      </mat-checkbox>
+      <mat-checkbox formControlName="channelMessengers">
+        {{ 'pages.profile.channelMessengers' | translate }}
+      </mat-checkbox>
+    </div>
+
+    <div class="user-profile-dialog__phones-header">
+      <h3>{{ 'pages.profile.sectionPhones' | translate }}</h3>
+      @if (!readonly) {
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="addPhone()"
+          [disabled]="phones.length >= 5"
+        >
+          <mat-icon fontIcon="add" aria-hidden="true"></mat-icon>
+          {{ 'pages.profile.addPhone' | translate }}
+        </button>
+      }
+    </div>
+
+    <div formArrayName="phones" class="user-profile-dialog__phones">
+      @for (phoneCtrl of phones.controls; track $index; let i = $index) {
+        <div class="user-profile-dialog__phone-row" [formGroupName]="i">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'pages.profile.phone' | translate }}</mat-label>
+            <input matInput formControlName="phone" maxlength="32" />
+          </mat-form-field>
+          <div class="user-profile-dialog__flags">
+            <mat-checkbox formControlName="telegram">Telegram</mat-checkbox>
+            <mat-checkbox formControlName="whatsapp">WhatsApp</mat-checkbox>
+            <mat-checkbox formControlName="viber">Viber</mat-checkbox>
+            <mat-radio-button
+              [checked]="phoneCtrl.get('primary')?.value"
+              (change)="setPrimary(i)"
+            >
+              {{ 'pages.profile.primaryPhone' | translate }}
+            </mat-radio-button>
+          </div>
+          @if (!readonly) {
+            <button mat-icon-button type="button" color="warn" (click)="removePhone(i)">
+              <mat-icon fontIcon="delete" aria-hidden="true"></mat-icon>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button type="button" (click)="close()">
+    {{ 'common.confirmDialog.cancel' | translate }}
+  </button>
+  @if (!readonly) {
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="save()"
+      [disabled]="isSaving() || form.invalid"
+    >
+      {{ 'pages.profile.save' | translate }}
+    </button>
+  }
+</mat-dialog-actions>

@@ -12,4 +12,6 @@ public record UserAdminDto(
     boolean emailVerified,
     Instant createdAt,
     Instant updatedAt,
-    Instant deletedAt) {}
+    Instant deletedAt,
+    String displayName,
+    UserProfileDto profile) {}

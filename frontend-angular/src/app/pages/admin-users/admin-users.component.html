@@ -55,7 +55,9 @@
             [class.user-card--deleted]="row.deleted"
             [class.user-card--self]="isCurrentUser(row)">
             <div class="user-card__header">
-              <div class="user-card__email" [attr.title]="row.email">{{ row.email }}</div>
+              <div class="user-card__email" [attr.title]="row.displayName || row.email">
+                {{ row.displayName || row.email }}
+              </div>
               @if (row.deleted) {
                 <span class="user-card__badge user-card__badge--deleted">
                   {{ 'pages.adminUsers.deleted' | translate }}
@@ -64,6 +66,12 @@
             </div>
 
             <mat-card-content class="user-card__content">
+              <div class="user-card__field user-card__field--meta">
+                <span class="user-card__label">{{ 'pages.adminUsers.email' | translate }}</span>
+                <span class="user-card__value">{{ row.email }}</span>
+              </div>
+
+              @if (canManageUsers()) {
               <div class="user-card__field">
                 <span class="user-card__label">{{ 'pages.adminUsers.role' | translate }}</span>
                 <mat-form-field appearance="outline" class="user-card__role-field" subscriptSizing="dynamic">
@@ -100,6 +108,12 @@
                   </span>
                 </div>
               </div>
+              } @else {
+              <div class="user-card__field user-card__field--meta">
+                <span class="user-card__label">{{ 'pages.adminUsers.role' | translate }}</span>
+                <span class="user-card__value">{{ ('pages.adminUsers.roles.' + row.role) | translate }}</span>
+              </div>
+              }
 
               <div class="user-card__field user-card__field--meta">
                 <span class="user-card__label">{{ 'pages.adminUsers.createdAt' | translate }}</span>
@@ -108,6 +122,18 @@
             </mat-card-content>
 
             <mat-card-actions class="user-card__actions" align="end">
+              <button
+                mat-button
+                type="button"
+                (click)="openProfile(row)"
+                [matTooltip]="
+                  (canManageUsers() ? 'pages.adminUsers.editProfile' : 'pages.adminUsers.viewProfile')
+                    | translate
+                ">
+                <mat-icon aria-hidden="true">person</mat-icon>
+                {{ 'pages.adminUsers.profile' | translate }}
+              </button>
+              @if (canManageUsers()) {
               @if (row.deleted) {
                 <button
                   mat-button
@@ -134,6 +160,7 @@
                   {{ 'pages.adminUsers.delete' | translate }}
                 </button>
               }
+              }
             </mat-card-actions>
           </mat-card>
         }
@@ -147,6 +174,13 @@
         matSort
         (matSortChange)="onSort($event)"
         class="admin-users__table">
+        <ng-container matColumnDef="displayName">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'pages.adminUsers.displayName' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.displayName || row.email }}</td>
+        </ng-container>
+
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="email">
             {{ 'pages.adminUsers.email' | translate }}
@@ -159,6 +193,7 @@
             {{ 'pages.adminUsers.role' | translate }}
           </th>
           <td mat-cell *matCellDef="let row">
+            @if (canManageUsers()) {
             <mat-form-field appearance="outline" class="admin-users__role-field" subscriptSizing="dynamic">
               @for (_ of [roleSelectEpoch()]; track _) {
                 <mat-select
@@ -171,12 +206,16 @@
                 </mat-select>
               }
             </mat-form-field>
+            } @else {
+              {{ ('pages.adminUsers.roles.' + row.role) | translate }}
+            }
           </td>
         </ng-container>
 
         <ng-container matColumnDef="active">
           <th mat-header-cell *matHeaderCellDef>{{ 'pages.adminUsers.active' | translate }}</th>
           <td mat-cell *matCellDef="let row">
+            @if (canManageUsers()) {
             <mat-slide-toggle
               [checked]="row.active"
               [disabled]="isCurrentUser(row) || row.deleted || isUpdating(row.id)"
@@ -186,6 +225,9 @@
                   ? ('pages.adminUsers.selfLocked' | translate)
                   : ''
               " />
+            } @else {
+              {{ (row.active ? 'pages.adminUsers.yes' : 'pages.adminUsers.no') | translate }}
+            }
           </td>
         </ng-container>
 
@@ -206,6 +248,17 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>{{ 'pages.adminUsers.actions' | translate }}</th>
           <td mat-cell *matCellDef="let row">
+            <button
+              mat-button
+              type="button"
+              (click)="openProfile(row)"
+              [matTooltip]="
+                (canManageUsers() ? 'pages.adminUsers.editProfile' : 'pages.adminUsers.viewProfile')
+                  | translate
+              ">
+              {{ 'pages.adminUsers.profile' | translate }}
+            </button>
+            @if (canManageUsers()) {
             @if (row.deleted) {
               <button
                 mat-button
@@ -229,6 +282,7 @@
                 ">
                 {{ 'pages.adminUsers.delete' | translate }}
               </button>
+            }
             }
           </td>
         </ng-container>

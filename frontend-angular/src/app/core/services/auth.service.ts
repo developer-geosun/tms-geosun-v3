@@ -312,7 +312,29 @@ export class AuthService {
 
   private normalizeUser_(user: AuthUser): AuthUser {
     const normalizedRole = normalizeRole_(user.role);
-    return { ...user, role: normalizedRole };
+    const profile = user.profile
+      ? {
+          ...user.profile,
+          preferredChannels: user.profile.preferredChannels ?? [],
+          phones: user.profile.phones ?? [],
+          profileComplete: Boolean(user.profile.profileComplete)
+        }
+      : {
+          lastName: null,
+          firstName: null,
+          patronymic: null,
+          personType: null,
+          legalEntityEdrpou: null,
+          preferredChannels: [],
+          phones: [],
+          profileComplete: false
+        };
+    return {
+      ...user,
+      role: normalizedRole,
+      displayName: user.displayName?.trim() || user.email,
+      profile
+    };
   }
 }
 
