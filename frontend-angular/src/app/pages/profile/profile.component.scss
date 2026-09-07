@@ -12,7 +12,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* flex-start + margin auto: центрує, якщо вміщується; інакше — зверху без обрізання */
+  justify-content: flex-start;
   box-sizing: border-box;
   width: 100%;
   min-height: 0;
@@ -28,7 +29,6 @@
   flex-direction: column;
   width: 100%;
   max-width: 1120px;
-  /* Вертикальне центрування без обрізання зверху при переповненні */
   margin-block: auto;
 }
 
@@ -266,13 +266,35 @@
 }
 
 @include bp.handset {
+  .profile-page__form {
+    /* На телефоні контент вищий за екран — завжди зверху */
+    margin-block: 0;
+  }
+
   .profile-page__phones-header {
     flex-direction: row;
     align-items: center;
   }
 
-  .profile-page__phone-main {
+  /* Тіло телефону стовпчиком; delete справа від усього блоку */
+  .profile-page__phone-row {
     grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .profile-page__phone-main {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .profile-page__phone-flags {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .profile-page__phone-remove {
+    align-self: center;
   }
 
   .profile-page__footer {
