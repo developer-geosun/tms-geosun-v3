@@ -28,7 +28,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1120px;
+  max-width: 1280px;
   margin-block: auto;
 }
 
@@ -86,7 +86,8 @@
   min-height: 100%;
 
   @include bp.grid-2col {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    /* Права колонка (телефони) ширша — місце для номера + Основний + статус */
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
     gap: 0;
   }
 }
@@ -195,36 +196,49 @@
 }
 
 .profile-page__phone-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.5rem 0.65rem;
-  align-items: center;
-  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
   border: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant, #cac4d0) 55%, transparent);
   border-radius: 8px;
 }
 
-.profile-page__phone-body {
+.profile-page__phone-top {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  min-width: 0;
-}
-
-/* Телефон + «Основний» в одному ряду */
-.profile-page__phone-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.35rem 0.5rem;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 0.5rem 0.75rem;
 }
 
 .profile-page__phone-input {
-  width: 100%;
+  /* Компактне поле під E.164 (+380XXXXXXXXX) */
+  flex: 0 1 12.5rem;
+  width: 12.5rem;
+  max-width: 100%;
+  min-width: 9.5rem;
 }
 
 .profile-page__phone-primary {
+  flex: 0 0 auto;
   white-space: nowrap;
+}
+
+.profile-page__status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant, #cac4d0) 80%, transparent);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--mat-sys-on-surface-variant, inherit);
+  white-space: nowrap;
+}
+
+.profile-page__status-pill--ok {
+  border-color: color-mix(in srgb, var(--mat-sys-primary, #6750a4) 35%, transparent);
+  color: var(--mat-sys-primary, #6750a4);
 }
 
 /* Як document-type-action--danger на admin/document-types */
@@ -242,10 +256,38 @@
 
 .profile-page__phone-flags {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.15rem 0.75rem;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.35rem;
   min-width: 0;
+  padding-top: 0.15rem;
+  border-top: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant, #cac4d0) 45%, transparent);
+}
+
+.profile-page__messenger-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  min-height: 2rem;
+}
+
+.profile-page__telegram-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin-left: 0.25rem;
+}
+
+.profile-page__telegram-action-btn {
+  min-height: 2rem;
+  line-height: 1.2;
+  padding-inline: 0.5rem;
+}
+
+.profile-page__telegram-hint-inline {
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant, inherit);
 }
 
 .profile-page__messenger {
@@ -293,25 +335,23 @@
     align-items: center;
   }
 
-  /* Тіло телефону стовпчиком; delete справа від усього блоку */
-  .profile-page__phone-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
+  .profile-page__phone-top {
+    flex-wrap: wrap;
   }
 
-  .profile-page__phone-main {
-    grid-template-columns: 1fr;
-    align-items: stretch;
-  }
-
-  .profile-page__phone-flags {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
+  .profile-page__phone-input {
+    flex: 1 1 9.5rem;
+    width: auto;
+    min-width: 0;
   }
 
   .profile-page__phone-remove {
-    align-self: center;
+    margin-left: auto;
+  }
+
+  .profile-page__telegram-actions {
+    width: 100%;
+    margin-left: 1.75rem;
   }
 
   .profile-page__footer {
@@ -325,32 +365,4 @@
       width: 100%;
     }
   }
-}
-
-.profile-page__section--telegram {
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
-}
-
-.profile-page__telegram-hint {
-  margin: 0 0 0.75rem;
-  font-size: 0.875rem;
-  color: var(--mat-sys-on-surface-variant, inherit);
-}
-
-.profile-page__telegram-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.profile-page__verified-hint {
-  font-size: 0.75rem;
-  color: var(--mat-sys-on-surface-variant, inherit);
-}
-
-.profile-page__verified-chip {
-  align-self: center;
 }

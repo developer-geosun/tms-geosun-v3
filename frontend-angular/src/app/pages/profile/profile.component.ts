@@ -45,7 +45,6 @@ import { showAppSnack } from '../../shared/utils/app-snackbar';
 import { sanitizeDriverPersonNameInput } from '../admin-drivers/driver-person-name.util';
 import { TelegramLinkDialogComponent } from './telegram-link-dialog.component';
 import { firstValueFrom } from 'rxjs';
-import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-profile',
@@ -61,8 +60,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatIconModule,
     MatInputModule,
     MatRadioModule,
-    MatTooltipModule,
-    MatChipsModule
+    MatTooltipModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -105,6 +103,7 @@ export class ProfileComponent implements OnInit {
   });
 
   constructor() {
+    this.syncPhoneDependentChannels();
     this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.isDirty.set(this.form.dirty);
     });
@@ -143,6 +142,7 @@ export class ProfileComponent implements OnInit {
     }
     const isFirst = this.phones.length === 0;
     this.phones.push(this.createPhoneGroup(null, '', isFirst, false, false, false));
+    this.syncPhoneDependentChannels();
     if (isFirst) {
       this.form.controls.channelPhone.setValue(true);
     }
@@ -169,6 +169,7 @@ export class ProfileComponent implements OnInit {
         this.phones.at(0).get('primary')?.setValue(true, { emitEvent: false });
       }
     }
+    this.syncPhoneDependentChannels();
     this.form.markAsDirty();
     this.isDirty.set(true);
   }
@@ -220,6 +221,28 @@ export class ProfileComponent implements OnInit {
     return this.phoneVerifiedById()[id] === true;
   }
 
+  /**
+   * Кнопки прив'язки Telegram — на картці з позначеним Telegram
+   * (або на основному / першому телефоні).
+   */
+  isTelegramActionPhone(index: number): boolean {
+    return index === this.telegramActionPhoneIndex();
+  }
+
+  private telegramActionPhoneIndex(): number {
+    if (this.phones.length === 0) {
+      return -1;
+    }
+    const withTelegram = this.phones.controls.findIndex(
+      (c) => c.get('telegram')?.value === true
+    );
+    if (withTelegram >= 0) {
+      return withTelegram;
+    }
+    const primary = this.phones.controls.findIndex((c) => c.get('primary')?.value === true);
+    return primary >= 0 ? primary : 0;
+  }
+
   async startTelegramLink(): Promise<void> {
     if (this.telegramBusy()) {
       return;
@@ -227,13 +250,20 @@ export class ProfileComponent implements OnInit {
     this.telegramBusy.set(true);
     try {
       const link = await this.chatbotApi.createLinkCode('TELEGRAM');
-      this.dialog.open(
+      const ref = this.dialog.open(
         TelegramLinkDialogComponent,
         getHandsetFriendlyDialogConfig({
           data: { link },
           width: 'min(420px, calc(100vw - 24px))'
         })
       );
+      await firstValueFrom(ref.afterClosed());
+      await this.reloadTelegramIdentity();
+      // Не затираємо незбережені правки форми.
+      if (!this.isDirty()) {
+        const profile = await this.profileApi.getMine();
+        this.patchForm(profile);
+      }
     } catch (error) {
       const api = extractApiError(error);
       const key =
@@ -337,6 +367,7 @@ export class ProfileComponent implements OnInit {
     }
     this.phoneVerifiedById.set(verifiedMap);
     this.syncLegalEntityEdrpouState({ clearWhenIndividual: false });
+    this.syncPhoneDependentChannels();
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.isDirty.set(false);
@@ -353,6 +384,24 @@ export class ProfileComponent implements OnInit {
       ctrl.setValue('', { emitEvent: false });
     }
     ctrl.disable({ emitEvent: false });
+  }
+
+  /**
+   * Без телефонів канали PHONE / MESSENGERS недоступні
+   * (і знімаються, якщо були позначені).
+   */
+  private syncPhoneDependentChannels(): void {
+    const phoneChannel = this.form.controls.channelPhone;
+    const messengersChannel = this.form.controls.channelMessengers;
+    if (this.phones.length > 0) {
+      phoneChannel.enable({ emitEvent: false });
+      messengersChannel.enable({ emitEvent: false });
+      return;
+    }
+    phoneChannel.setValue(false, { emitEvent: false });
+    messengersChannel.setValue(false, { emitEvent: false });
+    phoneChannel.disable({ emitEvent: false });
+    messengersChannel.disable({ emitEvent: false });
   }
 
   private createPhoneGroup(
