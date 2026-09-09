@@ -94,6 +94,8 @@
 
       mat-spinner {
         display: inline-block;
+        // Колір кільця = колір тексту кнопки (білий)
+        --mat-progress-spinner-active-indicator-color: currentColor;
       }
 
       &:hover:not(:disabled) {
