@@ -519,6 +519,8 @@
       "retry": "Retry",
       "save": "Save",
       "cancel": "Discard changes",
+      "close": "Close",
+      "closeUnsavedConfirm": "You have unsaved changes. Close without saving?",
       "saveSuccess": "Profile saved",
       "saveFailed": "Failed to save profile",
       "incompleteBanner": "Complete your profile so we can contact you about requests",

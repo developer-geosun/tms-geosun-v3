@@ -25,6 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   ContactChannelContract,
@@ -70,6 +71,7 @@ export class ProfileComponent implements OnInit {
   private readonly translate = inject(TranslateService);
   private readonly layout = inject(LayoutService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   readonly isHandset = this.layout.isHandset;
   readonly isLoading = signal(true);
@@ -165,6 +167,23 @@ export class ProfileComponent implements OnInit {
     });
     this.form.markAsDirty();
     this.isDirty.set(true);
+  }
+
+  /** Закрити картку й повернутися на головну; при брудній формі — підтвердження. */
+  async close(): Promise<void> {
+    if (this.isDirty()) {
+      const ok = await firstValueFrom(
+        this.dialog
+          .open(ConfirmDialogComponent, {
+            data: { messageKey: 'pages.profile.closeUnsavedConfirm' }
+          })
+          .afterClosed()
+      );
+      if (!ok) {
+        return;
+      }
+    }
+    await this.router.navigateByUrl('/main');
   }
 
   async reload(): Promise<void> {

@@ -9,11 +9,21 @@
   } @else {
     <form class="profile-page__form" [formGroup]="form" (ngSubmit)="save()">
       <mat-card appearance="outlined" class="profile-page__card">
-        <mat-card-header class="profile-page__card-header">
-          <mat-card-title class="profile-page__card-title">
+        <div class="profile-page__card-header">
+          <h1 class="profile-page__card-title">
             {{ 'pages.profile.title' | translate }}
-          </mat-card-title>
-        </mat-card-header>
+          </h1>
+          <button
+            mat-icon-button
+            type="button"
+            class="profile-page__close"
+            (click)="close()"
+            [attr.aria-label]="'pages.profile.close' | translate"
+            [matTooltip]="'pages.profile.close' | translate"
+          >
+            <mat-icon aria-hidden="true">close</mat-icon>
+          </button>
+        </div>
 
         <mat-card-content class="profile-page__card-content">
           <div class="profile-page__columns">
