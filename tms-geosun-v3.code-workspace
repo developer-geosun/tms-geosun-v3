@@ -1,0 +1,38 @@
+{
+  // Відкривайте цей файл (File → Open Workspace from File), а не «Open Folder».
+  // Тоді Maven for Java активується одразу: pom.xml лежить у корені папки backend-java.
+  "folders": [
+    {
+      "name": "backend-java",
+      "path": "backend-java"
+    },
+    {
+      "name": "tms-geosun-v3",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "java.server.launchMode": "Standard",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.import.maven.enabled": true,
+    "java.import.gradle.enabled": false,
+    "java.compile.nullAnalysis.mode": "automatic",
+    // Не імпортувати той самий Maven-проєкт двічі з батьківської папки репо.
+    "java.import.exclusions": [
+      "**/node_modules/**",
+      "**/.metadata/**",
+      "**/archetype-resources/**",
+      "**/META-INF/maven/**",
+      "backend-java/**",
+      "frontend-angular/**",
+      "frontend-flutter/**"
+    ],
+    // У корені репо ховаємо backend-java: він уже є окремою папкою workspace.
+    "files.exclude": {
+      "backend-java": true
+    }
+  },
+  "extensions": {
+    "recommendations": ["vscjava.vscode-java-pack"]
+  }
+}

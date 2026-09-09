@@ -1,4 +1,6 @@
 {
+  // Для стабільної секції MAVEN у Explorer відкривайте tms-geosun-v3.code-workspace,
+  // а не корінь репозиторію через Open Folder (pom.xml вкладений у backend-java).
   // Повний JDT Language Server: classpath Maven і резолв типів між main та test.
   "java.server.launchMode": "Standard",
   "java.configuration.updateBuildConfiguration": "automatic",
