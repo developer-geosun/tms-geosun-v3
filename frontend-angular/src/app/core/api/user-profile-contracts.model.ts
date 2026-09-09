@@ -11,6 +11,10 @@ export interface UserContactPhoneContractDto {
   telegram: boolean;
   whatsapp: boolean;
   viber: boolean;
+  /** Підтверджено через Telegram (серверне поле). */
+  verified: boolean;
+  verifiedAt: string | null;
+  verifiedVia: string | null;
 }
 
 export interface UserProfileContractDto {

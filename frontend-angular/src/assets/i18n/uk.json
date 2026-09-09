@@ -548,6 +548,31 @@
       "phonesEmpty": "Телефонів ще немає. Натисніть «+», щоб додати.",
       "phone": "Номер телефону",
       "primaryPhone": "Основний",
+      "phoneVerified": "Підтверджено",
+      "phoneNotVerified": "Не підтверджено",
+      "telegram": {
+        "title": "Telegram",
+        "hint": "Прив'яжіть Telegram і поділіться контактом у боті, щоб підтвердити номер телефону з профілю.",
+        "verify": "Підтвердити через Telegram",
+        "unlink": "Відв'язати",
+        "unlinkConfirm": "Відв'язати Telegram від облікового запису?",
+        "statusLinked": "Прив'язано",
+        "statusNotLinked": "Не прив'язано",
+        "phoneVerified": "Телефон підтверджено",
+        "phoneNotVerified": "Поділіться контактом у боті",
+        "linkTitle": "Код для Telegram",
+        "linkHint": "Відкрийте бота або надішліть цей код у чат з ботом.",
+        "expiresAt": "Дійсний до {{at}}",
+        "copyCode": "Копіювати код",
+        "copied": "Скопійовано",
+        "openBot": "Відкрити Telegram",
+        "close": "Закрити",
+        "alreadyLinked": "Telegram уже прив'язано",
+        "channelDisabled": "Канал Telegram вимкнено на сервері",
+        "linkFailed": "Не вдалося створити код прив'язки",
+        "unlinked": "Telegram відв'язано",
+        "unlinkFailed": "Не вдалося відв'язати Telegram"
+      },
       "errors": {
         "channelPhoneRequired": "Для каналу «Телефон» потрібен хоча б один номер",
         "channelMessengerRequired": "Для каналу «Месенджери» позначте Telegram, WhatsApp або Viber",
@@ -556,6 +581,24 @@
         "primaryPhoneInvalid": "Має бути рівно один основний телефон",
         "validation": "Перевірте правильність заповнення полів"
       }
+    },
+    "adminChatbots": {
+      "title": "Чат-боти",
+      "refresh": "Оновити",
+      "loadFailed": "Не вдалося завантажити дані чат-ботів",
+      "module": "Модуль",
+      "moduleOn": "Увімкнено",
+      "moduleOff": "Вимкнено",
+      "enabled": "Активний",
+      "configured": "Налаштований",
+      "activeIdentities": "Активні прив'язки",
+      "channel": "Канал",
+      "userId": "User ID",
+      "externalUserId": "External ID",
+      "status": "Статус",
+      "linkedAt": "Прив'язано",
+      "yes": "Так",
+      "no": "Ні"
     },
     "adminUsers": {
       "title": "Користувачі",
@@ -1312,6 +1355,7 @@
     "adminDrivers": "Водії",
     "adminVehicleCombinations": "Автопоїзди",
     "adminTrips": "Рейси",
+    "adminChatbots": "Чат-боти",
     "myTrips": "Мої рейси"
   },
   "auth": {

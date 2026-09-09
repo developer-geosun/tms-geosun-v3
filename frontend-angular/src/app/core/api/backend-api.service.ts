@@ -64,6 +64,18 @@ export class BackendApiService {
     return this.build('/users/me/profile');
   }
 
+  get myBotLinkCodes(): string {
+    return this.build('/users/me/bot-link-codes');
+  }
+
+  get myBotIdentities(): string {
+    return this.build('/users/me/bot-identities');
+  }
+
+  get adminChatbots(): string {
+    return this.build('/admin/chatbots');
+  }
+
   get adminStoredFiles(): string {
     return this.build('/admin/stored-files');
   }

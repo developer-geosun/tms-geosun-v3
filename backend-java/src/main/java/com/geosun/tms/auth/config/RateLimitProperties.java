@@ -23,6 +23,11 @@ public class RateLimitProperties {
   /** Максимум реєстрацій з одного IP за вікно (додатково до ТЗ, щоб закрити 429 у матриці). */
   private int registerMaxPerWindow = 30;
 
+  /** Ліміт webhook чат-бота з одного IP. */
+  private int chatbotWebhookMaxRequests = 120;
+
+  private int chatbotWebhookWindowSeconds = 60;
+
   public int getLoginMaxAttempts() {
     return loginMaxAttempts;
   }
@@ -77,5 +82,21 @@ public class RateLimitProperties {
 
   public void setRegisterMaxPerWindow(int registerMaxPerWindow) {
     this.registerMaxPerWindow = registerMaxPerWindow;
+  }
+
+  public int getChatbotWebhookMaxRequests() {
+    return chatbotWebhookMaxRequests;
+  }
+
+  public void setChatbotWebhookMaxRequests(int chatbotWebhookMaxRequests) {
+    this.chatbotWebhookMaxRequests = chatbotWebhookMaxRequests;
+  }
+
+  public int getChatbotWebhookWindowSeconds() {
+    return chatbotWebhookWindowSeconds;
+  }
+
+  public void setChatbotWebhookWindowSeconds(int chatbotWebhookWindowSeconds) {
+    this.chatbotWebhookWindowSeconds = chatbotWebhookWindowSeconds;
   }
 }

@@ -10,11 +10,12 @@
 - Frontend на Angular 21 с маршрутизацией, i18n и auth-слоем (`AuthService`, `AuthGuard`, `AuthInterceptor`, login-page).
 - **Flutter Web client** (`frontend-flutter/`): каркас + auth (login/refresh/logout/me), i18n uk/en/ru, порт dev `:4300`. Бизнес-экраны и mobile — следующие фазы; Angular остаётся основным UI для admin и route-builder.
 - Экраны `/route-builder` (построение и сохранение маршрута), `/routes` (список и открытие сохранённых маршрутов), `/my-freight-requests` (заявки пользователя) и диалог заявки на фрахт работают через backend API.
-- Есть admin-страницы `/admin/route-requests` (очередь, расчёт, quote), `/admin/freight-numeric-scenarios` (сценарии), `/admin/users` (список/карточка с контактами: `ADMIN` и `MANAGER` read; мутации учётки и PUT профиля — только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, а также `/my-trips` для водителя и `/profile` (self-service профиль учётки для всех ролей).
+- Есть admin-страницы `/admin/route-requests` (очередь, расчёт, quote), `/admin/freight-numeric-scenarios` (сценарии), `/admin/users` (список/карточка с контактами: `ADMIN` и `MANAGER` read; мутации учётки и PUT профиля — только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, `/admin/chatbots` (статус Telegram + прив'язки), а также `/my-trips` для водителя и `/profile` (self-service профіль + верифікація Telegram).
 - Backend на Java 21 + Spring Boot 3 с JWT auth, refresh token rotation и RBAC.
 - Backend модуль `routes`: сохранение, чтение списка/деталей (в т.ч. `view=active|all|deleted`), soft delete, блокировка `PUT` после заявки, `duplicate`/`restore`.
 - Backend модуль `route-requests`: создание заявок, список заявок пользователя, admin очередь; пробіг по країнах у відповіді заявки — з БД до явного admin `POST .../country-breakdown` (провайдер расчёта выбирается feature flag: `here` или `geojson`).
 - Backend модуль `quotes`: создание draft, отправка оффера, история офферов и idempotency.
+- Backend модуль `chatbot` (`com.geosun.tms.chatbot`): Telegram verify (link-code + share contact → `phone_verified`); webhook `POST /api/v1/webhooks/telegram`; self `/users/me/bot-*`; admin `/admin/chatbots`. Выключен по умолчанию (`app.chatbot.enabled=false`).
 - Деплой frontend на GitHub Pages через GitHub Actions (`main`/`master`, source **GitHub Actions**); публичный API — по выбору через ngrok или статический IP провайдера (только backend, см. `PUBLIC_ACCESS_MODE` в `.env` / `RUN.md`).
 
 ## Как работает (высокоуровнево)
@@ -34,6 +35,7 @@
 - **Vehicle / VehicleCombination**: справочник ТС и именованные автопоезда (тягач + полуприцеп).
 - **Trip**: операционный рейс с назначением водителя/состава и статусами исполнения.
 - **TripExpenseReport**: фактический отчёт по затратам рейса (строки + чеки, submit/approve).
+- **BotIdentity / BotLinkCode**: привязка Telegram (v1 verify) и одноразовый код; `user_contact_phones.phone_verified*`.
 
 ## Основные API (текущее состояние)
 
@@ -44,6 +46,12 @@
 - `GET /api/v1/auth/me` — текущий пользователь: `id`, `email`, `role`, `displayName`, вложенный `profile`.
 - `GET /api/v1/users/me/profile` — свой профиль учётки.
 - `PUT /api/v1/users/me/profile` — полная замена своего профиля и телефонов.
+- `POST /api/v1/users/me/bot-link-codes` — одноразовый код прив'язки Telegram.
+- `GET /api/v1/users/me/bot-identities` — свої прив'язки бота.
+- `DELETE /api/v1/users/me/bot-identities/{channel}` — відв'язка (204).
+- `POST /api/v1/webhooks/telegram` — публічний webhook Telegram (secret header, без JWT).
+- `GET /api/v1/admin/chatbots/status` — статус каналів (`ADMIN`/`MANAGER`).
+- `GET /api/v1/admin/chatbots/identities` — список прив'язок (`ADMIN`/`MANAGER`; external id маскується для MANAGER).
 - `POST /api/v1/routes` — сохранить маршрут.
 - `GET /api/v1/routes/my?view=active|all|deleted` — список своих маршрутов (по умолчанию `active`).
 - `GET /api/v1/routes/my/{id}` — детали своего маршрута (в т.ч. soft-deleted для restore-потока).

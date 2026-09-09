@@ -31,6 +31,7 @@
   - [`auth-authentication-authorization.md`](auth-authentication-authorization.md)
   - [`admin-user-management.md`](admin-user-management.md)
   - [`drivers-and-vehicle-combinations.md`](drivers-and-vehicle-combinations.md) — правила ПІБ, отдельная сущность
+  - [`chatbots-telegram-whatsapp-viber.md`](chatbots-telegram-whatsapp-viber.md) — identity бота (`bot_identities`), не колонки профиля; `@username` по-прежнему вне профиля
 - **Environment constraints / Ограничения окружения:** Java 21 / Spring Boot 3, Flyway (следующая миграция после `V39`), MySQL, Angular 21 + Material, i18n ua/en/ru (файлы `uk.json` / `en.json` / `ru.json` не переименовывать).
 
 ## 3) Scope (In) / Scope (входит в задачу)
@@ -53,7 +54,7 @@
 - Синхронизация ФИО/телефона профиля с карточкой `Driver`.
 - Блокировка route-builder / заявок на фрахт при незаполненном профиле (только флаг `profileComplete` + баннер).
 - Invite / создание пользователя админом.
-- Верификация телефонов (SMS OTP).
+- Верификация телефонов через **SMS OTP** (вне scope). Верификация телефона через **Telegram** (share contact) — см. [`chatbots-telegram-whatsapp-viber.md`](chatbots-telegram-whatsapp-viber.md).
 - Аватар / фото.
 - Будь-які нові колонки або індекси на існуючій таблиці `users`.
 
@@ -147,6 +148,9 @@
 | `has_telegram` | TINYINT(1) NOT NULL DEFAULT 0 | |
 | `has_whatsapp` | TINYINT(1) NOT NULL DEFAULT 0 | |
 | `has_viber` | TINYINT(1) NOT NULL DEFAULT 0 | |
+| `phone_verified` | TINYINT(1) NOT NULL DEFAULT 0 | серверний прапорець (чат-бот); клієнт PUT не приймає |
+| `phone_verified_at` | DATETIME(6) NULL | |
+| `phone_verified_via` | VARCHAR(16) NULL | напр. `TELEGRAM` |
 | `created_at` / `updated_at` | DATETIME(6) | |
 
 Унікальність: `UNIQUE (user_id, phone)`. Індекс `user_id`.

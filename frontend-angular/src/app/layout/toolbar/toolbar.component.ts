@@ -179,6 +179,12 @@ export class ToolbarComponent {
       roles: ['admin', 'manager', 'driver'] as const
     },
     {
+      route: '/admin/chatbots',
+      labelKey: 'navigation.adminChatbots',
+      icon: 'smart_toy',
+      roles: ['admin', 'manager'] as const
+    },
+    {
       route: '/admin/users',
       labelKey: 'navigation.adminUsers',
       roles: ['admin', 'manager'] as const

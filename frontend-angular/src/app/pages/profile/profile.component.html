@@ -162,6 +162,15 @@
                                 placeholder="+380..."
                               />
                             </mat-form-field>
+                            @if (isPhoneVerified(i)) {
+                              <mat-chip class="profile-page__verified-chip">
+                                {{ 'pages.profile.phoneVerified' | translate }}
+                              </mat-chip>
+                            } @else {
+                              <span class="profile-page__verified-hint">
+                                {{ 'pages.profile.phoneNotVerified' | translate }}
+                              </span>
+                            }
                             <mat-radio-button
                               class="profile-page__phone-primary"
                               [checked]="phoneCtrl.get('primary')?.value"
@@ -234,6 +243,54 @@
               </section>
             </div>
           </div>
+
+          <section class="profile-page__section profile-page__section--telegram">
+            <h2 class="profile-page__section-title">
+              {{ 'pages.profile.telegram.title' | translate }}
+            </h2>
+            <p class="profile-page__telegram-hint">
+              {{ 'pages.profile.telegram.hint' | translate }}
+            </p>
+            <div class="profile-page__telegram-row">
+              @if (telegramIdentity(); as tg) {
+                <mat-chip-set>
+                  <mat-chip>
+                    {{ 'pages.profile.telegram.statusLinked' | translate }}
+                  </mat-chip>
+                  @if (tg.phoneVerified) {
+                    <mat-chip>
+                      {{ 'pages.profile.telegram.phoneVerified' | translate }}
+                    </mat-chip>
+                  } @else {
+                    <mat-chip>
+                      {{ 'pages.profile.telegram.phoneNotVerified' | translate }}
+                    </mat-chip>
+                  }
+                </mat-chip-set>
+                <button
+                  mat-button
+                  color="warn"
+                  type="button"
+                  (click)="unlinkTelegram()"
+                  [disabled]="telegramBusy()"
+                >
+                  {{ 'pages.profile.telegram.unlink' | translate }}
+                </button>
+              } @else {
+                <mat-chip-set>
+                  <mat-chip>{{ 'pages.profile.telegram.statusNotLinked' | translate }}</mat-chip>
+                </mat-chip-set>
+                <button
+                  mat-stroked-button
+                  type="button"
+                  (click)="startTelegramLink()"
+                  [disabled]="telegramBusy()"
+                >
+                  {{ 'pages.profile.telegram.verify' | translate }}
+                </button>
+              }
+            </div>
+          </section>
         </mat-card-content>
 
         <mat-card-actions align="end" class="profile-page__footer">

@@ -28,6 +28,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
+  BotIdentitySelfContractDto,
+  ChatbotApiService,
   ContactChannelContract,
   PersonTypeContract,
   UpdateUserProfileRequest,
@@ -38,9 +40,12 @@ import { LayoutService } from '../../core/layout';
 import { AuthService } from '../../core/services/auth.service';
 import { extractApiError } from '../../core/utils/api-error';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { getHandsetFriendlyDialogConfig } from '../../shared/utils/handset-friendly-dialog-config';
 import { showAppSnack } from '../../shared/utils/app-snackbar';
 import { sanitizeDriverPersonNameInput } from '../admin-drivers/driver-person-name.util';
+import { TelegramLinkDialogComponent } from './telegram-link-dialog.component';
 import { firstValueFrom } from 'rxjs';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-profile',
@@ -56,7 +61,8 @@ import { firstValueFrom } from 'rxjs';
     MatIconModule,
     MatInputModule,
     MatRadioModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatChipsModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -65,6 +71,7 @@ import { firstValueFrom } from 'rxjs';
 export class ProfileComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly profileApi = inject(UserProfileApiService);
+  private readonly chatbotApi = inject(ChatbotApiService);
   private readonly authService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
@@ -79,6 +86,11 @@ export class ProfileComponent implements OnInit {
   readonly isDirty = signal(false);
   readonly loadError = signal<string | null>(null);
   readonly userEmail = computed(() => this.authService.user()?.email ?? '');
+  /** Прив'язка Telegram (окремо від форми профілю). */
+  readonly telegramIdentity = signal<BotIdentitySelfContractDto | null>(null);
+  readonly telegramBusy = signal(false);
+  /** verified за id телефону з останнього GET профілю. */
+  readonly phoneVerifiedById = signal<Record<string, boolean>>({});
 
   readonly form = this.formBuilder.nonNullable.group({
     lastName: ['', [Validators.required, Validators.maxLength(128)]],
@@ -190,13 +202,82 @@ export class ProfileComponent implements OnInit {
     this.isLoading.set(true);
     this.loadError.set(null);
     try {
-      const profile = await this.profileApi.getMine();
+      const [profile] = await Promise.all([this.profileApi.getMine(), this.reloadTelegramIdentity()]);
       this.patchForm(profile);
     } catch {
       this.loadError.set('pages.profile.loadFailed');
     } finally {
       this.isSaving.set(false);
       this.isLoading.set(false);
+    }
+  }
+
+  isPhoneVerified(index: number): boolean {
+    const id = this.phones.at(index)?.get('id')?.value as string | undefined;
+    if (!id) {
+      return false;
+    }
+    return this.phoneVerifiedById()[id] === true;
+  }
+
+  async startTelegramLink(): Promise<void> {
+    if (this.telegramBusy()) {
+      return;
+    }
+    this.telegramBusy.set(true);
+    try {
+      const link = await this.chatbotApi.createLinkCode('TELEGRAM');
+      this.dialog.open(
+        TelegramLinkDialogComponent,
+        getHandsetFriendlyDialogConfig({
+          data: { link },
+          width: 'min(420px, calc(100vw - 24px))'
+        })
+      );
+    } catch (error) {
+      const api = extractApiError(error);
+      const key =
+        api.code === 'BOT_ALREADY_LINKED'
+          ? 'pages.profile.telegram.alreadyLinked'
+          : api.code === 'BOT_CHANNEL_DISABLED'
+            ? 'pages.profile.telegram.channelDisabled'
+            : 'pages.profile.telegram.linkFailed';
+      showAppSnack(this.snackBar, this.translate, key, 'error');
+    } finally {
+      this.telegramBusy.set(false);
+    }
+  }
+
+  async unlinkTelegram(): Promise<void> {
+    const ok = await firstValueFrom(
+      this.dialog
+        .open(ConfirmDialogComponent, {
+          data: { messageKey: 'pages.profile.telegram.unlinkConfirm' }
+        })
+        .afterClosed()
+    );
+    if (!ok) {
+      return;
+    }
+    this.telegramBusy.set(true);
+    try {
+      await this.chatbotApi.unlink('TELEGRAM');
+      this.telegramIdentity.set(null);
+      showAppSnack(this.snackBar, this.translate, 'pages.profile.telegram.unlinked', 'success');
+    } catch {
+      showAppSnack(this.snackBar, this.translate, 'pages.profile.telegram.unlinkFailed', 'error');
+    } finally {
+      this.telegramBusy.set(false);
+    }
+  }
+
+  private async reloadTelegramIdentity(): Promise<void> {
+    try {
+      const res = await this.chatbotApi.listMyIdentities();
+      const tg = res.items.find((i) => i.channel === 'TELEGRAM' && i.status === 'ACTIVE') ?? null;
+      this.telegramIdentity.set(tg);
+    } catch {
+      this.telegramIdentity.set(null);
     }
   }
 
@@ -240,7 +321,9 @@ export class ProfileComponent implements OnInit {
       channelMessengers: profile.preferredChannels.includes('MESSENGERS')
     });
     this.phones.clear();
+    const verifiedMap: Record<string, boolean> = {};
     for (const phone of profile.phones) {
+      verifiedMap[phone.id] = phone.verified === true;
       this.phones.push(
         this.createPhoneGroup(
           phone.id,
@@ -252,6 +335,7 @@ export class ProfileComponent implements OnInit {
         )
       );
     }
+    this.phoneVerifiedById.set(verifiedMap);
     this.syncLegalEntityEdrpouState({ clearWhenIndividual: false });
     this.form.markAsPristine();
     this.form.markAsUntouched();

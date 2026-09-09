@@ -100,9 +100,21 @@ app:
     refresh-max-requests: ${RATE_LIMIT_REFRESH_MAX_REQUESTS:30}
     refresh-window-seconds: ${RATE_LIMIT_REFRESH_WINDOW_SECONDS:60}
     register-max-per-window: ${RATE_LIMIT_REGISTER_MAX_PER_WINDOW:30}
+    chatbot-webhook-max-requests: ${RATE_LIMIT_CHATBOT_WEBHOOK_MAX:120}
+    chatbot-webhook-window-seconds: ${RATE_LIMIT_CHATBOT_WEBHOOK_WINDOW:60}
   cleanup:
     token-retention-days: ${TOKEN_CLEANUP_RETENTION_DAYS:30}
     cron: ${TOKEN_CLEANUP_CRON:0 0 2 * * *}
+  chatbot:
+    enabled: ${CHATBOT_ENABLED:false}
+    public-base-url: ${CHATBOT_PUBLIC_BASE_URL:}
+    cleanup-retention-days: ${CHATBOT_CLEANUP_RETENTION_DAYS:90}
+    telegram:
+      enabled: ${CHATBOT_TELEGRAM_ENABLED:false}
+      bot-token: ${CHATBOT_TELEGRAM_BOT_TOKEN:}
+      secret-token: ${CHATBOT_TELEGRAM_SECRET_TOKEN:}
+      bot-username: ${CHATBOT_TELEGRAM_BOT_USERNAME:}
+      timeout-millis: ${CHATBOT_TELEGRAM_TIMEOUT_MILLIS:10000}
   here:
     api-key: ${HERE_API_KEY:}
     base-url: ${HERE_BASE_URL:https://router.hereapi.com}

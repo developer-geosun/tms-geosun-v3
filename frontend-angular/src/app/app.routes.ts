@@ -113,6 +113,13 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'admin/chatbots',
+    canActivate: [authAvailabilityGuard, serviceStopGuard, authGuard],
+    data: { roles: ['admin', 'manager'] },
+    loadComponent: () =>
+      import('./pages/admin-chatbots/admin-chatbots.component').then((m) => m.AdminChatbotsComponent)
+  },
+  {
     path: 'admin/users',
     canActivate: [authAvailabilityGuard, serviceStopGuard, authGuard],
     data: { roles: ['admin', 'manager'] },

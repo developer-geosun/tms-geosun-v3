@@ -33,7 +33,8 @@ public final class SecurityPathRules {
             "/api/v1/auth/forgot-password",
             "/api/v1/auth/reset-password-info",
             "/api/v1/auth/reset-password",
-            "/api/v1/auth/refresh" ->
+            "/api/v1/auth/refresh",
+            "/api/v1/webhooks/telegram" ->
             true;
         default -> false;
       };

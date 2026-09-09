@@ -326,3 +326,31 @@
     }
   }
 }
+
+.profile-page__section--telegram {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
+}
+
+.profile-page__telegram-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant, inherit);
+}
+
+.profile-page__telegram-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-page__verified-hint {
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant, inherit);
+}
+
+.profile-page__verified-chip {
+  align-self: center;
+}

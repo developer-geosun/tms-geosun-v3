@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{ 'pages.profile.telegram.linkTitle' | translate }}</h2>
+
+<mat-dialog-content class="telegram-link-dialog">
+  <p class="telegram-link-dialog__hint">
+    {{ 'pages.profile.telegram.linkHint' | translate }}
+  </p>
+  <p class="telegram-link-dialog__code" aria-live="polite">{{ data.link.code }}</p>
+  <p class="telegram-link-dialog__ttl">
+    {{ 'pages.profile.telegram.expiresAt' | translate: { at: (data.link.expiresAt | date: 'short') } }}
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button type="button" (click)="copyCode()">
+    <mat-icon aria-hidden="true">content_copy</mat-icon>
+    {{
+      (copied() ? 'pages.profile.telegram.copied' : 'pages.profile.telegram.copyCode') | translate
+    }}
+  </button>
+  @if (data.link.deepLink) {
+    <button mat-flat-button color="primary" type="button" (click)="openTelegram()">
+      {{ 'pages.profile.telegram.openBot' | translate }}
+    </button>
+  }
+  <button mat-stroked-button type="button" (click)="close()">
+    {{ 'pages.profile.telegram.close' | translate }}
+  </button>
+</mat-dialog-actions>

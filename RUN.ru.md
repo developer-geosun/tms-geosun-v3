@@ -242,6 +242,10 @@ cp .env.example .env
   - **static-ip:** `PUBLIC_API_URL=http://178.136.237.7:8080`, без `COMPOSE_PROFILES`; на роутере — проброс порта `8080`
   - **ngrok:** `COMPOSE_PROFILES=ngrok`, `NGROK_AUTHTOKEN`, `NGROK_DOMAIN`, `PUBLIC_API_URL=https://<NGROK_DOMAIN>`
   - в обоих случаях: `CORS_ALLOWED_ORIGIN_PATTERNS=https://developer-geosun.github.io` и link-base на GitHub Pages
+- **Telegram chatbot (верификация, выключен по умолчанию):**
+  - `CHATBOT_ENABLED=true`, `CHATBOT_TELEGRAM_ENABLED=true`
+  - `CHATBOT_TELEGRAM_BOT_TOKEN`, `CHATBOT_TELEGRAM_SECRET_TOKEN`, `CHATBOT_TELEGRAM_BOT_USERNAME`
+  - `CHATBOT_PUBLIC_BASE_URL` = тот же публичный HTTPS API (напр. `https://<NGROK_DOMAIN>`), webhook: `{CHATBOT_PUBLIC_BASE_URL}/api/v1/webhooks/telegram`
 
 2. Запуск контейнеров (из корня проекта):
 

@@ -548,6 +548,31 @@
       "phonesEmpty": "Телефонов ещё нет. Нажмите «+», чтобы добавить.",
       "phone": "Номер телефона",
       "primaryPhone": "Основной",
+      "phoneVerified": "Подтверждён",
+      "phoneNotVerified": "Не подтверждён",
+      "telegram": {
+        "title": "Telegram",
+        "hint": "Привяжите Telegram и поделитесь контактом в боте, чтобы подтвердить номер телефона из профиля.",
+        "verify": "Подтвердить через Telegram",
+        "unlink": "Отвязать",
+        "unlinkConfirm": "Отвязать Telegram от учётной записи?",
+        "statusLinked": "Привязан",
+        "statusNotLinked": "Не привязан",
+        "phoneVerified": "Телефон подтверждён",
+        "phoneNotVerified": "Поделитесь контактом в боте",
+        "linkTitle": "Код для Telegram",
+        "linkHint": "Откройте бота или отправьте этот код в чат с ботом.",
+        "expiresAt": "Действителен до {{at}}",
+        "copyCode": "Копировать код",
+        "copied": "Скопировано",
+        "openBot": "Открыть Telegram",
+        "close": "Закрыть",
+        "alreadyLinked": "Telegram уже привязан",
+        "channelDisabled": "Канал Telegram выключен на сервере",
+        "linkFailed": "Не удалось создать код привязки",
+        "unlinked": "Telegram отвязан",
+        "unlinkFailed": "Не удалось отвязать Telegram"
+      },
       "errors": {
         "channelPhoneRequired": "Для канала «Телефон» нужен хотя бы один номер",
         "channelMessengerRequired": "Для канала «Мессенджеры» отметьте Telegram, WhatsApp или Viber",
@@ -556,6 +581,24 @@
         "primaryPhoneInvalid": "Должен быть ровно один основной телефон",
         "validation": "Проверьте правильность заполнения полей"
       }
+    },
+    "adminChatbots": {
+      "title": "Чат-боты",
+      "refresh": "Обновить",
+      "loadFailed": "Не удалось загрузить данные чат-ботов",
+      "module": "Модуль",
+      "moduleOn": "Включён",
+      "moduleOff": "Выключен",
+      "enabled": "Активен",
+      "configured": "Настроен",
+      "activeIdentities": "Активные привязки",
+      "channel": "Канал",
+      "userId": "User ID",
+      "externalUserId": "External ID",
+      "status": "Статус",
+      "linkedAt": "Привязан",
+      "yes": "Да",
+      "no": "Нет"
     },
     "adminUsers": {
       "title": "Пользователи",
@@ -1313,6 +1356,7 @@
     "adminDrivers": "Водители",
     "adminVehicleCombinations": "Автопоезда",
     "adminTrips": "Рейсы",
+    "adminChatbots": "Чат-боты",
     "myTrips": "Мои рейсы"
   },
   "auth": {

@@ -8,7 +8,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import org.springframework.stereotype.Service;
 
 /**
- * In-memory rate limiting для login (лише невдалі спроби), resend, forgot-password та refresh.
+ * In-memory rate limiting для login (лише невдалі спроби), resend, forgot-password, refresh і
+ * chatbot webhook.
  */
 @Service
 public class RateLimitService {
@@ -17,6 +18,8 @@ public class RateLimitService {
   private final ConcurrentHashMap<String, Deque<Long>> loginFailures = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, Deque<Long>> refreshHits = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, Deque<Long>> registerHits = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, Deque<Long>> chatbotWebhookHits =
+      new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, Long> resendLastMillis = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, Long> forgotPasswordLastMillis =
       new ConcurrentHashMap<>();
@@ -91,13 +94,35 @@ public class RateLimitService {
         key, refreshHits, properties.getRefreshMaxRequests(), properties.getRefreshWindowSeconds());
   }
 
+  /** Ліміт вхідних webhook чат-бота з одного IP. */
+  public void checkChatbotWebhook(String clientIp) {
+    String key = "chatbot-webhook|" + clientIp;
+    slidingWindowAllow(
+        key,
+        chatbotWebhookHits,
+        properties.getChatbotWebhookMaxRequests(),
+        properties.getChatbotWebhookWindowSeconds(),
+        "CHATBOT_RATE_LIMITED",
+        "Chatbot webhook rate limit exceeded");
+  }
+
   private void slidingWindowAllow(
       String key, ConcurrentHashMap<String, Deque<Long>> map, int max, int windowSeconds) {
+    slidingWindowAllow(key, map, max, windowSeconds, "RATE_LIMIT_EXCEEDED", "Rate limit exceeded");
+  }
+
+  private void slidingWindowAllow(
+      String key,
+      ConcurrentHashMap<String, Deque<Long>> map,
+      int max,
+      int windowSeconds,
+      String errorCode,
+      String message) {
     Deque<Long> dq = map.computeIfAbsent(key, k -> new ConcurrentLinkedDeque<>());
     synchronized (dq) {
       prune(dq, windowSeconds);
       if (dq.size() >= max) {
-        throw ApiException.tooManyRequests("Rate limit exceeded");
+        throw new ApiException(429, errorCode, message);
       }
       dq.addLast(System.currentTimeMillis());
     }
@@ -118,6 +143,7 @@ public class RateLimitService {
     loginFailures.clear();
     refreshHits.clear();
     registerHits.clear();
+    chatbotWebhookHits.clear();
     synchronized (resendLastMillis) {
       resendLastMillis.clear();
     }

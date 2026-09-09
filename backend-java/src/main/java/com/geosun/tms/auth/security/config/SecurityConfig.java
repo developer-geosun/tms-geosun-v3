@@ -75,7 +75,8 @@ public class SecurityConfig {
                     "/api/v1/auth/forgot-password",
                     "/api/v1/auth/reset-password-info",
                     "/api/v1/auth/reset-password",
-                    "/api/v1/auth/refresh")
+                    "/api/v1/auth/refresh",
+                    "/api/v1/webhooks/telegram")
                 .permitAll()
                 // Список і картка користувачів — ADMIN і MANAGER (лише читання контактів)
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/users", "/api/v1/admin/users/*")
@@ -89,7 +90,10 @@ public class SecurityConfig {
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/admin/document-types", "/api/v1/admin/document-types/**")
                 .hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**")
+                .requestMatchers(
+                    HttpMethod.GET, "/api/v1/admin/chatbots", "/api/v1/admin/chatbots/**")
+                .hasAnyRole("ADMIN", "MANAGER")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*")
                 .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated());

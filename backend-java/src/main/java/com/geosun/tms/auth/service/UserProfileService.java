@@ -60,12 +60,12 @@ public class UserProfileService {
 
   @Transactional(readOnly = true)
   public UserProfileDto getByUserId(@NonNull String userId) {
-    Optional<UserProfile> profile = userProfileRepository.findById(userId);
+    Optional<UserProfile> profile = userProfileRepository.findById(Objects.requireNonNull(userId));
     if (profile.isEmpty()) {
       return UserProfileDto.empty();
     }
     List<UserContactPhone> phones =
-        userContactPhoneRepository.findByUserIdOrderBySortOrderAsc(userId);
+        userContactPhoneRepository.findByUserIdOrderBySortOrderAsc(Objects.requireNonNull(userId));
     return toDto(profile.get(), phones);
   }
 
@@ -75,7 +75,7 @@ public class UserProfileService {
     if (userIds == null || userIds.isEmpty()) {
       return Map.of();
     }
-    List<UserProfile> profiles = userProfileRepository.findAllById(userIds);
+    List<UserProfile> profiles = userProfileRepository.findAllById(Objects.requireNonNull(userIds));
     Map<String, UserProfile> profileById =
         profiles.stream()
             .collect(
@@ -85,10 +85,13 @@ public class UserProfileService {
                     (a, b) -> a,
                     HashMap::new));
     List<UserContactPhone> allPhones =
-        userContactPhoneRepository.findByUserIdInOrderByUserIdAscSortOrderAsc(userIds);
+        userContactPhoneRepository.findByUserIdInOrderByUserIdAscSortOrderAsc(
+            Objects.requireNonNull(userIds));
     Map<String, List<UserContactPhone>> phonesByUser = new HashMap<>();
     for (UserContactPhone phone : allPhones) {
-      phonesByUser.computeIfAbsent(phone.getUserId(), k -> new ArrayList<>()).add(phone);
+      phonesByUser
+          .computeIfAbsent(Objects.requireNonNull(phone.getUserId()), k -> new ArrayList<>())
+          .add(phone);
     }
     Map<String, UserProfileDto> result = new HashMap<>();
     for (String userId : userIds) {
@@ -145,7 +148,7 @@ public class UserProfileService {
 
     UserProfile profile =
         userProfileRepository
-            .findById(userId)
+            .findById(Objects.requireNonNull(userId))
             .orElseGet(
                 () -> {
                   UserProfile created = new UserProfile();
@@ -164,7 +167,17 @@ public class UserProfileService {
 
     userProfileRepository.save(Objects.requireNonNull(profile));
 
-    userContactPhoneRepository.deleteAllByUserId(userId);
+    // Зберігаємо прапорці верифікації для тих самих E.164 до deleteAll (клієнт їх не шле).
+    List<UserContactPhone> existingPhones =
+        userContactPhoneRepository.findByUserIdOrderBySortOrderAsc(Objects.requireNonNull(userId));
+    Map<String, UserContactPhone> verifiedByPhone = new HashMap<>();
+    for (UserContactPhone existing : existingPhones) {
+      if (existing.isPhoneVerified() && StringUtils.hasText(existing.getPhone())) {
+        verifiedByPhone.put(Objects.requireNonNull(existing.getPhone()), existing);
+      }
+    }
+
+    userContactPhoneRepository.deleteAllByUserId(Objects.requireNonNull(userId));
     List<UserContactPhone> savedPhones = new ArrayList<>();
     for (int i = 0; i < validated.phones().size(); i++) {
       ValidatedPhone vp = validated.phones().get(i);
@@ -184,7 +197,14 @@ public class UserProfileService {
       row.setTelegram(vp.telegram());
       row.setWhatsapp(vp.whatsapp());
       row.setViber(vp.viber());
-      savedPhones.add(userContactPhoneRepository.save(Objects.requireNonNull(row)));
+      UserContactPhone previouslyVerified = verifiedByPhone.get(vp.phone());
+      if (previouslyVerified != null) {
+        row.setPhoneVerified(true);
+        row.setPhoneVerifiedAt(previouslyVerified.getPhoneVerifiedAt());
+        row.setPhoneVerifiedVia(previouslyVerified.getPhoneVerifiedVia());
+      }
+      savedPhones.add(
+          Objects.requireNonNull(userContactPhoneRepository.save(Objects.requireNonNull(row))));
       log.debug(
           "Saved contact phone for user {}: {}",
           userId,
@@ -378,14 +398,19 @@ public class UserProfileService {
     List<UserContactPhoneDto> phoneDtos =
         phones.stream()
             .map(
-                p ->
-                    new UserContactPhoneDto(
-                        p.getId(),
-                        p.getPhone(),
-                        p.isPrimary(),
-                        p.isTelegram(),
-                        p.isWhatsapp(),
-                        p.isViber()))
+                p -> {
+                  UserContactPhone phone = Objects.requireNonNull(p);
+                  return new UserContactPhoneDto(
+                      Objects.requireNonNull(phone.getId()),
+                      Objects.requireNonNull(phone.getPhone()),
+                      phone.isPrimary(),
+                      phone.isTelegram(),
+                      phone.isWhatsapp(),
+                      phone.isViber(),
+                      phone.isPhoneVerified(),
+                      phone.getPhoneVerifiedAt(),
+                      phone.getPhoneVerifiedVia());
+                })
             .toList();
     boolean complete = isProfileComplete(profile, phones, channels);
     return new UserProfileDto(

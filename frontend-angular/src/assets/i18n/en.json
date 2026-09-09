@@ -548,6 +548,31 @@
       "phonesEmpty": "No phones yet. Press «+» to add one.",
       "phone": "Phone number",
       "primaryPhone": "Primary",
+      "phoneVerified": "Verified",
+      "phoneNotVerified": "Not verified",
+      "telegram": {
+        "title": "Telegram",
+        "hint": "Link Telegram and share your contact in the bot to verify a phone number from your profile.",
+        "verify": "Verify via Telegram",
+        "unlink": "Unlink",
+        "unlinkConfirm": "Unlink Telegram from this account?",
+        "statusLinked": "Linked",
+        "statusNotLinked": "Not linked",
+        "phoneVerified": "Phone verified",
+        "phoneNotVerified": "Share contact in the bot",
+        "linkTitle": "Telegram link code",
+        "linkHint": "Open the bot or send this code in the bot chat.",
+        "expiresAt": "Valid until {{at}}",
+        "copyCode": "Copy code",
+        "copied": "Copied",
+        "openBot": "Open Telegram",
+        "close": "Close",
+        "alreadyLinked": "Telegram is already linked",
+        "channelDisabled": "Telegram channel is disabled on the server",
+        "linkFailed": "Could not create a link code",
+        "unlinked": "Telegram unlinked",
+        "unlinkFailed": "Could not unlink Telegram"
+      },
       "errors": {
         "channelPhoneRequired": "Phone channel requires at least one number",
         "channelMessengerRequired": "Messengers channel requires Telegram, WhatsApp or Viber",
@@ -556,6 +581,24 @@
         "primaryPhoneInvalid": "Exactly one primary phone is required",
         "validation": "Please check the form fields"
       }
+    },
+    "adminChatbots": {
+      "title": "Chatbots",
+      "refresh": "Refresh",
+      "loadFailed": "Failed to load chatbot data",
+      "module": "Module",
+      "moduleOn": "Enabled",
+      "moduleOff": "Disabled",
+      "enabled": "Active",
+      "configured": "Configured",
+      "activeIdentities": "Active links",
+      "channel": "Channel",
+      "userId": "User ID",
+      "externalUserId": "External ID",
+      "status": "Status",
+      "linkedAt": "Linked at",
+      "yes": "Yes",
+      "no": "No"
     },
     "adminUsers": {
       "title": "Users",
@@ -1313,6 +1356,7 @@
     "adminDrivers": "Drivers",
     "adminVehicleCombinations": "Combinations",
     "adminTrips": "Trips",
+    "adminChatbots": "Chatbots",
     "myTrips": "My trips"
   },
   "auth": {

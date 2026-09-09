@@ -40,6 +40,17 @@ public class UserContactPhone {
   @Column(name = "has_viber", nullable = false)
   private boolean viber;
 
+  /** Чи підтверджено номер через месенджер (серверний прапорець). */
+  @Column(name = "phone_verified", nullable = false)
+  private boolean phoneVerified;
+
+  @Column(name = "phone_verified_at")
+  private Instant phoneVerifiedAt;
+
+  /** Канал верифікації, напр. TELEGRAM. */
+  @Column(name = "phone_verified_via", length = 16)
+  private String phoneVerifiedVia;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private Instant createdAt;
@@ -117,6 +128,30 @@ public class UserContactPhone {
 
   public void setViber(boolean viber) {
     this.viber = viber;
+  }
+
+  public boolean isPhoneVerified() {
+    return phoneVerified;
+  }
+
+  public void setPhoneVerified(boolean phoneVerified) {
+    this.phoneVerified = phoneVerified;
+  }
+
+  public Instant getPhoneVerifiedAt() {
+    return phoneVerifiedAt;
+  }
+
+  public void setPhoneVerifiedAt(Instant phoneVerifiedAt) {
+    this.phoneVerifiedAt = phoneVerifiedAt;
+  }
+
+  public String getPhoneVerifiedVia() {
+    return phoneVerifiedVia;
+  }
+
+  public void setPhoneVerifiedVia(String phoneVerifiedVia) {
+    this.phoneVerifiedVia = phoneVerifiedVia;
   }
 
   public Instant getCreatedAt() {
