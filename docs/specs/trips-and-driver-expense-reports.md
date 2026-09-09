@@ -1,5 +1,12 @@
 # Technical Specification / Техническое задание: Trips & Driver Expense Reports
 
+## Статус
+- **Реализация:** реализовано
+- **Роль:** источник истины
+- **Клиент:** Angular + Java
+- **Остаток:** сверка с `FreightCostCalculation` — вне scope
+- **Реестр:** [README.md](README.md)
+
 ## Language Rules / Правила языка
 - **Primary language / Основной язык:** RU
 - **Secondary language / Дополнительный язык:** EN
@@ -75,7 +82,7 @@ Lines: category, amount, currency_code, expense_date, description, optional stor
 - Flyway после drivers/combinations.
 
 ## 13) Acceptance Criteria
-- [ ] Рейсы создаются с/без заявки; назначение состава работает (catalog + override).
-- [ ] Overlap и license checks.
-- [ ] Expense workflow driver vs manager.
-- [ ] Tests + system.md updated.
+- [x] Рейсы создаются с/без заявки; назначение состава работает (catalog + override).
+- [x] Overlap и license checks.
+- [x] Expense workflow driver vs manager.
+- [x] Tests + system.md updated (`TripAndExpenseIntegrationTest`).

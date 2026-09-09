@@ -1,7 +1,11 @@
 # Technical Specification / Техническое задание: User Profile / Профиль пользователя
 
 ## Статус
-**Реалізовано** (Angular + Java; Flutter не входить).
+- **Реализация:** реализовано
+- **Роль:** источник истины
+- **Клиент:** Angular + Java (`frontend-flutter/` не входит)
+- **Остаток:** нет
+- **Реестр:** [README.md](README.md)
 
 Целевой клиент — `frontend-angular`. `frontend-flutter/` не входит (заморозка Flutter).
 

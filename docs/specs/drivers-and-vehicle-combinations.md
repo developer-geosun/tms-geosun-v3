@@ -1,5 +1,12 @@
 # Technical Specification / Техническое задание: Drivers & Vehicle Combinations
 
+## Статус
+- **Реализация:** реализовано
+- **Роль:** источник истины
+- **Клиент:** Angular + Java
+- **Остаток:** виды документов — enum `PASSPORT` / `DRIVER_LICENSE`, не FK на `document_types` (v2)
+- **Реестр:** [README.md](README.md)
+
 ## Language Rules / Правила языка
 - **Primary language / Основной язык:** RU
 - **Secondary language / Дополнительный язык:** EN
@@ -109,11 +116,11 @@
 3. Frontend API + pages + i18n.
 
 ## 13) Acceptance Criteria
-- [ ] CRUD водителей и документов работает для ADMIN/MANAGER.
-- [ ] Привязка User и soft-delete/restore с заявленными кодами.
-- [ ] CRUD автопоездов с проверкой типов и unique pair.
-- [ ] UI desktop + handset, i18n.
-- [ ] Tests + docs updated.
+- [x] CRUD водителей и документов работает для ADMIN/MANAGER.
+- [x] Привязка User и soft-delete/restore с заявленными кодами.
+- [x] CRUD автопоездов с проверкой типов и unique pair.
+- [x] UI desktop + handset, i18n.
+- [x] Tests + docs updated (`AdminDriverAndCombinationIntegrationTest`).
 
 ## 14) Test Plan
 - Integration: RBAC, unique, documents upload, link user, combination types.

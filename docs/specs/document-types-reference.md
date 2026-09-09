@@ -1,8 +1,14 @@
 # Справочник видов документов
 
 ## Статус
+- **Реализация:** частично
+- **Роль:** источник истины по CRUD справочника видов (`/admin/document-types`)
+- **Клиент:** Angular + Java
+- **Остаток:** интеграция с карточками ТС/водителей (v2). Seed UUID `c1000000-…` в этом файле **устарели** — актуальный каталог: [document-types-ua-default-catalog.md](document-types-ua-default-catalog.md) (`V39`, `c2000000-…`)
+- **Реестр:** [README.md](README.md)
+
 - **Каталог (CRUD):** реализовано (Flyway `V35`, admin UI `/admin/document-types`, доступ `ADMIN`).
-- **Seed:** свидетельство о регистрации ТС (UA) — `V36` / `V37` (исправление UTF-8).
+- **Seed UA:** реализовано отдельной спекой (`V39`); не использовать UUID из раздела seed ниже.
 - **Интеграция с карточками ТС/водителей:** не реализована (enum `VehicleDocumentType` / `DriverDocumentType` пока не заменены).
 
 ## Цель
@@ -12,6 +18,7 @@
 - Мягкое удаление (`is_deleted`, `deleted_at`).
 
 ## Связанные документы
+- [`document-types-ua-default-catalog.md`](document-types-ua-default-catalog.md) — актуальный UA-seed (`V39`).
 - [`vehicles-reference.md`](vehicles-reference.md) — поля `registration_series` / `registration_number`, сканы свидетельства.
 - [`drivers-and-vehicle-combinations.md`](drivers-and-vehicle-combinations.md) — паспорт, права, сканы FRONT/BACK.
 - [`file-storage.md`](file-storage.md) — хранение бинарников.
@@ -246,6 +253,8 @@
 | ІПН (ИНН) | `c1000000-0000-4000-8000-000000000005` |
 
 > Для seed-миграций кириллицу в SQL сохранять через `CONVERT(UNHEX(...) USING utf8mb4)` (см. `V37`) — иначе на Windows возможна порча кодировки.
+>
+> **Актуальный seed:** таблица ниже и UUID `c1000000-…` **не используются**. Живой каталог — [document-types-ua-default-catalog.md](document-types-ua-default-catalog.md) / Flyway `V39` (`c2000000-…`).
 
 ---
 
@@ -271,8 +280,8 @@
 
 - [x] CRUD + soft delete + restore для ADMIN.
 - [x] Уникальность имени в пределах страны.
-- [x] Seed: свидетельство о регистрации ТС (UA).
-- [ ] Seed: права, паспорта, ІПН (UA).
+- [x] Seed: свидетельство о регистрации ТС (UA) — исторический `V36`/`V37`; перекрыт `V39`.
+- [x] Seed: права, паспорта (UA) — через [document-types-ua-default-catalog.md](document-types-ua-default-catalog.md) (`V39`). ІПН в текущем UA-каталоге **нет** (вне его scope).
 - [ ] Спека согласована с заказчиком.
 - [ ] Интеграция с карточками ТС/водителей (v2).
 

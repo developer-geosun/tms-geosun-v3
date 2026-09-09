@@ -8,7 +8,8 @@ This folder contains reusable templates for specifications and AI prompts.
 
 ## Specification templates
 - `specs/_template.md`  
-  Universal bilingual (RU/EN) technical specification template.
+  Universal bilingual (RU/EN) technical specification template (блок **Статус** обязателен).
+- Живые ТЗ: `docs/specs/`. Реестр статусов: `docs/specs/README.md`.
 
 ## Prompt templates
 - `prompts/spec-to-plan.md`  

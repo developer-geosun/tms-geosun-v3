@@ -10,7 +10,7 @@
 - Frontend на Angular 21 с маршрутизацией, i18n и auth-слоем (`AuthService`, `AuthGuard`, `AuthInterceptor`, login-page).
 - **Flutter Web client** (`frontend-flutter/`): каркас + auth (login/refresh/logout/me), i18n uk/en/ru, порт dev `:4300`. Бизнес-экраны и mobile — следующие фазы; Angular остаётся основным UI для admin и route-builder.
 - Экраны `/route-builder` (построение и сохранение маршрута), `/routes` (список и открытие сохранённых маршрутов), `/my-freight-requests` (заявки пользователя) и диалог заявки на фрахт работают через backend API.
-- Есть admin-страницы `/admin/route-requests` (очередь, ИИ-расчёт, quote), `/admin/freight-calculation-scenarios` (сценарии), `/admin/users` (список/карточка с контактами: `ADMIN` и `MANAGER` read; мутации учётки и PUT профиля — только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, а также `/my-trips` для водителя и `/profile` (self-service профиль учётки для всех ролей).
+- Есть admin-страницы `/admin/route-requests` (очередь, расчёт, quote), `/admin/freight-numeric-scenarios` (сценарии), `/admin/users` (список/карточка с контактами: `ADMIN` и `MANAGER` read; мутации учётки и PUT профиля — только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, а также `/my-trips` для водителя и `/profile` (self-service профиль учётки для всех ролей).
 - Backend на Java 21 + Spring Boot 3 с JWT auth, refresh token rotation и RBAC.
 - Backend модуль `routes`: сохранение, чтение списка/деталей (в т.ч. `view=active|all|deleted`), soft delete, блокировка `PUT` после заявки, `duplicate`/`restore`.
 - Backend модуль `route-requests`: создание заявок, список заявок пользователя, admin очередь; пробіг по країнах у відповіді заявки — з БД до явного admin `POST .../country-breakdown` (провайдер расчёта выбирается feature flag: `here` или `geojson`).
@@ -88,7 +88,7 @@
 - `frontend-angular/` — Angular приложение.
 - `frontend-flutter/` — Flutter Web client (auth v1; mobile позже).
 - `backend-java/` — Spring Boot backend (Maven, `src/main/java`, `src/main/resources`).
-- `docs/specs/` — ТЗ по фичам.
+- `docs/specs/` — ТЗ по фичам; реестр статусов и ролей — [`docs/specs/README.md`](specs/README.md).
 - `docs/templates/` — шаблоны ТЗ и промптов для LLM.
 
 ## Тесты и качество
@@ -126,7 +126,7 @@
 ## Важные правила разработки
 
 - Разрабатывать фичи в отдельных ветках (`feature/`*, `fix/`*), не напрямую в `main/master`.
-- Перед реализацией формировать/обновлять ТЗ в `docs/specs/`.
+- Перед реализацией читать [`docs/specs/README.md`](specs/README.md) (статус и роль документа), затем формировать/обновлять ТЗ в `docs/specs/`. После сдачи синхронизировать статус, реестр и чекбоксы DoD.
 - Не добавлять зависимости без обоснования.
 - Не хранить секреты и токены в репозитории.
 

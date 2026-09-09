@@ -1,5 +1,12 @@
 # Technical Specification / Техническое задание: Admin User Management
 
+## Статус
+- **Реализация:** реализовано
+- **Роль:** источник истины по `/admin/users` (мутации учётки)
+- **Клиент:** Angular + Java
+- **Остаток:** нет. **Факт:** MANAGER читает список и карточку; PUT профиля и role/active/delete/restore — только ADMIN (`user-profile.md`). Пункт Out of Scope «Доступ MANAGER к user-admin» устарел
+- **Реестр:** [README.md](README.md)
+
 ## Language Rules / Правила языка
 - **Primary language / Основной язык:** RU
 - **Secondary language / Дополнительный язык:** EN
@@ -13,7 +20,7 @@
 ## 2) Context / Контекст
 - **Project/module / Проект/модуль:** `backend-java` auth + `frontend-angular` admin pages.
 - **Current behavior / Текущее поведение:** регистрация всегда ставит `USER`; есть только `DELETE /api/v1/users/{id}` (soft-delete, ADMIN).
-- **Related docs / Связанные документы:** `docs/system.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`, `docs/specs/auth-authentication-authorization.md`.
+- **Related docs / Связанные документы:** `docs/system.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`, `docs/specs/auth-authentication-authorization.md`, `docs/specs/user-profile.md`.
 - **Environment constraints / Ограничения окружения:** Java 21 / Spring Boot 3, Angular 21 + Angular Material, единые breakpoints (`LayoutService`, `bp.handset`).
 
 ## 3) Scope (In) / Scope (входит в задачу)
@@ -29,7 +36,7 @@
 - Multi-role / permission matrix.
 - Invite / создание пользователя админом.
 - Смена email / пароля админом.
-- Доступ `MANAGER` к user-admin.
+- Доступ `MANAGER` к user-admin (устарело: GET списка/карточки разрешён; см. блок Статус).
 
 ## 5) User Stories / Пользовательские сценарии
 1. **Как** ADMIN, **я хочу** видеть список пользователей с фильтрами, **чтобы** быстро найти нужный аккаунт.
@@ -102,13 +109,13 @@
 4. Обновить `system.md` и auth ТЗ.
 
 ## 13) Acceptance Criteria (Definition of Done) / Критерии приемки
-- [ ] ADMIN может list/get/patch role/patch active/soft-delete через `/api/v1/admin/users`.
-- [ ] USER/MANAGER получают `403` на admin users API и не видят пункт меню.
-- [ ] Self-op и last-admin политики работают с заявленными кодами.
-- [ ] После deactivate/role/delete refresh цели недействителен.
-- [ ] Страница `/admin/users` работает на desktop и handset (фильтры, таблица `.table-shell`, диалоги).
-- [ ] Documentation updated / Документация обновлена.
-- [ ] Tests added/updated and passing / Тесты добавлены или обновлены и проходят.
+- [x] ADMIN может list/get/patch role/patch active/soft-delete через `/api/v1/admin/users`.
+- [x] USER получает `403` на admin users API и не видит пункт меню. MANAGER видит меню и GET list/get; мутации — `403`.
+- [x] Self-op и last-admin политики работают с заявленными кодами.
+- [x] После deactivate/role/delete refresh цели недействителен.
+- [x] Страница `/admin/users` работает на desktop и handset (фильтры, таблица `.table-shell`, диалоги).
+- [x] Documentation updated / Документация обновлена.
+- [x] Tests added/updated and passing / Тесты добавлены или обновлены и проходят (`AdminUserIntegrationTest`).
 
 ## 14) Test Plan / Тест-план
 - **Unit:** frontend API service.

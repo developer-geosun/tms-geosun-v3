@@ -1,5 +1,12 @@
 # Technical Specification / Техническое задание: User Authentication & Authorization / Аутентификация и авторизация пользователей
 
+## Статус
+- **Реализация:** реализовано
+- **Роль:** источник истины по login/JWT/RBAC и Angular auth-слою
+- **Клиент:** Angular + Java
+- **Остаток:** нет. §12 (план с `Code.gs`) — исторический, не выполнять. MVP сервера: [TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md](TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md)
+- **Реестр:** [README.md](README.md)
+
 ## Language Rules / Правила языка
 - **Primary language / Основной язык:** RU
 - **Secondary language / Дополнительный язык:** EN
@@ -13,7 +20,7 @@
 ## 2) Context / Контекст
 - **Project/module / Проект/модуль:** `frontend-angular` (Angular 21) + `backend-java` (Java 21, Spring Boot 3).
 - **Current behavior / Текущее поведение:** На backend уже реализованы auth endpoint-ы `/api/v1/auth/*` и soft-delete `/api/v1/users/{id}`. Этот документ синхронизирован с фактической реализацией backend v1.
-- **Related docs / Связанные документы:** `docs/system.md`, `backend-java/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`.
+- **Related docs / Связанные документы:** `docs/system.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`, `docs/specs/admin-user-management.md`.
 - **Environment constraints / Ограничения окружения:** Frontend должен работать с REST backend по base URL (`http://localhost:8080` локально) и префиксу `/api/v1`.
 
 ## 3) Scope (In) / Scope (входит в задачу)
@@ -180,6 +187,8 @@
   - `user`: только пользовательские разделы.
 
 ## 10) Architecture Changes / Изменения в архитектуре
+> Историческое описание (Google Apps Script). **Факт:** Spring Boot + Angular; роль `MANAGER` имеет admin-контур (заявки, справочники). Не реализовывать GAS.
+
 - **Components/services / Компоненты/сервисы:**
   - Frontend: `AuthService`, `AuthGuard`, `AuthInterceptor`.
   - Backend (GAS): роутинг в `doPost`, handlers проверки токенов и ролей.
@@ -194,9 +203,11 @@
 - Не менять несвязанные модули.
 - Не добавлять зависимость без описания причины в PR.
 - Не хранить секреты в репозитории.
-- Учитывать ограничения Google Apps Script (runtime/квоты/модель web app endpoint).
+- Учитывать ограничения Google Apps Script (runtime/квоты/модель web app endpoint) — **историческое, не актуально** (backend = Spring Boot).
 
 ## 12) Implementation Plan / План реализации
+> Исторический план (Apps Script `Code.gs`). **Не выполнять.** Актуальная реализация — Spring Boot + Angular; см. блок Статус.
+
 1. Утвердить модель ролей и матрицу доступа.
 2. Реализовать в `backend-java/src/Code.gs` роутинг `doPost` и endpoints `login/refresh/logout`; `me` реализовать через `doGet` с параметром маршрута или через общий роутер.
 3. Реализовать проверку access token и ролей на backend.
@@ -206,14 +217,14 @@
 7. Обновить документацию и инструкции запуска, включая разделы `docs/system.md`.
 
 ## 13) Acceptance Criteria (Definition of Done) / Критерии приемки
-- [ ] Пользователь может войти и получить корректные токены.
-- [ ] Защищенные API возвращают `401` без access token.
-- [ ] Пользователь с недостаточными правами получает `403`.
-- [ ] Refresh flow работает при истечении access token.
-- [ ] Logout инвалидирует refresh-сессию.
-- [ ] Frontend корректно обрабатывает `401/403`.
-- [ ] Тесты на критичные auth-сценарии добавлены и проходят.
-- [ ] Документация по auth-потоку обновлена.
+- [x] Пользователь может войти и получить корректные токены.
+- [x] Защищенные API возвращают `401` без access token.
+- [x] Пользователь с недостаточными правами получает `403`.
+- [x] Refresh flow работает при истечении access token.
+- [x] Logout инвалидирует refresh-сессию.
+- [x] Frontend корректно обрабатывает `401/403`.
+- [x] Тесты на критичные auth-сценарии добавлены и проходят (`ApiIntegrationTest`, guards/interceptor spec).
+- [x] Документация по auth-потоку обновлена.
 
 ## 14) Test Plan / Тест-план
 - **Unit:**

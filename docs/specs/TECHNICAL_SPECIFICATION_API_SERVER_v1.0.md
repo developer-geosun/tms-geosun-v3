@@ -1,5 +1,12 @@
 # ТЗ v1.0: MVP сервера авторизации и аутентификации (Java)
 
+## Статус
+- **Реализация:** реализовано
+- **Роль:** исторический MVP Java-сервера auth (регистрация, JWT, verify-email, soft-delete)
+- **Клиент:** backend-java; UI auth — Angular (см. [auth-authentication-authorization.md](auth-authentication-authorization.md))
+- **Остаток:** не расширять этот файл. Новые правила login/RBAC — в auth-спеке; админка пользователей — в [admin-user-management.md](admin-user-management.md)
+- **Реестр:** [README.md](README.md)
+
 Версия документа: `v1.0`
 
 ## 1. Цель проекта
