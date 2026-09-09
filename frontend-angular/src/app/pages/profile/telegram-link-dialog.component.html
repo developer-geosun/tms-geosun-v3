@@ -10,19 +10,26 @@
   </p>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-stroked-button type="button" (click)="copyCode()">
-    <mat-icon aria-hidden="true">content_copy</mat-icon>
-    {{
-      (copied() ? 'pages.profile.telegram.copied' : 'pages.profile.telegram.copyCode') | translate
-    }}
-  </button>
-  @if (data.link.deepLink) {
-    <button mat-flat-button color="primary" type="button" (click)="openTelegram()">
-      {{ 'pages.profile.telegram.openBot' | translate }}
+<mat-dialog-actions class="telegram-link-dialog__actions">
+  <div class="telegram-link-dialog__primary-actions">
+    <button mat-stroked-button type="button" (click)="copyCode()">
+      <mat-icon aria-hidden="true">content_copy</mat-icon>
+      {{
+        (copied() ? 'pages.profile.telegram.copied' : 'pages.profile.telegram.copyCode') | translate
+      }}
     </button>
-  }
-  <button mat-stroked-button type="button" (click)="close()">
+    @if (data.link.deepLink) {
+      <button mat-flat-button color="primary" type="button" (click)="openTelegram()">
+        {{ 'pages.profile.telegram.openBot' | translate }}
+      </button>
+    }
+  </div>
+  <button
+    mat-button
+    type="button"
+    class="telegram-link-dialog__close"
+    (click)="close()"
+  >
     {{ 'pages.profile.telegram.close' | translate }}
   </button>
 </mat-dialog-actions>

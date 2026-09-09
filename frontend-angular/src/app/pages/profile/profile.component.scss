@@ -219,6 +219,15 @@
   min-width: 9.5rem;
 }
 
+/* Основний + статус — один блок, щоб не роз’їжджались при wrap */
+.profile-page__phone-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.65rem;
+  min-width: 0;
+}
+
 .profile-page__phone-primary {
   flex: 0 0 auto;
   white-space: nowrap;
@@ -335,23 +344,41 @@
     align-items: center;
   }
 
+  /* Рядок: поле + видалити; нижче — Основний і статус в один ряд */
   .profile-page__phone-top {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'input remove'
+      'meta meta';
+    align-items: center;
+    column-gap: 0.35rem;
+    row-gap: 0.35rem;
   }
 
   .profile-page__phone-input {
-    flex: 1 1 9.5rem;
-    width: auto;
+    grid-area: input;
+    flex: none;
+    width: 100%;
+    max-width: none;
     min-width: 0;
   }
 
-  .profile-page__phone-remove {
-    margin-left: auto;
+  .profile-page__phone-meta {
+    grid-area: meta;
+    width: 100%;
   }
 
+  .profile-page__phone-remove {
+    grid-area: remove;
+    margin-left: 0;
+    align-self: center;
+  }
+
+  /* Дії Telegram поруч із чекбоксом, без окремого «кривого» рядка */
   .profile-page__telegram-actions {
-    width: 100%;
-    margin-left: 1.75rem;
+    width: auto;
+    margin-left: 0;
   }
 
   .profile-page__footer {

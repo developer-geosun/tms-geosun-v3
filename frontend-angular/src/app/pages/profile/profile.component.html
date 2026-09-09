@@ -161,22 +161,24 @@
                               placeholder="+380..."
                             />
                           </mat-form-field>
-                          <mat-radio-button
-                            class="profile-page__phone-primary"
-                            [checked]="phoneCtrl.get('primary')?.value"
-                            (change)="setPrimary(i)"
-                          >
-                            {{ 'pages.profile.primaryPhone' | translate }}
-                          </mat-radio-button>
-                          @if (isPhoneVerified(i)) {
-                            <span class="profile-page__status-pill profile-page__status-pill--ok">
-                              {{ 'pages.profile.phoneVerified' | translate }}
-                            </span>
-                          } @else {
-                            <span class="profile-page__status-pill">
-                              {{ 'pages.profile.phoneNotVerified' | translate }}
-                            </span>
-                          }
+                          <div class="profile-page__phone-meta">
+                            <mat-radio-button
+                              class="profile-page__phone-primary"
+                              [checked]="phoneCtrl.get('primary')?.value"
+                              (change)="setPrimary(i)"
+                            >
+                              {{ 'pages.profile.primaryPhone' | translate }}
+                            </mat-radio-button>
+                            @if (isPhoneVerified(i)) {
+                              <span class="profile-page__status-pill profile-page__status-pill--ok">
+                                {{ 'pages.profile.phoneVerified' | translate }}
+                              </span>
+                            } @else {
+                              <span class="profile-page__status-pill">
+                                {{ 'pages.profile.phoneNotVerified' | translate }}
+                              </span>
+                            }
+                          </div>
                           <button
                             mat-icon-button
                             type="button"

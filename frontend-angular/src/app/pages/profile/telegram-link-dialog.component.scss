@@ -1,8 +1,19 @@
+:host {
+  display: block;
+}
+
+:host h2[mat-dialog-title] {
+  text-align: center;
+  margin-bottom: 0;
+}
+
 .telegram-link-dialog {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
   min-width: min(100%, 20rem);
+  text-align: center;
 }
 
 .telegram-link-dialog__hint {
@@ -24,4 +35,44 @@
   font-size: 0.875rem;
   color: var(--mat-sys-on-surface-variant, inherit);
   text-align: center;
+}
+
+/* Дві основні дії в один ряд; «Закрити» окремо по центру — без кривого wrap */
+.telegram-link-dialog__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0));
+  box-sizing: border-box;
+}
+
+.telegram-link-dialog__primary-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  width: 100%;
+
+  /* Дві кнопки поруч, коли є deepLink і ширина дозволяє */
+  &:has(> :nth-child(2)) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  button {
+    width: 100%;
+    min-height: 2.5rem;
+  }
+
+  mat-icon {
+    margin-inline-end: 0.25rem;
+    font-size: 1.125rem;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+.telegram-link-dialog__close {
+  align-self: center;
+  min-height: 2.25rem;
 }
