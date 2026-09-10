@@ -609,6 +609,7 @@
       "filterCancel": "Cancel",
       "loading": "Loading...",
       "loadFailed": "Failed to load users",
+      "userNotFound": "User not found",
       "empty": "No users found",
       "email": "Email",
       "displayName": "Name",

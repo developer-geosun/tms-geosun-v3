@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -77,6 +78,8 @@ export class AdminUsersComponent implements AfterViewInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly snackBar = inject(MatSnackBar);
   private readonly translate = inject(TranslateService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   readonly roleOptions: AdminUserRole[] = ['USER', 'MANAGER', 'DRIVER', 'ADMIN'];
   readonly pageSizeOptions = [5, 10, 15, 25, 50];
@@ -119,6 +122,9 @@ export class AdminUsersComponent implements AfterViewInit {
 
   private lastHandsetViewport: boolean | null = null;
 
+  /** Щоб deep link з листа не відкривав діалог повторно після navigate. */
+  private deepLinkHandled = false;
+
   @ViewChild(MatPaginator) private paginator?: MatPaginator;
 
   constructor() {
@@ -146,7 +152,7 @@ export class AdminUsersComponent implements AfterViewInit {
       this.pageIndex.set(0);
       void this.reload();
     });
-    void this.reload();
+    void this.reload().then(() => this.openDeepLinkedUserIfNeeded());
   }
 
   ngAfterViewInit(): void {
@@ -260,6 +266,26 @@ export class AdminUsersComponent implements AfterViewInit {
     const changed = await firstValueFrom(ref.afterClosed());
     if (changed) {
       await this.reload();
+    }
+  }
+
+  /** Відкрити картку з deep link листа `/admin/users/{id}`. */
+  private async openDeepLinkedUserIfNeeded(): Promise<void> {
+    if (this.deepLinkHandled) {
+      return;
+    }
+    const userId = this.route.snapshot.paramMap.get('userId')?.trim();
+    if (!userId) {
+      return;
+    }
+    this.deepLinkHandled = true;
+    try {
+      const user = await this.usersApi.getById(userId);
+      await this.openProfile(user);
+    } catch {
+      this.notify('pages.adminUsers.userNotFound', 'error');
+    } finally {
+      await this.router.navigate(['/admin/users'], { replaceUrl: true });
     }
   }
 

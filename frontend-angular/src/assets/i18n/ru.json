@@ -609,6 +609,7 @@
       "filterCancel": "Отмена",
       "loading": "Загрузка...",
       "loadFailed": "Не удалось загрузить пользователей",
+      "userNotFound": "Пользователь не найден",
       "empty": "Пользователи не найдены",
       "email": "Email",
       "displayName": "ФИО",

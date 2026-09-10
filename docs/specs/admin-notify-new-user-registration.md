@@ -212,7 +212,7 @@ GeoSun: нова реєстрація user@example.com id=550e8400-e29b-41d4-a71
 ## 9) UX/UI Requirements (frontend) / UX/UI требования (frontend)
 - States: hint статичный, без loading (каналы уже на форме профиля).
 - Form behavior: без новых полей.
-- Navigation: из письма/бота — `/admin/users/{id}` (существующая карточка; если id не найден — текущий 404 админки).
+- Navigation: из письма/бота — `/admin/users/{id}` открывает список и диалог профиля (после закрытия URL → `/admin/users`); если id не найден — snack `userNotFound`.
 - UI texts: `pages.profile.adminNotifyChannelsHint` в `uk.json` / `en.json` / `ru.json`.
 
 ## 10) Architecture Changes / Изменения в архитектуре

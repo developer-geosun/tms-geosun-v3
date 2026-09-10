@@ -127,6 +127,14 @@ export const routes: Routes = [
       import('./pages/admin-users/admin-users.component').then((m) => m.AdminUsersComponent)
   },
   {
+    // Deep link з листа «нова реєстрація»: /admin/users/{id}
+    path: 'admin/users/:userId',
+    canActivate: [authAvailabilityGuard, serviceStopGuard, authGuard],
+    data: { roles: ['admin', 'manager'] },
+    loadComponent: () =>
+      import('./pages/admin-users/admin-users.component').then((m) => m.AdminUsersComponent)
+  },
+  {
     path: 'admin/document-types',
     canActivate: [authAvailabilityGuard, serviceStopGuard, authGuard],
     data: { roles: ['admin'] },
