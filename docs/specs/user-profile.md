@@ -32,6 +32,7 @@
   - [`admin-user-management.md`](admin-user-management.md)
   - [`drivers-and-vehicle-combinations.md`](drivers-and-vehicle-combinations.md) — правила ПІБ, отдельная сущность
   - [`chatbots-telegram-whatsapp-viber.md`](chatbots-telegram-whatsapp-viber.md) — identity бота (`bot_identities`), не колонки профиля; `@username` по-прежнему вне профиля
+  - [`admin-notify-new-user-registration.md`](admin-notify-new-user-registration.md) — каналы профиля ADMIN используются и как транспорт системного алерта «новая регистрация»
 - **Environment constraints / Ограничения окружения:** Java 21 / Spring Boot 3, Flyway (следующая миграция после `V39`), MySQL, Angular 21 + Material, i18n ua/en/ru (файлы `uk.json` / `en.json` / `ru.json` не переименовывать).
 
 ## 3) Scope (In) / Scope (входит в задачу)
@@ -97,6 +98,7 @@
 10. `PHONE` → `phones.length ≥ 1`.
 11. `MESSENGERS` → існує хоча б один телефон з `telegram \|\| whatsapp \|\| viber`.
 12. Канали зберігаються трьома boolean-колонками на `user_profiles` (`contact_via_email`, `contact_via_phone`, `contact_via_messengers`).
+12a. Для ролі **ADMIN** ті самі прапорці — транспорт системного сповіщення «нова реєстрація» ([admin-notify-new-user-registration.md](admin-notify-new-user-registration.md)). Правила обов’язковості каналів у формі профілю **не** змінюються цим ТЗ.
 
 ### 6.5 Повнота профілю
 13. `profileComplete = true`, якщо виконуються §6.2–6.4. Інакше `false`.

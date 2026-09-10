@@ -26,6 +26,7 @@ public class AppEmailProperties {
       "https://www.facebook.com/profile.php?id=100063988064019";
   private static final String VERIFY_EMAIL_PATH = "/verify-email";
   private static final String RESET_PASSWORD_PATH = "/reset-password";
+  private static final String ADMIN_USERS_PATH = "/admin/users/";
 
   private String from = "no-reply@example.com";
 
@@ -211,6 +212,13 @@ public class AppEmailProperties {
   @NonNull
   public String buildPasswordResetLink(@NonNull AppClient client, @NonNull String rawToken) {
     return buildActionLink(client, RESET_PASSWORD_PATH, rawToken);
+  }
+
+  /** Картка користувача в Angular admin (лише Angular base URL). */
+  @NonNull
+  public String buildAdminUserCardLink(@NonNull String userId) {
+    String id = Objects.requireNonNull(userId).trim();
+    return resolveAppBaseUrl(AppClient.ANGULAR) + ADMIN_USERS_PATH + id;
   }
 
   @NonNull

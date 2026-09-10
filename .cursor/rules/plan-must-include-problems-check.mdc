@@ -1,0 +1,34 @@
+---
+description: В каждом плане реализации обязателен явный шаг проверки Problems = 0 (в т.ч. тесты Java)
+alwaysApply: true
+---
+
+# План: обязательный шаг Problems = 0
+
+При создании или уточнении **плана реализации** (CreatePlan / markdown-план / todos) **обязательно** включать отдельный шаг сдачи про Problems.
+
+## Что добавить в план
+
+В секции тестов / сдачи / Implementation Plan — отдельный пункт (или todo), не «заодно с Spotless»:
+
+```
+- ReadLints + чеклист null-safety по всем изменённым Java (включая `src/test/**`);
+  цель Problems = 0 (16778128 и др.). Не закрывать todo, пока панель чиста.
+```
+
+То же для Angular, если менялся frontend: `lint:fix` / ReadLints по `frontend-angular/src/`.
+
+## Почему отдельно
+
+- `ReadLints` иногда **не показывает** те же 16778128, что панель Problems у пользователя (особенно Mockito `any()` / `anyString()` в тестах).
+- Тесты (`backend-java/src/test/**/*.java`) — **та же** планка, что production-код.
+- «Тесты зелёные» ≠ «Problems = 0».
+
+## Связь
+
+После выполнения плана действует [`post-plan-problems-check.mdc`](post-plan-problems-check.mdc) и [`java-null-safety.mdc`](java-null-safety.mdc). Это правило требует **заранее** заложить шаг в сам план, а не только помнить при сдаче.
+
+```
+❌ План без шага Problems / только «Spotless + тесты»
+✅ В плане отдельный шаг/todo: Problems = 0 по изменённым файлам вкл. тесты
+```

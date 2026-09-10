@@ -541,6 +541,7 @@
       "channelEmail": "Email ({{email}})",
       "channelPhone": "Телефон",
       "channelMessengers": "Месенджери",
+      "adminNotifyChannelsHint": "Обрані канали також використовуються для системних сповіщень (наприклад, про нову реєстрацію користувача).",
       "channelsRequired": "Оберіть хоча б один канал зв'язку",
       "addPhone": "Додати телефон",
       "removePhone": "Видалити телефон",

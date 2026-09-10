@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface BotMessageLogRepository extends JpaRepository<BotMessageLog, String> {
 
+  boolean existsByIdempotencyKey(String idempotencyKey);
+
   @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("delete from BotMessageLog m where m.createdAt < :cutoff")
   int deleteByCreatedAtBefore(@Param("cutoff") Instant cutoff);

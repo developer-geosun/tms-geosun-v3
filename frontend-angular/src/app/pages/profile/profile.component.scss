@@ -150,6 +150,13 @@
   gap: 0.15rem;
 }
 
+.profile-page__channels-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--mat-sys-on-surface-variant, #5f6368);
+}
+
 .profile-page__phones-header {
   display: flex;
   flex-wrap: wrap;

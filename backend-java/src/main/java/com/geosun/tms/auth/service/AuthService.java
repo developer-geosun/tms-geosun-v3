@@ -26,6 +26,7 @@ import com.geosun.tms.auth.dto.response.UserPublicDto;
 import com.geosun.tms.auth.exception.ApiException;
 import com.geosun.tms.auth.mail.PasswordResetMailSender;
 import com.geosun.tms.auth.mail.VerificationMailSender;
+import com.geosun.tms.auth.notify.AdminNewUserNotifier;
 import com.geosun.tms.auth.ratelimit.RateLimitService;
 import com.geosun.tms.auth.repository.EmailVerificationTokenRepository;
 import com.geosun.tms.auth.repository.PasswordResetTokenRepository;
@@ -45,6 +46,8 @@ import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * Реєстрація, вхід, верифікація email, скидання пароля, refresh/logout та профіль.
@@ -66,6 +69,7 @@ public class AuthService {
   private final PasswordResetMailSender passwordResetMailSender;
   private final RateLimitService rateLimitService;
   private final UserProfileService userProfileService;
+  private final AdminNewUserNotifier adminNewUserNotifier;
 
   public AuthService(
       UserRepository userRepository,
@@ -79,7 +83,8 @@ public class AuthService {
       VerificationMailSender verificationMailSender,
       PasswordResetMailSender passwordResetMailSender,
       RateLimitService rateLimitService,
-      UserProfileService userProfileService) {
+      UserProfileService userProfileService,
+      AdminNewUserNotifier adminNewUserNotifier) {
     this.userRepository = userRepository;
     this.emailVerificationTokenRepository = emailVerificationTokenRepository;
     this.passwordResetTokenRepository = passwordResetTokenRepository;
@@ -92,6 +97,7 @@ public class AuthService {
     this.passwordResetMailSender = passwordResetMailSender;
     this.rateLimitService = rateLimitService;
     this.userProfileService = userProfileService;
+    this.adminNewUserNotifier = adminNewUserNotifier;
   }
 
   @Transactional
@@ -125,7 +131,28 @@ public class AuthService {
       log.error("Failed to send verification email after registration");
     }
 
+    scheduleAdminNotifyAfterCommit(user);
+
     return UserDtoMapper.toRegisterResponse(user);
+  }
+
+  /** Сповіщення ADMIN лише після успішного commit реєстрації. */
+  private void scheduleAdminNotifyAfterCommit(@NonNull User user) {
+    String newUserId = Objects.requireNonNull(user.getId());
+    String newUserEmail = Objects.requireNonNull(user.getEmail());
+    Instant createdAt =
+        Objects.requireNonNull(user.getCreatedAt() != null ? user.getCreatedAt() : Instant.now());
+    if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+      adminNewUserNotifier.notifyAdminsAsync(newUserId, newUserEmail, createdAt);
+      return;
+    }
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+          @Override
+          public void afterCommit() {
+            adminNewUserNotifier.notifyAdminsAsync(newUserId, newUserEmail, createdAt);
+          }
+        });
   }
 
   @Transactional

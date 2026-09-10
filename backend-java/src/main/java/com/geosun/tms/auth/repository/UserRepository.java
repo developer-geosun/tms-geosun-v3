@@ -2,6 +2,7 @@ package com.geosun.tms.auth.repository;
 
 import com.geosun.tms.auth.domain.user.Role;
 import com.geosun.tms.auth.domain.user.User;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -19,6 +20,8 @@ public interface UserRepository
   Optional<User> findTopByEmailOrderByDeletedAsc(String email);
 
   boolean existsByEmailAndDeletedFalse(String email);
+
+  List<User> findByRoleAndActiveTrueAndDeletedFalse(Role role);
 
   @Query(
       """

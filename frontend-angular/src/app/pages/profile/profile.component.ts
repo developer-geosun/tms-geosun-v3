@@ -84,6 +84,7 @@ export class ProfileComponent implements OnInit {
   readonly isDirty = signal(false);
   readonly loadError = signal<string | null>(null);
   readonly userEmail = computed(() => this.authService.user()?.email ?? '');
+  readonly isAdmin = computed(() => this.authService.hasAnyRole(['admin']));
   /** Прив'язка Telegram (окремо від форми профілю). */
   readonly telegramIdentity = signal<BotIdentitySelfContractDto | null>(null);
   readonly telegramBusy = signal(false);

@@ -238,6 +238,12 @@ class AdminUserIntegrationTest {
 
   @Test
   void admin_lastAdminProtected_viaService() {
+    // Інші класи без @Transactional могли залишити активних ADMIN у спільній H2.
+    for (User leftover : userRepository.findByRoleAndActiveTrueAndDeletedFalse(Role.ADMIN)) {
+      leftover.setActive(false);
+      userRepository.save(leftover);
+    }
+
     User soleAdmin = saveUser("sole-admin@example.com", "Admin123!", Role.ADMIN);
     String otherActorId = Objects.requireNonNull(UUID.randomUUID().toString());
     String soleAdminId = Objects.requireNonNull(soleAdmin.getId());

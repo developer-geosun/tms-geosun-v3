@@ -1,5 +1,7 @@
 package com.geosun.tms.chatbot.service;
 
+import org.springframework.lang.NonNull;
+
 /**
  * Українські тексти відповідей бота (v1: лише locale ua).
  */
@@ -60,4 +62,16 @@ public final class ChatbotMessages {
 
   public static final String UNKNOWN =
       "Не зрозумів повідомлення. Надішліть код прив'язки з профілю або /help.";
+
+  /** Текст сповіщення ADMIN про нову реєстрацію (locale ua за замовчуванням). */
+  @NonNull
+  public static String userRegistered(
+      @NonNull String newUserEmail, @NonNull String newUserId, @NonNull String adminCardLink) {
+    return "GeoSun TMS: нова реєстрація.\nEmail: "
+        + newUserEmail
+        + "\nId: "
+        + newUserId
+        + "\nКартка: "
+        + adminCardLink;
+  }
 }

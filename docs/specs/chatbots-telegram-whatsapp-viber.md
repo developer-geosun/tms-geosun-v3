@@ -42,6 +42,7 @@
   - [`routes-server-workflow-and-freight-quoting.md`](routes-server-workflow-and-freight-quoting.md) — заявка и quote (`NEW` → `QUOTED`, quote `SENT`).
   - [`trips-and-driver-expense-reports.md`](trips-and-driver-expense-reports.md) — рейс и expense report.
   - [`file-storage.md`](file-storage.md) — **не** используется в v1 (вложения из чата не принимаем).
+  - [`admin-notify-new-user-registration.md`](admin-notify-new-user-registration.md) — исходящее `USER_REGISTERED` всем ADMIN с каналом `MESSENGERS` (транспорт — этот модуль; правила получателей — та спека).
 - **Environment constraints / Ограничения окружения:** Java 21 / Spring Boot 3, Flyway (следующая миграция после `V41` → **`V42`**), MySQL, Angular 21 + Material, i18n ua/en/ru (файлы `uk.json` / `en.json` / `ru.json` не переименовывать). Публичный HTTPS URL backend обязателен для webhook (локально — как у API: ngrok / статический IP, см. `RUN.ru.md`).
 
 ## 3) Scope (In) / Scope (входит в задачу)
@@ -151,6 +152,7 @@ public interface ChatbotChannelAdapter {
 
 | Событие | Кому | Каналы |
 |---------|------|--------|
+| регистрация `POST /auth/register` (`USER_REGISTERED`) | каждый активный `ADMIN` с каналом профиля `MESSENGERS` | ACTIVE привязки **этого ADMIN**; детали и EMAIL/SMS — [admin-notify-new-user-registration.md](admin-notify-new-user-registration.md) |
 | `FreightQuoteService` отправил quote (`SENT`), заявка `QUOTED` | владелец заявки (`USER`) | все ACTIVE привязки владельца |
 | заявка `ACCEPTED` / `REJECTED` / `CANCELLED` / `EXPIRED` | владелец заявки | то же |
 | рейс `PLANNED` / `IN_PROGRESS` / `COMPLETED` / `CANCELLED` | `driver.user_id`, если учётка есть | то же |

@@ -14,6 +14,9 @@ class AppEmailPropertiesTest {
 
     assertThat(properties.buildVerificationLink(AppClient.ANGULAR, "tok en"))
         .isEqualTo("https://example.com/tms-geosun-v3/verify-email?token=tok+en");
+    assertThat(properties.buildAdminUserCardLink("550e8400-e29b-41d4-a716-446655440000"))
+        .isEqualTo(
+            "https://example.com/tms-geosun-v3/admin/users/550e8400-e29b-41d4-a716-446655440000");
     assertThat(properties.buildPasswordResetLink(AppClient.FLUTTER, "abc"))
         .isEqualTo("https://example.com/tms-geosun-v3/flutter/reset-password?token=abc");
     assertThat(properties.resolveAppBaseUrl(AppClient.FLUTTER))

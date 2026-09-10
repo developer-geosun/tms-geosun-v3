@@ -15,7 +15,8 @@
 - Backend модуль `routes`: сохранение, чтение списка/деталей (в т.ч. `view=active|all|deleted`), soft delete, блокировка `PUT` после заявки, `duplicate`/`restore`.
 - Backend модуль `route-requests`: создание заявок, список заявок пользователя, admin очередь; пробіг по країнах у відповіді заявки — з БД до явного admin `POST .../country-breakdown` (провайдер расчёта выбирается feature flag: `here` или `geojson`).
 - Backend модуль `quotes`: создание draft, отправка оффера, история офферов и idempotency.
-- Backend модуль `chatbot` (`com.geosun.tms.chatbot`): Telegram verify (link-code + share contact → `phone_verified`); webhook `POST /api/v1/webhooks/telegram`; self `/users/me/bot-*`; admin `/admin/chatbots`. Выключен по умолчанию (`app.chatbot.enabled=false`).
+- Backend модуль `chatbot` (`com.geosun.tms.chatbot`): Telegram verify (link-code + share contact → `phone_verified`); webhook `POST /api/v1/webhooks/telegram`; self `/users/me/bot-*`; admin `/admin/chatbots`; исходящее `USER_REGISTERED` для ADMIN с каналом MESSENGERS. Выключен по умолчанию (`app.chatbot.enabled=false`).
+- После `POST /api/v1/auth/register` (afterCommit): активные ADMIN получают служебное уведомление по каналам своего профиля (`app.notifications.user-registered.enabled`, default true; SMS — `app.sms.provider=none` → SKIP).
 - Деплой frontend на GitHub Pages через GitHub Actions (`main`/`master`, source **GitHub Actions**); публичный API — по выбору через ngrok или статический IP провайдера (только backend, см. `PUBLIC_ACCESS_MODE` в `.env` / `RUN.md`).
 
 ## Как работает (высокоуровнево)

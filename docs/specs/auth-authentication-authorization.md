@@ -20,7 +20,7 @@
 ## 2) Context / Контекст
 - **Project/module / Проект/модуль:** `frontend-angular` (Angular 21) + `backend-java` (Java 21, Spring Boot 3).
 - **Current behavior / Текущее поведение:** На backend уже реализованы auth endpoint-ы `/api/v1/auth/*` и soft-delete `/api/v1/users/{id}`. Этот документ синхронизирован с фактической реализацией backend v1.
-- **Related docs / Связанные документы:** `docs/system.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`, `docs/specs/admin-user-management.md`.
+- **Related docs / Связанные документы:** `docs/system.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`, `docs/specs/admin-user-management.md`, `docs/specs/admin-notify-new-user-registration.md` (алерт ADMIN после register — не часть login/JWT).
 - **Environment constraints / Ограничения окружения:** Frontend должен работать с REST backend по base URL (`http://localhost:8080` локально) и префиксу `/api/v1`.
 
 ## 3) Scope (In) / Scope (входит в задачу)

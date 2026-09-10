@@ -16,7 +16,8 @@ You are a senior engineer. Analyze the technical specification and prepare an im
 3. List impacted files/modules and why.
 4. List risks and open questions.
 5. Define acceptance checks and verification strategy.
+6. **Обязательно:** в плане отдельный шаг/todo сдачи — Problems = 0 по всем изменённым файлам, включая `backend-java/src/test/**` (ReadLints + чеклист null-safety / Mockito helpers). Не смешивать только со Spotless или «тесты зелёные».
 
 ## Output format
-- Use sections exactly matching Tasks 1-5.
+- Use sections exactly matching Tasks 1-6.
 - If ambiguity exists, ask clarifying questions before proposing code.

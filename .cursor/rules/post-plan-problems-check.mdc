@@ -20,17 +20,21 @@ alwaysApply: true
 
 **`ReadLints` → 0 ≠ панель Problems у пользователя пуста.**
 
-Для **нового / существенно изменённого Java** (`backend-java/**/*.java`) одного пустого ReadLints **мало**:
+Для **нового / существенно изменённого Java** (`backend-java/**/*.java`, **включая `src/test/**`**) одного пустого ReadLints **мало**:
 
-1. Пройди чеклист [`java-null-safety.mdc`](java-null-safety.mdc) по каждому новому файлу (repo args, `List.of` → `@NonNull`, Mockito helpers, `MediaType`, getters, override `findAll`, Hamcrest matchers).
-2. Если пользователь прислал JSON/скрин Problems — правь **все** пункты из списка; задача не сдана, пока он не подтвердит 0 или ReadLints по тем же путям чистый **после** правок по его списку.
-3. Не оправдывайся «компилируется» / «тесты зелёные» / «Spotless ок» — Problems отдельно.
+1. Пройди чеклист [`java-null-safety.mdc`](java-null-safety.mdc) по каждому новому файлу (repo args, `List.of` → `@NonNull`, Mockito helpers `any()`/`anyString()`, `MediaType`, getters, override `findAll`, Hamcrest matchers).
+2. Явно вызови **ReadLints** по путям новых/изменённых **тестов**, не только `src/main`.
+3. Если пользователь прислал JSON/скрин Problems — правь **все** пункты из списка; задача не сдана, пока он не подтвердит 0 или ReadLints по тем же путям чистый **после** правок по его списку.
+4. Не оправдывайся «компилируется» / «тесты зелёные» / «Spotless ок» — Problems отдельно.
+
+В **плане** шаг Problems = 0 обязателен заранее — см. [`plan-must-include-problems-check.mdc`](plan-must-include-problems-check.mdc).
 
 ```
 ❌ «Готово» при Problems > 0
 ❌ «ReadLints пустой» при открытых 16778128 у пользователя
+❌ Проверить только src/main, забыть src/test
 ❌ Оставить warning «на потом»
-✅ Чеклист null-safety + ReadLints + (при жалобе пользователя) все его пункты закрыты → ответ
+✅ Чеклист null-safety + ReadLints (main+test) + (при жалобе пользователя) все его пункты закрыты → ответ
 ```
 
 ## Когда не раздувать

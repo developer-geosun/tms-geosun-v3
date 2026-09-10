@@ -105,6 +105,12 @@ app:
   cleanup:
     token-retention-days: ${TOKEN_CLEANUP_RETENTION_DAYS:30}
     cron: ${TOKEN_CLEANUP_CRON:0 0 2 * * *}
+  notifications:
+    user-registered:
+      enabled: ${APP_NOTIFY_USER_REGISTERED_ENABLED:true}
+  sms:
+    enabled: ${APP_SMS_ENABLED:false}
+    provider: ${APP_SMS_PROVIDER:none}
   chatbot:
     enabled: ${CHATBOT_ENABLED:false}
     public-base-url: ${CHATBOT_PUBLIC_BASE_URL:}
