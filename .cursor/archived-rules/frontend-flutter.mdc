@@ -1,12 +1,15 @@
 ---
-description: Flutter frontend conventions for TMS GeoSun
-globs: frontend-flutter/**
+description: ARCHIVED (Flutter freeze) — не застосовувати; повернути в .cursor/rules/ лише після зняття заморозки
 alwaysApply: false
 ---
 
-# Flutter frontend (TMS GeoSun)
+# Flutter frontend (TMS GeoSun) — АРХІВ
 
-**ЗАМОРОЖЕНО.** Не змінювати цей клієнт, доки користувач явно не зніме заморозку. Активні напрямки: Angular + Java. Див. `work-scope-freeze.mdc`.
+> Не в `.cursor/rules/` — Cursor не підхоплює автоматично.
+> Повертати в `.cursor/rules/` лише після явного зняття заморозки (`work-scope-freeze.mdc`).
+> Було: `globs: frontend-flutter/**`. Таблиці: `flutter-directory-tables.mdc` у цій же теці.
+
+**ЗАМОРОЖЕНО.** Не змінювати цей клієнт, доки користувач явно не зніме заморозку. Активні напрямки: Angular + Java.
 
 ## Stack
 
@@ -42,7 +45,7 @@ alwaysApply: false
 
 - Primary actions: `FilledButton`; secondary/cancel: `OutlinedButton`.
 - Login card pattern for auth screens.
-- Directory / paged tables: follow `.cursor/rules/flutter-directory-tables.mdc` (еталон `/directories/countries`).
+- Directory / paged tables: follow `flutter-directory-tables.mdc` у цій теці (еталон `/directories/countries`).
 
 ## Dev
 

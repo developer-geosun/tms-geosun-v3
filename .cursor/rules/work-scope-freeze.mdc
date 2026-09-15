@@ -22,6 +22,7 @@ alwaysApply: true
 - Не запускати `flutter run` / `flutter test` / `dart format` як частину задачі.
 - Не пропонувати «заодно» правки Flutter, паралельний клієнт, «зробити як у Flutter, але ще й там».
 - Двозначне «фронтенд» = **тільки Angular**.
+- Не підвантажувати гайди з `.cursor/archived-rules/` (там `frontend-flutter.mdc`, `flutter-directory-tables.mdc`). Повернути їх у `.cursor/rules/` лише після зняття заморозки.
 
 ## Нагадування користувачу
 

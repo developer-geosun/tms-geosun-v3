@@ -1,13 +1,13 @@
 ---
-description: Flutter-таблиці довідників — еталон /directories/countries
-globs:
-  - frontend-flutter/lib/features/directories/**
-  - frontend-flutter/test/features/directories/**
-  - frontend-flutter/lib/**/*paged_table*.dart
+description: ARCHIVED (Flutter freeze) — не застосовувати; повернути в .cursor/rules/ лише після зняття заморозки
 alwaysApply: false
 ---
 
-# Flutter directory tables
+# Flutter directory tables — АРХІВ
+
+> Не в `.cursor/rules/` — Cursor не підхоплює автоматично.
+> Повертати в `.cursor/rules/` лише після явного зняття заморозки (`work-scope-freeze.mdc`).
+> Було: `globs` на `frontend-flutter/lib/features/directories/**`, тести та `*paged_table*.dart`.
 
 Еталон: `/directories/countries`.
 Код: `countries_directory_page.dart`, спільний каркас `directory_paged_table.dart` / `directory_table_layout.dart`.
