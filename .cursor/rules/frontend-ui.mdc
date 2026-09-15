@@ -43,7 +43,7 @@ Auth (login/register) — отдельное семейство (карточк�
 - Действие (сохранил, удалил, ошибка API) → `showAppSnack` ([`app-snackbar.ts`](frontend-angular/src/app/shared/utils/app-snackbar.ts)).
 - Ошибка загрузки списка / пустой список → блок на странице.
 - Ошибки полей формы / диалога → inline под полем.
-- Загрузка списка → `syncPageLoadingToToolbar(isLoading)`; полоска в toolbar, не локальный `mat-progress-bar` на странице. См. [`page-loading-toolbar.mdc`](page-loading-toolbar.mdc).
+- Загрузка списка → [`page-loading-toolbar.mdc`](page-loading-toolbar.mdc).
 
 ## Диалоги
 
@@ -55,5 +55,5 @@ Auth (login/register) — отдельное семейство (карточк�
 
 - Обёртки `app-button` вместо Material.
 - Свой хедер, если подходит миксин admin-list-toolbar.
-- Ad-hoc `@media` — только mixins из `_breakpoints.scss`.
+- Ad-hoc `@media` — [`mobile-layout-breakpoints.mdc`](mobile-layout-breakpoints.mdc).
 - Менять темы Material и цвета языковых toggle.

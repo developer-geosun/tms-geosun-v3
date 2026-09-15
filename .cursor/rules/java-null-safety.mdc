@@ -1,5 +1,5 @@
 ---
-description: Java null-safety (JDT 16778128) — обязательные @NonNull и Objects.requireNonNull; проверка Problems перед сдачей
+description: Java null-safety (JDT 16778128) — @NonNull и Objects.requireNonNull; сдача — problems-zero
 globs:
   - backend-java/src/main/java/**/*.java
   - backend-java/src/test/java/**/*.java
@@ -12,14 +12,7 @@ alwaysApply: false
 
 Используй **`org.springframework.lang.NonNull`** / **`Nullable`**, не `jakarta.annotation.Nonnull`.
 
-## Обязательно перед завершением Java-задачи (жёсткий стоп)
-
-**Не сдавать**, пока по изменённым Java в Problems не **0** (в т.ч. **16778128**, **67109778**/**67109781**, NPE **536871***, **1102**). Правило alwaysApply: [`problems-zero.mdc`](problems-zero.mdc).
-
-1. Вызови **ReadLints** по всем изменённым `backend-java/**/*.java`.
-2. **Не доверяй одному ReadLints=0** на новом коде — пройди быстрый чеклист ниже по каждому новому файлу.
-3. Если пользователь прислал список Problems — исправь **все** пункты **до** ответа «готово».
-4. Предупреждения остались → исправь; не «на потом».
+Сдача (ReadLints, Problems = 0) — [`problems-zero.mdc`](problems-zero.mdc). Ниже — как писать код, чтобы JDT молчал.
 
 ## 1. Контроллер → сервис
 
@@ -124,7 +117,6 @@ private static MimeMessage anyMailMessage() {
 
 - Не снимать `@NonNull` с сервиса «ради тишины» — усиливай контракт на границе.
 - Не ставить `@NonNull`, где null допустим — `@Nullable` или явная валидация.
-- Не игнорировать Problems: «компилируется» ≠ «готово».
 
 ## Быстрый чеклист (новый Java-код)
 
