@@ -1,17 +1,20 @@
 # Baseline канона (зафиксированное)
 
 **Дата создания:** 17 сентября 2026, 13:58 (UTC+3)  
-**Дата изменения:** 17 сентября 2026, 14:12 (UTC+3)  
+**Дата изменения:** 17 сентября 2026, 14:43 (UTC+3)  
 **Дата фиксации:** 17 сентября 2026  
 **Назначение:** согласованный список того, что уже в продукте (Angular + Java) и где единственный источник истины.  
 **Процесс после freeze:** [`docs/dev-workflow.ru.md`](../dev-workflow.ru.md) — новое через алгоритм **A**, изменение канона через **B**.  
+**Архитектура:** [`docs/architecture/ddd-pragmatic.ru.md`](../architecture/ddd-pragmatic.ru.md) — pragmatic DDD в силе для нового/затрагиваемого кода в core.  
+**Глоссарий:** [`docs/architecture/glossary.ru.en.ua.md`](../architecture/glossary.ru.en.ua.md) — единый язык (ua / ru / en).  
 **Реестр статусов:** [`README.ru.md`](README.ru.md).
 
 После явного «+» владельца по этому файлу:
 
 - менять поведение кода только через A или B;
 - правки текста baseline без смены кода — только если описание «как есть» ошибочно (алгоритм B, без реализации, если код уже совпадает);
-- бэклог ниже — **не** часть freeze; открывать отдельной задачей (A).
+- бэклог ниже — **не** часть freeze; открывать отдельной задачей (A);
+- код в core (B05–B09, B14 и связанный freight) — по ddd-pragmatic; Big Bang-рефакторинг не начинать без задачи B.
 
 Канонические имена файлов — с языковым суффиксом (`.ru.md`, `.ru.en.md`, `.ua.md`). Дубликаты без суффикса не считать источником истины.
 
@@ -40,6 +43,17 @@
 | B17 | Country reference | код + куски B05/B08 | карточка-дыра | отдельной спеки нет; справочник стран для breakdown живёт в коде — при доработке завести спеку (A) или дописать канон (B) |
 
 **Исторический MVP (не канон):** [`docs/archive/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md`](../archive/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md); актуальный auth — только B01.
+
+---
+
+## Архитектура (зафиксировано)
+
+| Тема | Документ | С |
+|------|----------|---|
+| Pragmatic DDD | [`docs/architecture/ddd-pragmatic.ru.md`](../architecture/ddd-pragmatic.ru.md) | 17 сентября 2026 |
+| Glossary (ua/ru/en) | [`docs/architecture/glossary.ru.en.ua.md`](../architecture/glossary.ru.en.ua.md) | 17 сентября 2026 |
+
+Новый и затрагиваемый код в **core** (Route Planning, Freight Commercial, Trip Operations) — по ADR. Остальное — transaction script, пока нет отдельной задачи B.
 
 ---
 

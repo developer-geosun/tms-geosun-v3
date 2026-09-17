@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Алгоритм разработки (A / B)
 
-Перед фичей или доработкой: [`docs/dev-workflow.ru.md`](docs/dev-workflow.ru.md), реестр [`docs/specs/README.ru.md`](docs/specs/README.ru.md), baseline [`docs/specs/BASELINE.ru.md`](docs/specs/BASELINE.ru.md).
+Перед фичей или доработкой: [`docs/dev-workflow.ru.md`](docs/dev-workflow.ru.md), реестр [`docs/specs/README.ru.md`](docs/specs/README.ru.md), baseline [`docs/specs/BASELINE.ru.md`](docs/specs/BASELINE.ru.md), DDD [`docs/architecture/ddd-pragmatic.ru.md`](docs/architecture/ddd-pragmatic.ru.md).
 
 ## Выбор
 

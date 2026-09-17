@@ -1,0 +1,30 @@
+---
+description: Pragmatic DDD — границы пакетов, core vs CRUD; без Big Bang
+alwaysApply: true
+---
+
+# DDD boundaries (pragmatic)
+
+Канон: [`docs/architecture/ddd-pragmatic.ru.md`](docs/architecture/ddd-pragmatic.ru.md). Глоссарий: [`docs/architecture/glossary.ru.en.ua.md`](docs/architecture/glossary.ru.en.ua.md). Baseline: [`docs/specs/BASELINE.ru.md`](docs/specs/BASELINE.ru.md). Процесс A/B: [`docs/dev-workflow.ru.md`](docs/dev-workflow.ru.md).
+
+## Core (строже)
+
+Пакеты / темы: Route Planning, Freight Commercial, Trip Operations (`routes`, `freight.cost`, `trips`).
+
+- Инварианты — в агрегате или чистых domain-правилах (без Spring), не размазывать `setStatus` / lock по сервисам.
+- Чужой пакет: только **id** и **порт**, не JPA-entity / `repository` соседа.
+- Application `service` — сценарий и транзакция; формулы/FSM — не в контроллере и не в Angular.
+
+## Supporting / generic (слабее)
+
+Identity, Catalog, Storage, Notification, простой CRUD Fleet — transaction script ок; не навязывать «полноценный» DDD.
+
+## Запреты
+
+```
+❌ Big Bang «весь backend на DDD»
+❌ Импорт Route/Trip/User entity в чужой домен «для удобства»
+❌ Вторая domain-модель на TypeScript с копией FSM
+❌ Микросервисы / Axon / event store без отдельного ADR
+✅ Новый/затронутый core-код по ddd-pragmatic.ru.md; остальное — по задаче B
+```

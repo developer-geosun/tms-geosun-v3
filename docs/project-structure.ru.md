@@ -1,8 +1,8 @@
 # Структура репозитория TMS GeoSun v3
 
 **Дата создания:** 15 сентября 2026, 00:00 (UTC+3)  
-**Дата изменения:** 17 сентября 2026, 14:12 (UTC+3)  
-**Дата фиксации:** 15 сентября 2026 (структура); процесс/baseline/archive — 17 сентября 2026.  
+**Дата изменения:** 17 сентября 2026, 14:32 (UTC+3)  
+**Дата фиксации:** 15 сентября 2026 (структура); процесс/baseline/archive/DDD — 17 сентября 2026.  
 **Файл:** снимок структуры. Назначение и API — [`docs/system.ru.md`](system.ru.md); канон — [`docs/specs/BASELINE.ru.md`](specs/BASELINE.ru.md); реестр — [`docs/specs/README.ru.md`](specs/README.ru.md); процесс — [`docs/dev-workflow.ru.md`](dev-workflow.ru.md).
 
 ## 1. Что это за проект
@@ -188,6 +188,8 @@ Guards: `authAvailabilityGuard` → `guestGuard` или `serviceStopGuard` + `au
 | Путь | Роль |
 |------|------|
 | `docs/dev-workflow.ru.md` | Алгоритмы **A** (новая фича) и **B** (доработка) |
+| `docs/architecture/ddd-pragmatic.ru.md` | Pragmatic DDD (в силе для core) |
+| `docs/architecture/glossary.ru.en.ua.md` | Единый язык домена (ua / ru / en) |
 | `docs/specs/BASELINE.ru.md` | Канон реализованного vs бэклог |
 | `docs/specs/README.ru.md` | Реестр ТЗ: статус, роль, остаток |
 | `docs/specs/*.<lang>.md` | Источники истины по фичам (канонические имена с языковым суффиксом) |

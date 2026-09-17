@@ -1,11 +1,15 @@
 # Алгоритм разработки TMS GeoSun
 
+**Дата создания:** 17 сентября 2026, 13:56 (UTC+3)  
+**Дата изменения:** 17 сентября 2026, 14:32 (UTC+3)
+
 Канон процесса после фиксации baseline. Клиент: **Angular + Java**. Flutter вне процесса (заморозка).
 
 Связанные документы:
 
 - Реестр: [`docs/specs/README.ru.md`](specs/README.ru.md)
 - Baseline: [`docs/specs/BASELINE.ru.md`](specs/BASELINE.ru.md)
+- Архитектура (DDD): [`docs/architecture/ddd-pragmatic.ru.md`](architecture/ddd-pragmatic.ru.md)
 - Архив (не источник истины): [`docs/archive/README.ru.md`](archive/README.ru.md)
 
 Между воротами — стоп, пока нет явного «+» (или «можно дальше») от владельца задачи.
@@ -23,6 +27,15 @@
 ```
 Задача → A (новое) или B (доработка)
 ```
+
+## DDD при исполнении (A4 / B4)
+
+С **17 сентября 2026** действует [`docs/architecture/ddd-pragmatic.ru.md`](architecture/ddd-pragmatic.ru.md):
+
+- **Core** (маршруты, фрахт/quote/ставка, рейсы): в плане и коде — use case → агрегат/правила → порт; не импортировать чужие JPA-сущности.
+- **CRUD / Identity / Storage / Notification:** transaction script достаточно.
+- Полный рефакторинг «под DDD» — только отдельной задачей **B**, не «заодно» с фичей.
+- Angular не дублирует доменный FSM/формулы.
 
 ---
 

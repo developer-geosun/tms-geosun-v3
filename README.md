@@ -1,7 +1,7 @@
 # TMS GeoSun v3
 
 **Created:** 17 September 2026, 14:21 (UTC+3)  
-**Last updated:** 17 September 2026, 14:23 (UTC+3)
+**Last updated:** 17 September 2026, 14:45 (UTC+3)
 
 [Українська](#українська) · [Русский](#русский) · [English](#english)
 
@@ -24,6 +24,8 @@ Transport Management System компанії GeoSun: маршрути, заяв�
 
 | Документ | Навіщо |
 |----------|--------|
+| [docs/architecture/ddd-pragmatic.ru.md](docs/architecture/ddd-pragmatic.ru.md) | Pragmatic DDD |
+| [docs/architecture/glossary.ru.en.ua.md](docs/architecture/glossary.ru.en.ua.md) | Глосарій ua/ru/en |
 | [RUN.ru.md](RUN.ru.md) | Як запустити стек |
 | [docs/system.ru.md](docs/system.ru.md) | Огляд системи та API |
 | [docs/specs/BASELINE.ru.md](docs/specs/BASELINE.ru.md) | Канон реалізованого |
@@ -47,6 +49,8 @@ Transport Management System компании GeoSun: маршруты, заяв�
 
 | Документ | Зачем |
 |----------|--------|
+| [docs/architecture/ddd-pragmatic.ru.md](docs/architecture/ddd-pragmatic.ru.md) | Pragmatic DDD |
+| [docs/architecture/glossary.ru.en.ua.md](docs/architecture/glossary.ru.en.ua.md) | Глоссарий ua/ru/en |
 | [RUN.ru.md](RUN.ru.md) | Как запустить стек |
 | [docs/system.ru.md](docs/system.ru.md) | Обзор системы и API |
 | [docs/specs/BASELINE.ru.md](docs/specs/BASELINE.ru.md) | Канон реализованного |
@@ -70,6 +74,8 @@ Transport Management System for GeoSun: routes, freight requests, quotes, direct
 
 | Document | Purpose |
 |----------|---------|
+| [docs/architecture/ddd-pragmatic.ru.md](docs/architecture/ddd-pragmatic.ru.md) | Pragmatic DDD |
+| [docs/architecture/glossary.ru.en.ua.md](docs/architecture/glossary.ru.en.ua.md) | Glossary ua/ru/en |
 | [RUN.ru.md](RUN.ru.md) | How to run the stack |
 | [docs/system.ru.md](docs/system.ru.md) | System overview and API |
 | [docs/specs/BASELINE.ru.md](docs/specs/BASELINE.ru.md) | Implemented baseline canon |
