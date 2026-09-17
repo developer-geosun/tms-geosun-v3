@@ -69,7 +69,7 @@ docker compose up --build mysql minio minio-init backend
 > Смена `APP_STORAGE_TYPE` на уже заполненной БД **не** переносит файлы автоматически — нужны те же `storage_key` в новом хранилище.
 
 Тестовая ADMIN-страница: `http://localhost:4200/admin/file-storage-test`  
-Спека: [`docs/specs/file-storage.md`](docs/specs/file-storage.md)
+Спека: [`docs/specs/file-storage.ru.md`](docs/specs/file-storage.ru.md)
 
 ## Публикация: frontend на GitHub Pages, API через ngrok или статический IP
 

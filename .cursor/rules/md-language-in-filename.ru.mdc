@@ -1,0 +1,43 @@
+---
+description: В імені .md / .mdc вказувати мову(и) документа через крапку
+alwaysApply: true
+---
+
+# Мова в імені Markdown / Cursor rules
+
+У назві файлів `.md` і `.mdc` перед розширенням вказуй код(и) мови, якою написаний документ. Кілька мов — кілька сегментів через крапку; **основна мова перша**.
+
+## Коди
+
+| Код | Мова |
+|-----|------|
+| `ru` | російська |
+| `en` | англійська |
+| `ua` | українська (**не** `uk` — див. `ua-locale-abbreviation.ua.mdc`) |
+
+Інші коди — лише за явною домовленістю.
+
+## Формат
+
+```
+<імʼя>.<lang>[.<lang>…].md
+<імʼя>.<lang>[.<lang>…].mdc
+```
+
+```
+❌ docs/dev-workflow.md
+❌ .cursor/rules/dev-workflow.mdc
+❌ README.uk.md
+
+✅ docs/dev-workflow.ru.md
+✅ docs/api-overview.en.md
+✅ docs/templates/specs/_template.ru.en.md
+✅ .cursor/rules/dev-workflow.ru.mdc
+✅ frontend-angular/README.ua.md
+```
+
+## Область
+
+- Усі нові та наявні файли в `docs/`, `.cursor/rules/`, `.cursor/archived-rules/`, корені модулів (`README.*`) тощо.
+- Не стосується `assets/i18n/*.json` і згенерованих артефактів — там свої угоди; для української в **наших** іменах лишається `ua`.
+- `frontend-flutter/` під заморозкою: не перейменовувати без зняття заморозки.

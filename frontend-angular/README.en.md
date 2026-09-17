@@ -125,7 +125,7 @@ To use Angular AI tooling with Cursor in this project:
 }
 ```
 
-3. Add Angular AI rules file at `frontend-angular/.cursor/rules/angular-best-practices.mdc`.
+3. Add Angular AI rules file at `.cursor/rules/angular-best-practices.ru.mdc`.
 
 4. Reload Cursor window/workspace.
 

@@ -125,7 +125,7 @@ npm run ng -- version
 }
 ```
 
-3. Додайте файл правил Angular AI: `frontend-angular/.cursor/rules/angular-best-practices.mdc`.
+3. Додайте файл правил Angular AI: `.cursor/rules/angular-best-practices.ru.mdc`.
 
 4. Перезавантажте вікно/workspace Cursor.
 
