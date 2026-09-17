@@ -4,10 +4,11 @@
 - **Реализация:** частично
 - **Роль:** источник истины по чат-ботам Telegram / WhatsApp / Viber
 - **Клиент:** Angular + Java (`frontend-flutter/` не входит)
-- **Остаток:** Angular UI (`/profile` блок + `/admin/chatbots`); уведомления quote/trip/expense; команды `status` / `lang`; WhatsApp; Viber; полный admin journal + test-send
+- **Baseline:** [BASELINE.ru.md](BASELINE.ru.md) **B16** — в каноне только срез v1 ниже; остальное — бэклог
+- **Остаток (бэклог, не freeze):** Angular UI (`/profile` блок + `/admin/chatbots`); уведомления quote/trip/expense; команды `status` / `lang`; WhatsApp; Viber; полный admin journal + test-send
 - **Реестр:** [README.ru.md](README.ru.md)
 
-### Поставка v1 (в коде сейчас)
+### Поставка v1 = канон B16 (в коде сейчас)
 Только **верификация Telegram + телефона** (backend Java):
 - opt-in привязка учётки к Telegram (код с `/profile` API);
 - share contact → сверка E.164 с `user_contact_phones` → флаги `phone_verified` / `phone_verified_at` / `phone_verified_via`;

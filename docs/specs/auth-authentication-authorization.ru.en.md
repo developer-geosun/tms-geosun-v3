@@ -4,7 +4,8 @@
 - **Реализация:** реализовано
 - **Роль:** источник истины по login/JWT/RBAC и Angular auth-слою
 - **Клиент:** Angular + Java
-- **Остаток:** нет. §12 (план с `Code.gs`) — исторический, не выполнять. MVP сервера: [TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md](TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md)
+- **Baseline:** [BASELINE.ru.md](BASELINE.ru.md) **B01** — единственный канон auth; исторический MVP не расширять
+- **Остаток:** нет. §12 (план с `Code.gs`) — исторический, не выполнять. MVP сервера (архив): [TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md](../archive/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md)
 - **Реестр:** [README.ru.md](README.ru.md)
 
 ## Language Rules / Правила языка
@@ -20,7 +21,7 @@
 ## 2) Context / Контекст
 - **Project/module / Проект/модуль:** `frontend-angular` (Angular 21) + `backend-java` (Java 21, Spring Boot 3).
 - **Current behavior / Текущее поведение:** На backend уже реализованы auth endpoint-ы `/api/v1/auth/*` и soft-delete `/api/v1/users/{id}`. Этот документ синхронизирован с фактической реализацией backend v1.
-- **Related docs / Связанные документы:** `docs/system.ru.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md`, `docs/specs/admin-user-management.ru.en.md`, `docs/specs/admin-notify-new-user-registration.ru.en.md` (алерт ADMIN после register — не часть login/JWT).
+- **Related docs / Связанные документы:** `docs/system.ru.md`, `docs/archive/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md` (исторический MVP), `docs/specs/admin-user-management.ru.en.md`, `docs/specs/admin-notify-new-user-registration.ru.en.md` (алерт ADMIN после register — не часть login/JWT), `docs/specs/BASELINE.ru.md`.
 - **Environment constraints / Ограничения окружения:** Frontend должен работать с REST backend по base URL (`http://localhost:8080` локально) и префиксу `/api/v1`.
 
 ## 3) Scope (In) / Scope (входит в задачу)

@@ -4,7 +4,8 @@
 - **Реализация:** реализовано
 - **Роль:** источник истины по routes / route-requests / quotes
 - **Клиент:** Angular + Java
-- **Остаток:** нет в этом файле. Блокировка маршрута, `view`, restore, отложенный breakdown — [route-immutability-list-filters-deferred-country-breakdown.md](route-immutability-list-filters-deferred-country-breakdown.ru.md). Ставка — [freight-cost-scenario-nbu-pricing.md](freight-cost-scenario-nbu-pricing.ru.md)
+- **Baseline:** [BASELINE.ru.md](BASELINE.ru.md) **B05** (planning) / **B07** (request & quoting)
+- **Остаток:** нет в этом файле. Блокировка маршрута, `view`, restore, отложенный breakdown — [route-immutability-list-filters-deferred-country-breakdown.ru.md](route-immutability-list-filters-deferred-country-breakdown.ru.md). Ставка — [freight-cost-scenario-nbu-pricing.ru.md](freight-cost-scenario-nbu-pricing.ru.md)
 - **Реестр:** [README.ru.md](README.ru.md)
 
 ## Language Rules / Правила языка
@@ -27,7 +28,8 @@
   - `docs/specs/route-immutability-list-filters-deferred-country-breakdown.ru.md` (**блокировка маршрута после заявки, фильтры списка по soft delete, отложенный country breakdown**).
   - `docs/specs/freight-cost-scenario-nbu-pricing.ru.md` (**спецификация расчёта фрахта через числовые сценарии и НБУ**).
   - `docs/system.ru.md`.
-  - `backend-java/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.md`.
+  - `docs/archive/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md` (исторический MVP auth; канон — auth-спека).
+  - `docs/specs/BASELINE.ru.md`.
 - **Environment constraints / Ограничения окружения:**
   - REST base path: `/api/v1`.
   - Аутентификация и авторизация строго по правилам из `docs/specs/auth-authentication-authorization.ru.en.md`.

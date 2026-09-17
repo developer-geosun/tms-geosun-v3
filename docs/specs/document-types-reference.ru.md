@@ -4,12 +4,13 @@
 - **Реализация:** частично
 - **Роль:** источник истины по CRUD справочника видов (`/admin/document-types`)
 - **Клиент:** Angular + Java
-- **Остаток:** интеграция с карточками ТС/водителей (v2). Seed UUID `c1000000-…` в этом файле **устарели** — актуальный каталог: [document-types-ua-default-catalog.md](document-types-ua-default-catalog.ua.md) (`V39`, `c2000000-…`)
+- **Baseline:** [BASELINE.ru.md](BASELINE.ru.md) **B15** — в каноне CRUD + UA-seed; v2-интеграция — бэклог
+- **Остаток (бэклог):** интеграция с карточками ТС/водителей (v2). Seed UUID `c1000000-…` в этом файле **устарели** — актуальный каталог: [document-types-ua-default-catalog.ua.md](document-types-ua-default-catalog.ua.md) (`V39`, `c2000000-…` только)
 - **Реестр:** [README.ru.md](README.ru.md)
 
-- **Каталог (CRUD):** реализовано (Flyway `V35`, admin UI `/admin/document-types`, доступ `ADMIN`).
+- **Каталог (CRUD):** реализовано (Flyway `V35`, admin UI `/admin/document-types`, доступ `ADMIN`) — **канон**.
 - **Seed UA:** реализовано отдельной спекой (`V39`); не использовать UUID из раздела seed ниже.
-- **Интеграция с карточками ТС/водителей:** не реализована (enum `VehicleDocumentType` / `DriverDocumentType` пока не заменены).
+- **Интеграция с карточками ТС/водителей:** не реализована (enum `VehicleDocumentType` / `DriverDocumentType` пока не заменены) — **бэклог**.
 
 ## Цель
 - Единый **admin-only** справочник видов документов с локализованными названиями (uk / en / ru).

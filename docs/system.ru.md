@@ -7,8 +7,8 @@
 
 ## Что уже умеет система
 
-- Frontend на Angular 21 с маршрутизацией, i18n и auth-слоем (`AuthService`, `AuthGuard`, `AuthInterceptor`, login-page).
-- **Flutter Web client** (`frontend-flutter/`): каркас + auth (login/refresh/logout/me), i18n uk/en/ru, порт dev `:4300`. Бизнес-экраны и mobile — следующие фазы; Angular остаётся основным UI для admin и route-builder.
+- Frontend на Angular 21 с маршрутизацией, i18n и auth-слоем (`AuthService`, `AuthGuard`, `AuthInterceptor`, login-page). Активный клиент — **только Angular**.
+- `frontend-flutter/` в репозитории есть, но **заморожен** до прямого распоряжения (не развивать, не запускать как часть задач).
 - Экраны `/route-builder` (построение и сохранение маршрута), `/routes` (список и открытие сохранённых маршрутов), `/my-freight-requests` (заявки пользователя) и диалог заявки на фрахт работают через backend API.
 - Есть admin-страницы `/admin/route-requests` (очередь, расчёт, quote), `/admin/freight-numeric-scenarios` (сценарии), `/admin/users` (список/карточка с контактами: `ADMIN` и `MANAGER` read; мутации учётки и PUT профиля — только `ADMIN`), `/admin/drivers`, `/admin/vehicle-combinations`, `/admin/trips`, `/admin/chatbots` (статус Telegram + прив'язки), а также `/my-trips` для водителя и `/profile` (self-service профіль + верифікація Telegram).
 - Backend на Java 21 + Spring Boot 3 с JWT auth, refresh token rotation и RBAC.
@@ -21,7 +21,8 @@
 
 ## Как работает (высокоуровнево)
 
-Пользователь -> Angular или Flutter frontend -> Backend API (Spring Boot, `/api/v1`) -> MySQL -> Ответ пользователю.
+Пользователь → Angular frontend → Backend API (Spring Boot, `/api/v1`) → MySQL → ответ пользователю.  
+(Flutter Web в репозитории заморожен и в активный поток не входит.)
 
 ## Основные сущности
 
@@ -94,11 +95,14 @@
 
 ## Структура проекта
 
-- `frontend-angular/` — Angular приложение.
-- `frontend-flutter/` — Flutter Web client (auth v1; mobile позже).
+- `frontend-angular/` — Angular приложение (активный UI).
+- `frontend-flutter/` — Flutter Web (заморожен).
 - `backend-java/` — Spring Boot backend (Maven, `src/main/java`, `src/main/resources`).
-- `docs/specs/` — ТЗ по фичам; реестр статусов и ролей — [`docs/specs/README.ru.md`](specs/README.ru.md).
-- `docs/templates/` — шаблоны ТЗ и промптов для LLM.
+- `docs/dev-workflow.ru.md` — алгоритмы разработки A (новое) / B (доработка).
+- `docs/specs/BASELINE.ru.md` — канон реализованного vs бэклог.
+- `docs/specs/README.ru.md` — реестр статусов ТЗ.
+- `docs/archive/` — исторический MVP и одноразовые notes (не источник истины).
+- `docs/templates/` — briefs, шаблон ТЗ и промпты для LLM.
 
 ## Тесты и качество
 
@@ -135,7 +139,7 @@
 ## Важные правила разработки
 
 - Разрабатывать фичи в отдельных ветках (`feature/`*, `fix/`*), не напрямую в `main/master`.
-- Перед реализацией читать [`docs/specs/README.ru.md`](specs/README.ru.md) (статус и роль документа), затем формировать/обновлять ТЗ в `docs/specs/`. После сдачи синхронизировать статус, реестр и чекбоксы DoD.
+- Процесс: [`docs/dev-workflow.ru.md`](dev-workflow.ru.md) — **A** новая фича / **B** доработка канона. Перед кодом: [`docs/specs/BASELINE.ru.md`](specs/BASELINE.ru.md) и [`docs/specs/README.ru.md`](specs/README.ru.md) → одна спека. После сдачи — Статус, реестр, DoD, при сдвиге границы — BASELINE.
 - Не добавлять зависимости без обоснования.
 - Не хранить секреты и токены в репозитории.
 

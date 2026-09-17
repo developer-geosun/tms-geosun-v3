@@ -4,7 +4,8 @@
 - **Реализация:** реализовано
 - **Роль:** источник истины по `/admin/users` (мутации учётки)
 - **Клиент:** Angular + Java
-- **Остаток:** нет. **Факт:** MANAGER читает список и карточку; PUT профиля и role/active/delete/restore — только ADMIN (`user-profile.ru.en.md`). Пункт Out of Scope «Доступ MANAGER к user-admin» устарел
+- **Baseline:** [BASELINE.ru.md](BASELINE.ru.md) **B02**
+- **Остаток:** нет. **Канон RBAC:** MANAGER **читает** список и карточку; PUT профиля и role/active/delete/restore — только ADMIN (`user-profile.ru.en.md`). Пункт Out of Scope «Доступ MANAGER к user-admin» устарел — не восстанавливать
 - **Реестр:** [README.ru.md](README.ru.md)
 
 ## Language Rules / Правила языка
@@ -20,7 +21,7 @@
 ## 2) Context / Контекст
 - **Project/module / Проект/модуль:** `backend-java` auth + `frontend-angular` admin pages.
 - **Current behavior / Текущее поведение:** регистрация всегда ставит `USER`; есть только `DELETE /api/v1/users/{id}` (soft-delete, ADMIN).
-- **Related docs / Связанные документы:** `docs/system.ru.md`, `docs/specs/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md`, `docs/specs/auth-authentication-authorization.ru.en.md`, `docs/specs/user-profile.ru.en.md`, `docs/specs/admin-notify-new-user-registration.ru.en.md` (ссылка из алерта регистрации ведёт на карточку `/admin/users/{id}`).
+- **Related docs / Связанные документы:** `docs/system.ru.md`, `docs/archive/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md` (исторический MVP), `docs/specs/auth-authentication-authorization.ru.en.md`, `docs/specs/user-profile.ru.en.md`, `docs/specs/admin-notify-new-user-registration.ru.en.md` (ссылка из алерта регистрации ведёт на карточку `/admin/users/{id}`), `docs/specs/BASELINE.ru.md`.
 - **Environment constraints / Ограничения окружения:** Java 21 / Spring Boot 3, Angular 21 + Angular Material, единые breakpoints (`LayoutService`, `bp.handset`).
 
 ## 3) Scope (In) / Scope (входит в задачу)

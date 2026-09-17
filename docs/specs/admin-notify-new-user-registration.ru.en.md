@@ -31,7 +31,7 @@
 - **Related docs / Связанные документы:**
   - [`user-profile.ru.en.md`](user-profile.ru.en.md) — источник флагов каналов и телефонов ADMIN.
   - [`chatbots-telegram-whatsapp-viber.ru.en.md`](chatbots-telegram-whatsapp-viber.ru.en.md) — транспорт `MESSENGERS` (`bot_identities`, `bot_message_log`).
-  - [`TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md`](TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md) — `POST /auth/register`.
+  - [`TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md`](../archive/TECHNICAL_SPECIFICATION_API_SERVER_v1.0.ru.md) (архив, исторический MVP) — `POST /auth/register`.
   - [`admin-user-management.ru.en.md`](admin-user-management.ru.en.md) — карточка `/admin/users/{id}` как цель ссылки.
   - [`auth-authentication-authorization.ru.en.md`](auth-authentication-authorization.ru.en.md) — роли, JWT (этот хук публичный API не добавляет).
 - **Environment constraints / Ограничения окружения:** Java 21 / Spring Boot 3, MySQL, Angular 21 + Material, i18n ua/en/ru (файлы `uk.json` / `en.json` / `ru.json` не переименовывать). SMTP — тот же `app.email.*`, что верификация. Ссылка в сообщении — **только Angular** (`app.email.angular-app-base-url` + `/admin/users/{id}`), Flutter-URL не использовать.

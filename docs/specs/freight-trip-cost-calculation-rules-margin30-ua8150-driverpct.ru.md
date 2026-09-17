@@ -3,8 +3,9 @@
 ## Статус
 - **Реализация:** в силе
 - **Роль:** дополнение — источник истины по формулам (пресет v1)
-- **Клиент:** backend-java калькулятор; продуктовый контур — [freight-cost-scenario-nbu-pricing.md](freight-cost-scenario-nbu-pricing.ru.md)
-- **Остаток:** эталонный unit-тест с фиксированными суммами — вне v1
+- **Клиент:** backend-java калькулятор; продуктовый контур — [freight-cost-scenario-nbu-pricing.ru.md](freight-cost-scenario-nbu-pricing.ru.md)
+- **Baseline:** [BASELINE.ru.md](BASELINE.ru.md) **B09**; при расхождении чисел с B08 приоритет у **этого** файла
+- **Остаток:** эталонный unit-тест с фиксированными суммами — вне v1 (бэклог)
 - **Реестр:** [README.ru.md](README.ru.md)
 
 > **Назначение:** серверный расчёт без ИИ; **источник истины по формулам** для [`freight-cost-scenario-nbu-pricing.ru.md`](./freight-cost-scenario-nbu-pricing.ru.md) (курсы НБУ из БД, country breakdown, `cost-preview` / quote).

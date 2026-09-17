@@ -1,7 +1,9 @@
 # Структура репозитория TMS GeoSun v3
 
-**Дата фиксации:** 15 сентября 2026  
-**Файл:** снимок структуры на эту дату. Назначение и API системы — в [`docs/system.ru.md`](system.ru.md); статусы ТЗ — в [`docs/specs/README.ru.md`](specs/README.ru.md).
+**Дата создания:** 15 сентября 2026, 00:00 (UTC+3)  
+**Дата изменения:** 17 сентября 2026, 14:12 (UTC+3)  
+**Дата фиксации:** 15 сентября 2026 (структура); процесс/baseline/archive — 17 сентября 2026.  
+**Файл:** снимок структуры. Назначение и API — [`docs/system.ru.md`](system.ru.md); канон — [`docs/specs/BASELINE.ru.md`](specs/BASELINE.ru.md); реестр — [`docs/specs/README.ru.md`](specs/README.ru.md); процесс — [`docs/dev-workflow.ru.md`](dev-workflow.ru.md).
 
 ## 1. Что это за проект
 
@@ -185,18 +187,20 @@ Guards: `authAvailabilityGuard` → `guestGuard` или `serviceStopGuard` + `au
 
 | Путь | Роль |
 |------|------|
-| `docs/system.ru.md` | Обзор системы, сущности, основные API |
+| `docs/dev-workflow.ru.md` | Алгоритмы **A** (новая фича) и **B** (доработка) |
+| `docs/specs/BASELINE.ru.md` | Канон реализованного vs бэклог |
 | `docs/specs/README.ru.md` | Реестр ТЗ: статус, роль, остаток |
-| `docs/specs/*.md` | Источники истины по фичам (19 файлов) |
-| `docs/templates/` | Шаблон ТЗ и промпты (plan / implement / bugfix / review / release) |
-| `docs/auth-mvp-runbook.ru.md`, `docs/auth-validation-checklist.ru.md` | Auth-процедуры |
-| `docs/release-notes-routes-quotes-rollout.ru.md` | Исторический rollout маршрутов |
+| `docs/specs/*.<lang>.md` | Источники истины по фичам (канонические имена с языковым суффиксом) |
+| `docs/archive/` | Исторический MVP auth, rollout notes — **не** источник истины |
+| `docs/templates/` | Briefs, шаблон ТЗ, промпты (plan / implement / bugfix / review / release) |
+| `docs/system.ru.md` | Обзор системы, сущности, основные API |
+| `docs/auth-mvp-runbook.ru.md`, `docs/auth-validation-checklist.ru.md` | → [`docs/archive/`](archive/README.ru.md) (устаревшие MVP-процедуры) |
 | `docs/examples/` | Пример JSON расчёта фрахта |
 | **этот файл** | Карта каталогов |
 
-Перед новой фичей: реестр → один файл ТЗ → поле «Связанные». Не читать все спеки подряд.
+Перед новой задачей: [`BASELINE.ru.md`](specs/BASELINE.ru.md) / реестр → алгоритм A или B → один файл ТЗ → «Связанные». Не читать все спеки подряд.
 
-На дату документа: 16 спек реализовано/в силе, 2 частично (`document-types-reference`, `chatbots-telegram-whatsapp-viber`), 1 не реализовано (`document-ocr`).
+Сводка: см. [`BASELINE.ru.md`](specs/BASELINE.ru.md) и [`README.ru.md`](specs/README.ru.md) (канон vs бэклог: document-types v2, chatbot post-v1, OCR и т.д.).
 
 ## 7. Инфраструктура и CI
 
@@ -211,13 +215,14 @@ GitHub Actions:
 - `frontend-ci.yml` — lint + unit tests Angular на PR/`main`
 - `deploy.yml` — сборка Angular (+ Flutter Web) на GitHub Pages при push в `main`/`master`
 
-Cursor (`.cursor/rules/`): заморозка Flutter, реестр спек, Angular Material/UI, null-safety Java, Spotless, ESLint, Problems = 0 при сдаче.
+Cursor (`.cursor/rules/`): заморозка Flutter, `dev-workflow` (A/B), реестр/BASELINE спек, Angular Material/UI, null-safety Java, Spotless, ESLint, Problems = 0 при сдаче.
 
 ## 8. Как ориентироваться при новой задаче
 
 1. Клиент = **Angular**. Backend = **Java**. Flutter не трогать.
-2. Открыть [`docs/specs/README.ru.md`](specs/README.ru.md), затем одну спеку.
-3. Код домена: `backend-java/.../<пакет>/` и экран в `frontend-angular/src/app/pages/<имя>/`.
-4. Контракт HTTP: Java `*Controller` + Angular `*-api.service.ts` / `*-contracts.model.ts`.
-5. Схема: новая Flyway `Vnn__….sql`, предыдущие файлы не править.
-6. Сдача: Spotless / `lint:fix`, тесты, **Problems = 0** по изменённым файлам (включая Java-тесты).
+2. Открыть [`docs/dev-workflow.ru.md`](dev-workflow.ru.md): алгоритм **A** или **B**.
+3. [`docs/specs/BASELINE.ru.md`](specs/BASELINE.ru.md) / [`docs/specs/README.ru.md`](specs/README.ru.md) → одна спека.
+4. Код домена: `backend-java/.../<пакет>/` и экран в `frontend-angular/src/app/pages/<имя>/`.
+5. Контракт HTTP: Java `*Controller` + Angular `*-api.service.ts` / `*-contracts.model.ts`.
+6. Схема: новая Flyway `Vnn__….sql`, предыдущие файлы не править.
+7. Сдача: Spotless / `lint:fix`, тесты, **Problems = 0** по изменённым файлам (включая Java-тесты); обновить Статус / реестр / BASELINE.

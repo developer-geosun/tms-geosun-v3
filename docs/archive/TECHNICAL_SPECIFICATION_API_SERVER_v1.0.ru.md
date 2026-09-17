@@ -1,11 +1,12 @@
 # ТЗ v1.0: MVP сервера авторизации и аутентификации (Java)
 
 ## Статус
-- **Реализация:** реализовано
+- **Реализация:** реализовано (исторический снимок)
 - **Роль:** исторический MVP Java-сервера auth (регистрация, JWT, verify-email, soft-delete)
-- **Клиент:** backend-java; UI auth — Angular (см. [auth-authentication-authorization.md](auth-authentication-authorization.ru.en.md))
-- **Остаток:** не расширять этот файл. Новые правила login/RBAC — в auth-спеке; админка пользователей — в [admin-user-management.md](admin-user-management.ru.en.md)
-- **Реестр:** [README.ru.md](README.ru.md)
+- **Клиент:** backend-java; UI auth — Angular (см. [auth-authentication-authorization.ru.en.md](../specs/auth-authentication-authorization.ru.en.md))
+- **Остаток:** не расширять этот файл. Новые правила login/RBAC — в auth-спеке; админка пользователей — в [admin-user-management.ru.en.md](../specs/admin-user-management.ru.en.md)
+- **Расположение:** `docs/archive/` — не канон. Реестр: [README.ru.md](../specs/README.ru.md). Baseline: [BASELINE.ru.md](../specs/BASELINE.ru.md) **B01**
+- **Реестр:** [README.ru.md](../specs/README.ru.md)
 
 Версия документа: `v1.0`
 
